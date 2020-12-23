@@ -1,25 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Layout">
+    <style name="layout">
         <item name="android:background">@color/white</item>
     </style>
 
-    <style name="TextBox">
+    <style name="app_title">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="text_input_layout">
+        <item name="android:textColorHint">@color/grey</item>
+        <item name="hintEnabled">false</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+    </style>
+
+    <style name="text_box">
         <item name="android:paddingVertical">20dp</item>
         <item name="android:paddingHorizontal">15dp</item>
         <item name="android:background">@drawable/edittext_frame</item>
         <item name="android:layout_marginHorizontal">50dp</item>
         <item name="cornerRadius">3dp</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="FormButton">
+    <style name="form_button">
         <item name="android:layout_marginHorizontal">50dp</item>
-        <item name="android:background">@color/flame</item>
+        <item name="android:backgroundTint">@color/turquoise_light</item>
         <item name="android:textColor">@color/white</item>
         <item name="cornerRadius">3dp</item>
         <item name="android:paddingVertical">20dp</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="form_button_small">
+        <item name="android:layout_marginHorizontal">70dp</item>
+        <item name="android:backgroundTint">@color/turquoise_super_light</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">3dp</item>
+        <item name="android:paddingVertical">20dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="LoginTheme" parent="FirebaseUI">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/turquoise_light</item>
+        <item name="colorButtonNormal">@color/turquoise_light</item>
+        <item name="colorControlNormal">@color/turquoise_light</item>
+        <item name="colorControlActivated">@color/turquoise_light</item>
+        <item name="colorControlHighlight">@color/turquoise_light</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/black</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColorHint">@android:color/black</item>
+        <item name="android:fontFamily">@font/sfpro</item>
         <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="FirebaseUI.Text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/sfpro</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="FirebaseUI.Text.Link">
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>

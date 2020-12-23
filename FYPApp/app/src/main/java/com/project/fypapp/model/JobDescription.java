@@ -1,4 +1,4 @@
-package com.example.fypapp;
+package com.project.fypapp.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

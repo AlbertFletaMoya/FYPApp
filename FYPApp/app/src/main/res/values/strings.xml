@@ -3,4 +3,9 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Log In</string>
+    <string name="crate_account">Don\'t have an account yet?</string>
+    <string name="create_account_button">Create New Account</string>
+    <string name="logout">Log Out</string>
+    <string name="sign_in_with_email">Sign in with email</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
 </resources>

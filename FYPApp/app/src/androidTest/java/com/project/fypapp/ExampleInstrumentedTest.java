@@ -1,4 +1,4 @@
-package com.example.fypapp;
+package com.project.fypapp;
 
 import android.content.Context;
 

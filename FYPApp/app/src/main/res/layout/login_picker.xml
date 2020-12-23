@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/app_name_view"
+        style="@style/app_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="55dp"
+        android:text="@string/app_name"
+        app:layout_constraintBottom_toTopOf="@id/google_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+
+    <Button
+        android:id="@+id/google_button"
+        style="@style/FirebaseUI.Button.AccountChooser.GoogleButton"
+        app:layout_constraintTop_toBottomOf="@id/app_name_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/email_button"
+        android:text="@string/sign_in_with_google"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:paddingVertical="20dp"
+        android:layout_marginHorizontal="50dp" />
+
+
+    <Button
+        android:id="@+id/email_button"
+        style="@style/FirebaseUI.Button.AccountChooser.EmailButton"
+        app:layout_constraintTop_toBottomOf="@id/google_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/sign_in_with_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:padding="20dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="20dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

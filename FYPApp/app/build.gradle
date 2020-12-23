@@ -6,7 +6,7 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        applicationId "com.example.fypapp"
+        applicationId "com.project.fypapp"
         minSdkVersion 26
         targetSdkVersion 29
         versionCode 1
@@ -27,8 +27,13 @@ android {
     }
 }
 
-dependencies {
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
+dependencies {
+    implementation platform('com.google.firebase:firebase-bom:26.2.0')
+    implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
+    implementation 'com.google.firebase:firebase-analytics'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
