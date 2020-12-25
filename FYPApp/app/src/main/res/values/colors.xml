@@ -10,7 +10,7 @@
     <color name="turquoise_light">#045757</color>
     <color name="turquoise_dark">#044343</color>
     <color name="turquoise_super_light">#46737D</color>
-
+    <color name="lavender">#EEE5E9</color>
     <!-- Light specific colors-->
     <color name="text_box">#EEE5E9</color>
 </resources>

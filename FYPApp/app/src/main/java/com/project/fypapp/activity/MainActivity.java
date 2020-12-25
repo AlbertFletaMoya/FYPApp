@@ -3,14 +3,21 @@ package com.project.fypapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.project.fypapp.R;
+import com.project.fypapp.adapter.UserProfileRecyclerAdapter;
+import com.project.fypapp.model.UserProfile;
+
+import org.w3c.dom.Text;
 
 import static com.project.fypapp.util.Constants.LOGOUT_MESSAGE;
 
@@ -27,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
 
         final Button logoutButton = findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(view -> signOut());
+
+
+        initRecyclerView();
     }
 
     private void checkCurrentUser() {
@@ -50,4 +60,15 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    private void initRecyclerView(){
+        final RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        UserProfileRecyclerAdapter userProfileRecyclerAdapter = new UserProfileRecyclerAdapter(new UserProfile());
+        recyclerView.setAdapter(userProfileRecyclerAdapter);
+    }
+
+
 }

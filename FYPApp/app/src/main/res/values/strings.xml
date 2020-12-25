@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FYPApp</string>
+    <string name="app_name">YouHelp</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Log In</string>
@@ -8,4 +8,11 @@
     <string name="logout">Log Out</string>
     <string name="sign_in_with_email">Sign in with email</string>
     <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="user_name">User Name</string>
+    <string name="user_email">User Email</string>
+    <string name="bio_text">User Bio</string>
+    <string name="company">Company</string>
+    <string name="position">Position</string>
+    <string name="dates">10/10/2020–10/10/2021</string>
+    <string name="job_description">Job Description</string>
 </resources>
