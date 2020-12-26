@@ -8,18 +8,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.auth.data.model.User;
 import com.project.fypapp.R;
 import com.project.fypapp.model.JobDescription;
 import com.project.fypapp.model.UserProfile;
+
+import org.w3c.dom.Text;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
-public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final UserProfile userProfile;
+    private final  UserProfileRecyclerAdapterListener onClickListener;
 
-    static class UserInformationViewHolder extends RecyclerView.ViewHolder{
+    class UserInformationViewHolder extends RecyclerView.ViewHolder{
         private final TextView name;
         private final TextView email;
         private final TextView location;
@@ -31,14 +35,18 @@ public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             email = itemView.findViewById(R.id.email_view);
             location = itemView.findViewById(R.id.location_view);
             bio = itemView.findViewById(R.id.bio_view);
+
+            TextView editInformation = itemView.findViewById(R.id.edit_view);
+            editInformation.setOnClickListener(view -> onClickListener.editTextViewOnClick(view, getAdapterPosition()));
         }
     }
 
-    static class JobDescriptionViewHolder extends RecyclerView.ViewHolder{
+    class JobDescriptionViewHolder extends RecyclerView.ViewHolder{
         private final TextView company;
         private final TextView position;
         private final TextView dates;
         private final TextView jobDescription;
+        private final TextView section;
 
         public JobDescriptionViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -46,6 +54,10 @@ public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             position = itemView.findViewById(R.id.position_view);
             dates = itemView.findViewById(R.id.date_view);
             jobDescription = itemView.findViewById(R.id.job_description_view);
+            section = itemView.findViewById(R.id.section_view);
+
+            TextView editInformation = itemView.findViewById(R.id.edit_view);
+            editInformation.setOnClickListener(view -> onClickListener.editTextViewOnClick(view, getAdapterPosition()));
         }
     }
 
@@ -83,13 +95,21 @@ public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             jobDescriptionViewHolder.position.setText(jobDescription.getPosition());
             jobDescriptionViewHolder.jobDescription.setText(jobDescription.getJobDescription());
 
-            final String dates = jobDescription.getStartingDate() + "-" + jobDescription.getEndingDate();
+            final String dates = jobDescription.getStartingDate() + " - " + jobDescription.getEndingDate();
             jobDescriptionViewHolder.dates.setText(dates);
+
+            if (position != 1) {
+                jobDescriptionViewHolder.section.setText("");
+            }
         }
     }
 
     @Override
     public int getItemCount() {
         return userProfile.getJobs().size() + 1;
+    }
+
+    public interface UserProfileRecyclerAdapterListener {
+        void editTextViewOnClick(View v, int position);
     }
 }

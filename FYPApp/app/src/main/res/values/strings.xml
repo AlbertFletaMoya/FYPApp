@@ -15,4 +15,10 @@
     <string name="position">Position</string>
     <string name="dates">10/10/2020–10/10/2021</string>
     <string name="job_description">Job Description</string>
+    <string name="edit">EDIT</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="location">Location</string>
+    <string name="vertical_bar">|</string>
+    <string name="experience">Experience</string>
 </resources>

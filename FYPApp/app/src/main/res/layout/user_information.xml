@@ -3,63 +3,103 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="50dp">
+    android:paddingTop="10dp"
+    android:paddingBottom="40dp">
+
+    <TextView
+        android:id="@+id/edit_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/edit"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/name_view"
+        android:gravity="end"
+        android:paddingHorizontal="20dp"
+        android:textSize="18sp"
+        android:textColor="@color/turquoise_super_light"
+        app:layout_constraintVertical_chainStyle="packed"/>
 
     <TextView
         android:id="@+id/name_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_view"
         app:layout_constraintBottom_toTopOf="@id/email_view"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:gravity="center"
+        android:gravity="start"
         android:textSize="18sp"
         android:text="@string/user_name"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-    <TextView
-        android:id="@+id/email_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/name_view"
-        app:layout_constraintBottom_toTopOf="@id/bio_view"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/location_view"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:text="@string/user_email"
         app:layout_constraintVertical_chainStyle="packed"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintHorizontal_chainStyle="packed"/>
-
-    <TextView
-        android:id="@+id/location_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/user_email"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/bio_view"
-        app:layout_constraintLeft_toRightOf="@id/email_view"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name_view"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintVertical_chainStyle="packed"
-        android:layout_marginStart="10dp"
-        app:layout_constraintHorizontal_chainStyle="packed"/>
+        android:textStyle="bold"
+        android:paddingHorizontal="20dp"
+        android:layout_marginTop="5dp"/>
 
     <TextView
         android:id="@+id/bio_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/email_view"
+        app:layout_constraintTop_toBottomOf="@id/name_view"
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:gravity="start"
         android:textSize="18sp"
         android:text="@string/bio_text"
-        app:layout_constraintVertical_chainStyle="packed"/>
+        app:layout_constraintVertical_chainStyle="packed"
+        android:paddingHorizontal="20dp" />
+
+    <TextView
+        android:id="@+id/email_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/bio_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/separator_view"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:text="@string/user_email"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        android:layout_marginTop="10dp"
+        app:layout_constraintHorizontal_bias="0"
+        android:layout_marginStart="20dp" />
+
+    <TextView
+        android:id="@+id/separator_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/vertical_bar"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toRightOf="@id/email_view"
+        app:layout_constraintRight_toLeftOf="@id/location_view"
+        app:layout_constraintTop_toBottomOf="@id/bio_view"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/location_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/location"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toRightOf="@id/separator_view"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bio_view"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

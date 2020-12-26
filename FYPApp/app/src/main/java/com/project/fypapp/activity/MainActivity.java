@@ -3,7 +3,6 @@ package com.project.fypapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,13 +16,9 @@ import com.project.fypapp.R;
 import com.project.fypapp.adapter.UserProfileRecyclerAdapter;
 import com.project.fypapp.model.UserProfile;
 
-import org.w3c.dom.Text;
-
 import static com.project.fypapp.util.Constants.LOGOUT_MESSAGE;
 
 public class MainActivity extends AppCompatActivity {
-
-    private final FirebaseUIActivity firebaseUIActivity = new FirebaseUIActivity();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +61,14 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        UserProfileRecyclerAdapter userProfileRecyclerAdapter = new UserProfileRecyclerAdapter(new UserProfile());
+        final UserProfile userProfile = new UserProfile();
+
+        UserProfileRecyclerAdapter userProfileRecyclerAdapter =
+                new UserProfileRecyclerAdapter(userProfile, (v, position) -> {
+                    Intent i = new Intent(MainActivity.this, EditProfileActivity.class);
+                    i.putExtra("position", position);
+                    startActivity(i);
+                });
         recyclerView.setAdapter(userProfileRecyclerAdapter);
     }
 

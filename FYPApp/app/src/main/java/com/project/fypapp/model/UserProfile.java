@@ -1,5 +1,11 @@
 package com.project.fypapp.model;
 
+import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.RequiresApi;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +26,8 @@ public class UserProfile {
     public UserProfile(){
         name = "Albert Fleta";
         email = "leinadfc01@gmail.com";
-        bio = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
-        region = "London, UK";
+        region = "London, England, UK";
+        bio = "Former SDE Intern at Amazon and final-year Electronic Engineering student at Imperial College London";
         jobs = new ArrayList<>();
         for (int i = 0; i<3; i++){
             jobs.add(new JobDescription());
