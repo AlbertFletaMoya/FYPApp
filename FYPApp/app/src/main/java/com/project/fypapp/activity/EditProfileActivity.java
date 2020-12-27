@@ -31,16 +31,19 @@ public class EditProfileActivity extends AppCompatActivity {
         final EditText edit = findViewById(R.id.edit_text_view);
 
         if (getIntent().getExtras() != null){
-            // Get from database
             UserProfile userProfile = new UserProfile();
-            int position = getIntent().getIntExtra("position", 0);
+            int position = getIntent().getIntExtra("position", -1);
 
-            if (position == 0){
+            if (position == -2){
+                edit.setText("");
+            }
+
+            else if (position == -1){
                 edit.setText(userProfile.getBio());
             }
 
             else {
-                edit.setText(userProfile.getJobs().get(position-1).getJobDescription());
+                edit.setText(userProfile.getJobs().get(position).getJobDescription());
             }
         }
     }

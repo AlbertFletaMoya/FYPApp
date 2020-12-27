@@ -2,6 +2,7 @@ package com.project.fypapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -64,10 +65,19 @@ public class MainActivity extends AppCompatActivity {
         final UserProfile userProfile = new UserProfile();
 
         UserProfileRecyclerAdapter userProfileRecyclerAdapter =
-                new UserProfileRecyclerAdapter(userProfile, (v, position) -> {
-                    Intent i = new Intent(MainActivity.this, EditProfileActivity.class);
-                    i.putExtra("position", position);
-                    startActivity(i);
+                new UserProfileRecyclerAdapter(userProfile, new UserProfileRecyclerAdapter.UserProfileRecyclerAdapterListener() {
+                    @Override
+                    public void editProfileOnClick(View v, int position) {
+                        Intent i = new Intent(MainActivity.this, EditProfileActivity.class);
+                        i.putExtra("position", position-1);
+                        startActivity(i);
+                    }
+
+                    @Override
+                    public void editExperienceOnClick(View v, int position) {
+                        Intent i = new Intent(MainActivity.this, ExperienceIndexActivity.class);
+                        startActivity(i);
+                    }
                 });
         recyclerView.setAdapter(userProfileRecyclerAdapter);
     }

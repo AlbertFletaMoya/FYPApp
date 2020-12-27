@@ -21,4 +21,6 @@
     <string name="location">Location</string>
     <string name="vertical_bar">|</string>
     <string name="experience">Experience</string>
+    <string name="edit_add">EDIT/ADD</string>
+    <string name="add">ADD</string>
 </resources>

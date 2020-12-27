@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingBottom="20dp">
+    android:paddingBottom="30dp">
 
     <TextView
         android:id="@+id/position_view"
@@ -45,7 +45,7 @@
         android:gravity="start"
         android:text="@string/dates"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/job_description_view"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/company_view"
@@ -53,20 +53,6 @@
         app:layout_constraintVertical_chainStyle="packed"
         android:paddingHorizontal="20dp"
         app:layout_constraintHorizontal_chainStyle="packed"
-        android:layout_marginTop="5dp"/>
-
-    <TextView
-        android:id="@+id/job_description_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/date_view"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:gravity="start"
-        android:textSize="18sp"
-        android:text="@string/job_description"
-        app:layout_constraintVertical_chainStyle="packed"
-        android:paddingHorizontal="20dp"
         android:layout_marginTop="5dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,17 +31,18 @@
 
     <ScrollView
         android:id="@+id/scroll_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/save_button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:isScrollContainer="false"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:paddingHorizontal="20dp">
 
         <EditText
             android:id="@+id/edit_text_view"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
