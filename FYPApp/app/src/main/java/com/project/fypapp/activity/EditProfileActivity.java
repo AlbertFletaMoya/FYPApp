@@ -13,6 +13,8 @@ import com.project.fypapp.model.UserProfile;
 
 import org.w3c.dom.Text;
 
+import static com.project.fypapp.util.Constants.RECYCLER_VIEW_POSITION;
+
 public class EditProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +34,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null){
             UserProfile userProfile = new UserProfile();
-            int position = getIntent().getIntExtra("position", -1);
+            int position = getIntent().getIntExtra(RECYCLER_VIEW_POSITION, -1);
 
             if (position == -2){
                 edit.setText("");

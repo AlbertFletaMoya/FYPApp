@@ -14,6 +14,8 @@ import com.project.fypapp.R;
 import com.project.fypapp.adapter.UserExperienceRecyclerAdapter;
 import com.project.fypapp.model.UserProfile;
 
+import static com.project.fypapp.util.Constants.RECYCLER_VIEW_ADD_EXPERIENCE;
+
 public class ExperienceIndexActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class ExperienceIndexActivity extends AppCompatActivity {
 
     private void addExperience() {
         Intent i = new Intent(ExperienceIndexActivity.this, EditProfileActivity.class);
-        i.putExtra("position", -2);
+        i.putExtra("position", RECYCLER_VIEW_ADD_EXPERIENCE);
         startActivity(i);
     }
 }

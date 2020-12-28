@@ -7,4 +7,8 @@ public class Constants {
 
     public static final String LOGOUT_MESSAGE = "Successfully signed out";
     public static final String LOGIN_MESSAGE = "Successfully signed in";
+
+    public static final String RECYCLER_VIEW_POSITION = "position";
+    public static final int RECYCLER_VIEW_EDIT_PROFILE = -1;
+    public static final int RECYCLER_VIEW_ADD_EXPERIENCE = -2;
 }
