@@ -22,6 +22,7 @@ import static com.project.fypapp.util.Constants.RECYCLER_VIEW_EDIT_PROFILE;
 import static com.project.fypapp.util.Constants.RECYCLER_VIEW_POSITION;
 
 public class MainActivity extends AppCompatActivity {
+    boolean firstLogIn = true; // Retrieve this from server
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             goToLogIn();
+        }
+
+        if (firstLogIn){
+            //ask for minimum information
         }
     }
 
@@ -83,5 +88,5 @@ public class MainActivity extends AppCompatActivity {
                 });
         recyclerView.setAdapter(userProfileRecyclerAdapter);
     }
-    
+
 }

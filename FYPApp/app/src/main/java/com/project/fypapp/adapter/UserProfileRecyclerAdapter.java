@@ -17,6 +17,8 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String ADD = "ADD";
+
     private final UserProfile userProfile;
     private final  UserProfileRecyclerAdapterListener onClickListener;
 
@@ -25,6 +27,7 @@ public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         private final TextView email;
         private final TextView location;
         private final TextView bio;
+        private final TextView editExperience;
 
         public UserInformationViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -36,7 +39,7 @@ public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             TextView editInformation = itemView.findViewById(R.id.edit_profile_view);
             editInformation.setOnClickListener(view -> onClickListener.editProfileOnClick(view, getAdapterPosition()));
 
-            TextView editExperience = itemView.findViewById(R.id.edit_experience_view);
+            editExperience = itemView.findViewById(R.id.edit_experience_view);
             editExperience.setOnClickListener(view -> onClickListener.editExperienceOnClick(view, getAdapterPosition()));
         }
     }
@@ -81,6 +84,10 @@ public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             userInformationViewHolder.email.setText(userProfile.getEmail());
             userInformationViewHolder.location.setText(userProfile.getRegion());
             userInformationViewHolder.bio.setText(userProfile.getBio());
+
+            if (userProfile.getJobs().isEmpty()){
+                userInformationViewHolder.editExperience.setText(ADD);
+            }
         }
 
         else {
