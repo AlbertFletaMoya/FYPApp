@@ -23,4 +23,7 @@
     <string name="experience">Experience</string>
     <string name="edit_add">EDIT/ADD</string>
     <string name="add">ADD</string>
+    <string name="profile_headline">Write your profile headline</string>
+    <string name="what_is_your_current_location">What is your current location?</string>
+    <string name="next">Next</string>
 </resources>

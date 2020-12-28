@@ -13,6 +13,8 @@ import com.project.fypapp.model.UserProfile;
 
 import org.w3c.dom.Text;
 
+import static com.project.fypapp.util.Constants.RECYCLER_VIEW_ADD_EXPERIENCE;
+import static com.project.fypapp.util.Constants.RECYCLER_VIEW_EDIT_PROFILE;
 import static com.project.fypapp.util.Constants.RECYCLER_VIEW_POSITION;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -34,13 +36,13 @@ public class EditProfileActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null){
             UserProfile userProfile = new UserProfile();
-            int position = getIntent().getIntExtra(RECYCLER_VIEW_POSITION, -1);
+            int position = getIntent().getIntExtra(RECYCLER_VIEW_POSITION, RECYCLER_VIEW_ADD_EXPERIENCE);
 
-            if (position == -2){
+            if (position == RECYCLER_VIEW_ADD_EXPERIENCE){
                 edit.setText("");
             }
 
-            else if (position == -1){
+            else if (position == RECYCLER_VIEW_EDIT_PROFILE){
                 edit.setText(userProfile.getBio());
             }
 

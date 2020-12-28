@@ -22,11 +22,11 @@ import static com.project.fypapp.util.Constants.RECYCLER_VIEW_EDIT_PROFILE;
 import static com.project.fypapp.util.Constants.RECYCLER_VIEW_POSITION;
 
 public class MainActivity extends AppCompatActivity {
-    boolean firstLogIn = true; // Retrieve this from server
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        checkCurrentUser();
+        boolean firstLogIn = getIntent().getExtras() == null || getIntent().getBooleanExtra("firstLogIn", true);
+        checkCurrentUser(firstLogIn);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -38,15 +38,19 @@ public class MainActivity extends AppCompatActivity {
         initRecyclerView();
     }
 
-    private void checkCurrentUser() {
+    private void checkCurrentUser(boolean firstLogIn) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             goToLogIn();
         }
 
-        if (firstLogIn){
+        // Uncomment this if want to check first login functionality
+        /*if (firstLogIn){
             //ask for minimum information
-        }
+            Intent i = new Intent(MainActivity.this, InitialInformationActivity.class);
+            startActivity(i);
+            finish();
+        }*/
     }
 
     private void signOut(){

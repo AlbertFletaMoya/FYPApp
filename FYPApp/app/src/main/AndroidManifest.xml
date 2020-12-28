@@ -19,6 +19,7 @@
         <activity android:name=".activity.MainActivity"/>
         <activity android:name=".activity.EditProfileActivity"/>
         <activity android:name=".activity.ExperienceIndexActivity"/>
+        <activity android:name=".activity.InitialInformationActivity"/>
     </application>
 
 </manifest>
