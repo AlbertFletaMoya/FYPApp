@@ -14,7 +14,7 @@
     <string name="company">Company</string>
     <string name="position">Position</string>
     <string name="dates">10/10/2020–10/10/2021</string>
-    <string name="job_description">Job Description</string>
+    <string name="job_description">Job description</string>
     <string name="edit">EDIT</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
@@ -26,4 +26,8 @@
     <string name="profile_headline">Write your profile headline</string>
     <string name="what_is_your_current_location">What is your current location?</string>
     <string name="next">Next</string>
+    <string name="what_roles_are_you_looking_for">What roles are you looking for?</string>
+    <string name="what_sectors_are_you_looking_for">What sectors are you looking for?</string>
+    <string name="search">Search</string>
+    <string name="minimum_years_of_experience_needed">Minimum years of experience needed</string>
 </resources>

@@ -1,12 +1,8 @@
 package com.project.fypapp.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
@@ -16,8 +12,10 @@ public class JobDescription {
     private final String startingDate;
     private final String endingDate;
     private final String jobDescription;
+    private final String sector;
 
     public JobDescription() {
+        sector = "Tech";
         companyName = "Amazon";
         position = "Software Engineering Intern";
         startingDate = "Apr 2020";

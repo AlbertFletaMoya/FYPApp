@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Uncomment this if want to check first login functionality
-        /*if (firstLogIn){
+        /*if (firstLogIn) {
             //ask for minimum information
             Intent i = new Intent(MainActivity.this, InitialInformationActivity.class);
             startActivity(i);
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         }*/
     }
 
-    private void signOut(){
+    private void signOut() {
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener(task -> {
@@ -62,13 +62,13 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void goToLogIn(){
+    private void goToLogIn() {
         Intent intent = new Intent(MainActivity.this, FirebaseUIActivity.class);
         startActivity(intent);
         finish();
     }
 
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
