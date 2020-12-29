@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent i = new Intent(MainActivity.this, ExperienceIndexActivity.class);
                         startActivity(i);
                     }
-                });
+                }, true); // set to false if don't want user to belong to profile
         recyclerView.setAdapter(userProfileRecyclerAdapter);
     }
 

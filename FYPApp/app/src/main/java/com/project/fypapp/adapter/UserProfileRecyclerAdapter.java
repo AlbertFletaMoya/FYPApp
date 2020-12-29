@@ -20,7 +20,8 @@ public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     private static final String ADD = "ADD";
 
     private final UserProfile userProfile;
-    private final  UserProfileRecyclerAdapterListener onClickListener;
+    private final UserProfileRecyclerAdapterListener onClickListener;
+    private final boolean profileBelongsToUser;
 
     class UserInformationViewHolder extends RecyclerView.ViewHolder {
         private final TextView name;
@@ -37,10 +38,16 @@ public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             bio = itemView.findViewById(R.id.bio_view);
 
             TextView editInformation = itemView.findViewById(R.id.edit_profile_view);
-            editInformation.setOnClickListener(view -> onClickListener.editProfileOnClick(view, getAdapterPosition()));
-
             editExperience = itemView.findViewById(R.id.edit_experience_view);
-            editExperience.setOnClickListener(view -> onClickListener.editExperienceOnClick(view, getAdapterPosition()));
+
+            if (!profileBelongsToUser){
+                ((ViewGroup) editInformation.getParent()).removeView(editInformation);
+                ((ViewGroup) editExperience.getParent()).removeView(editExperience);
+            }
+            else {
+                editInformation.setOnClickListener(view -> onClickListener.editProfileOnClick(view, getAdapterPosition()));
+                editExperience.setOnClickListener(view -> onClickListener.editExperienceOnClick(view, getAdapterPosition()));
+            }
         }
     }
 
