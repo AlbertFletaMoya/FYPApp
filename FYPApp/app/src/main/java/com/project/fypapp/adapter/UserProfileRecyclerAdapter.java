@@ -75,11 +75,11 @@ public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == 0){
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_information, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_user_information, parent, false);
             return new UserInformationViewHolder(view);
         }
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.job_description, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_experience_long, parent, false);
         return new JobDescriptionViewHolder(view);
     }
 

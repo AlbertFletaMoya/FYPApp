@@ -4,15 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.project.fypapp.R;
 import com.project.fypapp.model.UserProfile;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 

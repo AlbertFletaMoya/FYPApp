@@ -10,15 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FYPApp">
         <!-- Change back to FirebaseUIActivity-->
-        <activity android:name="com.project.fypapp.activity.CreateSearchActivity">
+        <activity android:name=".activity.SearchResultsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- <activity android:name="com.project.fypapp.activity.CreateSearchActivity"/> -->
         <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".activity.CreateSearchActivity"/>
         <activity android:name=".activity.EditProfileActivity"/>
         <activity android:name=".activity.ExperienceIndexActivity"/>
         <activity android:name=".activity.InitialInformationActivity"/>

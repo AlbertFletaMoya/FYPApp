@@ -18,7 +18,6 @@ import java.util.List;
 
 import static com.firebase.ui.auth.ErrorCodes.NO_NETWORK;
 import static com.project.fypapp.util.Constants.BACK_BUTTON_ERROR_MESSAGE;
-import static com.project.fypapp.util.Constants.LOGIN_MESSAGE;
 import static com.project.fypapp.util.Constants.NO_NETWORK_ERROR_MESSAGE;
 import static com.project.fypapp.util.Constants.UNKNOWN_ERROR_MESSAGE;
 
@@ -48,7 +47,7 @@ public class FirebaseUIActivity extends AppCompatActivity {
         );
 
         final AuthMethodPickerLayout customLayout = new AuthMethodPickerLayout
-                .Builder(R.layout.login_picker)
+                .Builder(R.layout.picker_login)
                 .setGoogleButtonId(R.id.google_button)
                 .setEmailButtonId(R.id.email_button)
                 .build();

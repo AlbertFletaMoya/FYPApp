@@ -34,8 +34,13 @@ public class MainActivity extends AppCompatActivity {
         final Button logoutButton = findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(view -> signOut());
 
+        boolean profileBelongsToUser = true;
 
-        initRecyclerView();
+        if (getIntent().getExtras() != null) {
+            profileBelongsToUser = getIntent().getBooleanExtra("profileBelongsToUser", false);
+        }
+
+        initRecyclerView(profileBelongsToUser);
     }
 
     private void checkCurrentUser(boolean firstLogIn) {
@@ -68,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    private void initRecyclerView() {
+    private void initRecyclerView(boolean profileBelongsToUser) {
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -89,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent i = new Intent(MainActivity.this, ExperienceIndexActivity.class);
                         startActivity(i);
                     }
-                }, true); // set to false if don't want user to belong to profile
+                }, profileBelongsToUser); // set to false if don't want user to belong to profile
         recyclerView.setAdapter(userProfileRecyclerAdapter);
     }
 

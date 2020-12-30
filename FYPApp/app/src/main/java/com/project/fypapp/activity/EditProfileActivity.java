@@ -7,11 +7,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.firebase.ui.auth.data.model.User;
 import com.project.fypapp.R;
 import com.project.fypapp.model.UserProfile;
-
-import org.w3c.dom.Text;
 
 import static com.project.fypapp.util.Constants.RECYCLER_VIEW_ADD_EXPERIENCE;
 import static com.project.fypapp.util.Constants.RECYCLER_VIEW_EDIT_PROFILE;
