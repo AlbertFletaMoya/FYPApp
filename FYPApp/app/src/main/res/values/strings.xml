@@ -33,4 +33,7 @@
     <string name="what_sector_best_describes_the_company">What sector best describes the company?</string>
     <string name="starting_date">Starting date</string>
     <string name="ending_date">Ending date</string>
+    <string name="i_am_an">I\'m an</string>
+    <string name="entrepreneur">Entrepreneur</string>
+    <string name="a_retiree_looking_for_opportunities">A retiree looking for opportunities</string>
 </resources>

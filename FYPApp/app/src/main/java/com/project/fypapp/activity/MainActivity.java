@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.project.fypapp.R;
@@ -48,12 +49,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Uncomment this if want to check first login functionality
-        /*if (firstLogIn) {
+        if (firstLogIn) {
             //ask for minimum information
-            Intent i = new Intent(MainActivity.this, InitialInformationActivity.class);
+            Intent i = new Intent(MainActivity.this, UserTypeActivity.class);
             startActivity(i);
             finish();
-        }*/
+        }
     }
 
     private void signOut() {
