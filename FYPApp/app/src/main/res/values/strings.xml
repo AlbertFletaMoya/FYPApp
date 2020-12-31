@@ -30,4 +30,7 @@
     <string name="what_sectors_are_you_looking_for">What sectors are you looking for?</string>
     <string name="search">Search</string>
     <string name="minimum_years_of_experience_needed">Minimum years of experience needed</string>
+    <string name="what_sector_best_describes_the_company">What sector best describes the company?</string>
+    <string name="starting_date">Starting date</string>
+    <string name="ending_date">Ending date</string>
 </resources>

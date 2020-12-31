@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="30dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/roles_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/roles_write_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            android:gravity="start"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="@string/what_roles_are_you_looking_for"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:paddingHorizontal="20dp"
+            app:layout_constraintHorizontal_chainStyle="packed"/>
+
+        <EditText
+            android:id="@+id/roles_write_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/roles_text_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginHorizontal="20dp"
+            android:inputType="textMultiLine"/>
+
+        <TextView
+            android:id="@+id/sectors_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/roles_write_view"
+            app:layout_constraintBottom_toTopOf="@id/sectors_write_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            android:gravity="start"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="@string/what_sectors_are_you_looking_for"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:paddingHorizontal="20dp"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:layout_marginTop="20dp"/>
+
+        <EditText
+            android:id="@+id/sectors_write_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/sectors_text_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginHorizontal="20dp"
+            android:inputType="textMultiLine"/>
+
+        <TextView
+            android:id="@+id/years_experience_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/sectors_write_view"
+            app:layout_constraintBottom_toTopOf="@id/years_experience_write_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            android:gravity="start"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="@string/minimum_years_of_experience_needed"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:paddingHorizontal="20dp"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:layout_marginTop="20dp"/>
+
+        <EditText
+            android:id="@+id/years_experience_write_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/years_experience_text_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginHorizontal="20dp"
+            android:digits="0123456789"
+            android:inputType="number"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor"/>
+
+        <TextView
+            android:id="@+id/job_description_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/years_experience_write_view"
+            app:layout_constraintBottom_toTopOf="@id/job_description_write_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            android:gravity="start"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="@string/job_description"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:paddingHorizontal="20dp"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:layout_marginTop="20dp"/>
+
+        <EditText
+            android:id="@+id/job_description_write_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/job_description_text_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginHorizontal="20dp"
+            android:inputType="textMultiLine"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
+
+        <Button
+            style="@style/form_button"
+            android:id="@+id/search_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/search"
+            app:layout_constraintTop_toBottomOf="@id/job_description_write_view"
+            app:layout_constraintBottom_toTopOf="@id/cancel_button"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="50dp"/>
+
+        <Button
+            style="@style/form_button"
+            android:id="@+id/cancel_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            app:layout_constraintTop_toBottomOf="@id/search_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="50dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

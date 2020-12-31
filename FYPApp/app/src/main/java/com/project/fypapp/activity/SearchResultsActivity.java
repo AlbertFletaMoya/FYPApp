@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.auth.data.model.User;
 import com.project.fypapp.R;
 import com.project.fypapp.adapter.SearchResultsRecyclerAdapter;
 import com.project.fypapp.model.UserProfile;
@@ -33,7 +32,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     private void goToEditSearch() {
-        Intent i = new Intent(SearchResultsActivity.this, CreateSearchActivity.class);
+        Intent i = new Intent(SearchResultsActivity.this, EditSearchActivity.class);
         i.putExtra("searchId", 123);
         startActivity(i);
     }

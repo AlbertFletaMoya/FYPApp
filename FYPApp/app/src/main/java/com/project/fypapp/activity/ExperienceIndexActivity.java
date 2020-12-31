@@ -13,7 +13,7 @@ import com.project.fypapp.R;
 import com.project.fypapp.adapter.UserExperienceRecyclerAdapter;
 import com.project.fypapp.model.UserProfile;
 
-import static com.project.fypapp.util.Constants.RECYCLER_VIEW_ADD_EXPERIENCE;
+import static com.project.fypapp.util.Constants.ADD_NEW_EXPERIENCE;
 
 public class ExperienceIndexActivity extends AppCompatActivity {
     @Override
@@ -35,16 +35,16 @@ public class ExperienceIndexActivity extends AppCompatActivity {
 
         UserExperienceRecyclerAdapter userExperienceRecyclerAdapter =
                 new UserExperienceRecyclerAdapter(userProfile.getJobs(), (v, position) -> {
-                    Intent i = new Intent(ExperienceIndexActivity.this, EditProfileActivity.class);
-                    i.putExtra("position", position);
+                    Intent i = new Intent(ExperienceIndexActivity.this, EditJobExperienceActivity.class);
+                    i.putExtra("experienceId", 123);
                     startActivity(i);
                 });
         recyclerView.setAdapter(userExperienceRecyclerAdapter);
     }
 
     private void addExperience() {
-        Intent i = new Intent(ExperienceIndexActivity.this, EditProfileActivity.class);
-        i.putExtra("position", RECYCLER_VIEW_ADD_EXPERIENCE);
+        Intent i = new Intent(ExperienceIndexActivity.this, EditJobExperienceActivity.class);
+        i.putExtra("experienceId", ADD_NEW_EXPERIENCE);
         startActivity(i);
     }
 }

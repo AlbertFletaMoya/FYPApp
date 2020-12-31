@@ -18,8 +18,6 @@ import com.project.fypapp.adapter.UserProfileRecyclerAdapter;
 import com.project.fypapp.model.UserProfile;
 
 import static com.project.fypapp.util.Constants.LOGOUT_MESSAGE;
-import static com.project.fypapp.util.Constants.RECYCLER_VIEW_EDIT_PROFILE;
-import static com.project.fypapp.util.Constants.RECYCLER_VIEW_POSITION;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -85,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void editProfileOnClick(View v, int position) {
                         Intent i = new Intent(MainActivity.this, EditProfileActivity.class);
-                        i.putExtra(RECYCLER_VIEW_POSITION, RECYCLER_VIEW_EDIT_PROFILE);
+                        i.putExtra("userId", 123);
                         startActivity(i);
                     }
 

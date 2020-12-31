@@ -2,6 +2,7 @@ package com.project.fypapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -9,21 +10,21 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.firebase.ui.auth.data.model.User;
 import com.project.fypapp.R;
 import com.project.fypapp.model.UserSearch;
 
 import java.util.Arrays;
 
-public class CreateSearchActivity extends AppCompatActivity {
+public class EditSearchActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_create_search);
+        setContentView(R.layout.activity_edit_search);
 
         final Button searchButton = findViewById(R.id.search_button);
+        final Button cancelButton = findViewById(R.id.cancel_button);
 
         if (getIntent().getExtras() != null) {
             UserSearch userSearch = new UserSearch();
@@ -37,6 +38,12 @@ public class CreateSearchActivity extends AppCompatActivity {
             minYearsEditText.setText(String.valueOf(userSearch.getMinYearsOfExperience()));
             jobDescriptionEditText.setText(userSearch.getJobDescription());
             searchButton.setOnClickListener(view -> createSearch(false));
+
+            cancelButton.setOnClickListener(view -> goToSearchResults());
+        }
+
+        else {
+            ((ViewManager)cancelButton.getParent()).removeView(cancelButton);
         }
 
         searchButton.setOnClickListener(view -> createSearch(true));
@@ -68,10 +75,14 @@ public class CreateSearchActivity extends AppCompatActivity {
             // save the user search if newSearch save if false just overwrite the existing one potentially
             // using the id passed in the intent
 
-            Intent i = new Intent(CreateSearchActivity.this, SearchResultsActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(i);
-            finish();
+            goToSearchResults();
         }
+    }
+
+    private void goToSearchResults() {
+        Intent i = new Intent(EditSearchActivity.this, SearchResultsActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+        finish();
     }
 }

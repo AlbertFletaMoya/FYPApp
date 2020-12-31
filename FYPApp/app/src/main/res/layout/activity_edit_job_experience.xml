@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="30dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,80 +15,80 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
-            android:id="@+id/roles_text_view"
+            android:id="@+id/company_name_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/roles_write_view"
+            app:layout_constraintBottom_toTopOf="@id/company_name_write_view"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="parent"
             android:gravity="start"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="@string/what_roles_are_you_looking_for"
+            android:text="@string/company"
             app:layout_constraintVertical_chainStyle="packed"
             android:paddingHorizontal="20dp"
             app:layout_constraintHorizontal_chainStyle="packed"/>
 
         <EditText
-            android:id="@+id/roles_write_view"
+            android:id="@+id/company_name_write_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/roles_text_view"
+            app:layout_constraintTop_toBottomOf="@id/company_name_view"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginHorizontal="20dp"
             android:inputType="textMultiLine"/>
 
         <TextView
-            android:id="@+id/sectors_text_view"
+            android:id="@+id/sector_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/roles_write_view"
-            app:layout_constraintBottom_toTopOf="@id/sectors_write_view"
+            app:layout_constraintTop_toBottomOf="@id/company_name_write_view"
+            app:layout_constraintBottom_toTopOf="@id/sector_write_view"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="parent"
             android:gravity="start"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="@string/what_sectors_are_you_looking_for"
+            android:text="@string/what_sector_best_describes_the_company"
             app:layout_constraintVertical_chainStyle="packed"
             android:paddingHorizontal="20dp"
             app:layout_constraintHorizontal_chainStyle="packed"
             android:layout_marginTop="20dp"/>
 
         <EditText
-            android:id="@+id/sectors_write_view"
+            android:id="@+id/sector_write_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/sectors_text_view"
+            app:layout_constraintTop_toBottomOf="@id/sector_view"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginHorizontal="20dp"
             android:inputType="textMultiLine"/>
 
         <TextView
-            android:id="@+id/years_experience_text_view"
+            android:id="@+id/position_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/sectors_write_view"
-            app:layout_constraintBottom_toTopOf="@id/years_experience_write_view"
+            app:layout_constraintTop_toBottomOf="@id/sector_write_view"
+            app:layout_constraintBottom_toTopOf="@id/position_write_view"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="parent"
             android:gravity="start"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="@string/minimum_years_of_experience_needed"
+            android:text="@string/position"
             app:layout_constraintVertical_chainStyle="packed"
             android:paddingHorizontal="20dp"
             app:layout_constraintHorizontal_chainStyle="packed"
             android:layout_marginTop="20dp"/>
 
         <EditText
-            android:id="@+id/years_experience_write_view"
+            android:id="@+id/position_write_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/years_experience_text_view"
+            app:layout_constraintTop_toBottomOf="@id/position_view"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginHorizontal="20dp"
@@ -101,7 +101,7 @@
             android:id="@+id/job_description_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/years_experience_write_view"
+            app:layout_constraintTop_toBottomOf="@id/position_write_view"
             app:layout_constraintBottom_toTopOf="@id/job_description_write_view"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="parent"
@@ -121,25 +121,93 @@
             app:layout_constraintTop_toBottomOf="@id/job_description_text_view"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/starting_date_view"
             android:layout_marginHorizontal="20dp"
             android:inputType="textMultiLine"
             android:importantForAutofill="no"
             tools:ignore="LabelFor" />
 
-        <Button
-            style="@style/form_button"
-            android:id="@+id/search_button"
+        <TextView
+            android:id="@+id/starting_date_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/search"
             app:layout_constraintTop_toBottomOf="@id/job_description_write_view"
+            app:layout_constraintBottom_toTopOf="@id/starting_date_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            android:gravity="start"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="@string/starting_date"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:paddingHorizontal="20dp"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:layout_marginTop="20dp"/>
+
+        <EditText
+            android:id="@+id/starting_date_write_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/starting_date_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginHorizontal="20dp"
+            android:inputType="date"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
+
+        <TextView
+            android:id="@+id/ending_date_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/starting_date_write_view"
+            app:layout_constraintBottom_toTopOf="@id/ending_date_write_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            android:gravity="start"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="@string/ending_date"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:paddingHorizontal="20dp"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:layout_marginTop="20dp"/>
+
+        <EditText
+            android:id="@+id/ending_date_write_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/ending_date_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginHorizontal="20dp"
+            android:inputType="date"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
+
+        <Button
+            style="@style/form_button"
+            android:id="@+id/save_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            app:layout_constraintTop_toBottomOf="@id/ending_date_write_view"
+            app:layout_constraintBottom_toTopOf="@id/cancel_button"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="50dp"/>
+
+        <Button
+            style="@style/form_button"
+            android:id="@+id/cancel_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            app:layout_constraintTop_toBottomOf="@id/search_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="50dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 </ScrollView>

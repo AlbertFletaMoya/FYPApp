@@ -2,60 +2,81 @@ package com.project.fypapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.project.fypapp.R;
 import com.project.fypapp.model.UserProfile;
 
-import static com.project.fypapp.util.Constants.RECYCLER_VIEW_ADD_EXPERIENCE;
-import static com.project.fypapp.util.Constants.RECYCLER_VIEW_EDIT_PROFILE;
-import static com.project.fypapp.util.Constants.RECYCLER_VIEW_POSITION;
+import java.util.ArrayList;
 
 public class EditProfileActivity extends AppCompatActivity {
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit);
+
+        setContentView(R.layout.activity_edit_profile);
 
         final Button saveButton = findViewById(R.id.save_button);
-        saveButton.setOnClickListener(view -> {
-            saveProfile();
-            goToMain();
-        });
 
         final Button cancelButton = findViewById(R.id.cancel_button);
-        cancelButton.setOnClickListener(view -> goToMain());
 
-        final EditText edit = findViewById(R.id.edit_text_view);
+        // User is editing the information instead of creating a new profile
+        if (getIntent().getExtras() != null) {
+            final UserProfile userProfile = new UserProfile();
 
-        if (getIntent().getExtras() != null){
-            UserProfile userProfile = new UserProfile();
-            int position = getIntent().getIntExtra(RECYCLER_VIEW_POSITION, RECYCLER_VIEW_ADD_EXPERIENCE);
+            final EditText headlineView = findViewById(R.id.headline_write_view);
+            headlineView.setText(userProfile.getBio());
 
-            if (position == RECYCLER_VIEW_ADD_EXPERIENCE){
-                edit.setText("");
-            }
+            final EditText locationView = findViewById(R.id.location_write_view);
+            locationView.setText(userProfile.getRegion());
 
-            else if (position == RECYCLER_VIEW_EDIT_PROFILE){
-                edit.setText(userProfile.getBio());
-            }
+            cancelButton.setOnClickListener(view -> goToMain());
 
-            else {
-                edit.setText(userProfile.getJobs().get(position).getJobDescription());
-            }
+            saveButton.setOnClickListener(view -> saveProfile(false));
+        }
+
+        // User is creating a new profile
+        else {
+            ((ViewManager)cancelButton.getParent()).removeView(cancelButton);
+            saveButton.setOnClickListener(view -> saveProfile(true));
+        }
+
+    }
+
+    private void saveProfile(boolean newProfile) {
+        final EditText bioView = findViewById(R.id.headline_write_view);
+        final EditText locationView = findViewById(R.id.location_write_view);
+
+        final String bio = bioView.getText().toString().trim();
+        final String location = locationView.getText().toString().trim();
+
+        if (bio.equals("") || location.equals("")) {
+            Toast.makeText(getApplicationContext(), "Please fill in all the profile fields", Toast.LENGTH_LONG).show();
+        }
+
+        else {
+
+            UserProfile userProfile = new UserProfile("Albert Fleta", "leinadfc01@gmail.com", new ArrayList<>(),
+                    location, bio);
+
+            // save the profile or overwrite it depending on new profile
+
+            goToMain();
         }
     }
 
     private void goToMain() {
         Intent i = new Intent(EditProfileActivity.this, MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.putExtra("firstLogIn", false);
         startActivity(i);
-    }
-
-    private void saveProfile() {
-        // save in database
+        finish();
     }
 }
