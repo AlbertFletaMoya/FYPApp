@@ -49,12 +49,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Uncomment this if want to check first login functionality
-        if (firstLogIn) {
+        /* if (firstLogIn) {
             //ask for minimum information
             Intent i = new Intent(MainActivity.this, UserTypeActivity.class);
             startActivity(i);
             finish();
-        }
+        } */
     }
 
     private void signOut() {

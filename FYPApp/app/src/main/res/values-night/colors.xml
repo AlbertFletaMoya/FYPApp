@@ -2,4 +2,6 @@
 <resources>
     <!-- Night specific colors -->
     <color name="text_box">#303030</color>
+    <color name="main">#FF000000</color>
+    <color name="opposite_main">#FFFFFFFF</color>
 </resources>

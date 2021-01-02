@@ -13,4 +13,6 @@
     <color name="lavender">#EEE5E9</color>
     <!-- Light specific colors-->
     <color name="text_box">#EEE5E9</color>
+    <color name="main">#FFFFFF</color>
+    <color name="opposite_main">#FF000000</color>
 </resources>

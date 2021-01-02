@@ -78,4 +78,37 @@
     <style name="FirebaseUI.Text.Link">
         <item name="android:textColor">@color/black</item>
     </style>
+
+    <style name="edit_page_edit_text">
+        <item name="boxBackgroundColor">@color/main</item>
+        <item name="android:background">@color/main</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginHorizontal">20dp</item>
+        <item name="hintTextAppearance">@style/TextLabel</item>
+        <item name="errorTextAppearance">@style/ErrorTextLabel</item>
+    </style>
+
+    <style name="TextLabel" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ErrorTextLabel" parent="TextAppearance.Design.Error">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
+    <style name="AlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/opposite_main</item>
+        <item name="backgroundTint">@color/fui_transparent</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/opposite_main</item>
+        <item name="backgroundTint">@color/fui_transparent</item>
+    </style>
 </resources>

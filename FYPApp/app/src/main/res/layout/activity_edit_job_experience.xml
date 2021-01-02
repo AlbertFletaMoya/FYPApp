@@ -1,213 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginTop="30dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/scroll_view"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:background="@drawable/shadow_bottom"
+        android:paddingVertical="5dp">
 
         <TextView
-            android:id="@+id/company_name_view"
-            android:layout_width="match_parent"
+            android:id="@+id/cancel_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/page_title_view"
+            android:text="@string/cross"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:textSize="24sp"
+            android:textColor="@color/grey"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"/>
+
+        <TextView
+            android:id="@+id/page_title_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/cancel_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/edit_experience"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            android:textColor="@color/opposite_main"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginStart="30dp"/>
+
+        <TextView
+            android:id="@+id/save_view"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/company_name_write_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="parent"
-            android:gravity="start"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:text="@string/company"
-            app:layout_constraintVertical_chainStyle="packed"
-            android:paddingHorizontal="20dp"
-            app:layout_constraintHorizontal_chainStyle="packed"/>
-
-        <EditText
-            android:id="@+id/company_name_write_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/company_name_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginHorizontal="20dp"
-            android:inputType="textMultiLine"/>
-
-        <TextView
-            android:id="@+id/sector_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/company_name_write_view"
-            app:layout_constraintBottom_toTopOf="@id/sector_write_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="parent"
-            android:gravity="start"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:text="@string/what_sector_best_describes_the_company"
-            app:layout_constraintVertical_chainStyle="packed"
-            android:paddingHorizontal="20dp"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            android:layout_marginTop="20dp"/>
-
-        <EditText
-            android:id="@+id/sector_write_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/sector_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginHorizontal="20dp"
-            android:inputType="textMultiLine"/>
-
-        <TextView
-            android:id="@+id/position_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/sector_write_view"
-            app:layout_constraintBottom_toTopOf="@id/position_write_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="parent"
-            android:gravity="start"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:text="@string/position"
-            app:layout_constraintVertical_chainStyle="packed"
-            android:paddingHorizontal="20dp"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            android:layout_marginTop="20dp"/>
-
-        <EditText
-            android:id="@+id/position_write_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/position_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginHorizontal="20dp"
-            android:digits="0123456789"
-            android:inputType="number"
-            android:importantForAutofill="no"
-            tools:ignore="LabelFor"/>
-
-        <TextView
-            android:id="@+id/job_description_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/position_write_view"
-            app:layout_constraintBottom_toTopOf="@id/job_description_write_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="parent"
-            android:gravity="start"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:text="@string/job_description"
-            app:layout_constraintVertical_chainStyle="packed"
-            android:paddingHorizontal="20dp"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            android:layout_marginTop="20dp"/>
-
-        <EditText
-            android:id="@+id/job_description_write_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/job_description_text_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/starting_date_view"
-            android:layout_marginHorizontal="20dp"
-            android:inputType="textMultiLine"
-            android:importantForAutofill="no"
-            tools:ignore="LabelFor" />
-
-        <TextView
-            android:id="@+id/starting_date_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/job_description_write_view"
-            app:layout_constraintBottom_toTopOf="@id/starting_date_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="parent"
-            android:gravity="start"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:text="@string/starting_date"
-            app:layout_constraintVertical_chainStyle="packed"
-            android:paddingHorizontal="20dp"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            android:layout_marginTop="20dp"/>
-
-        <EditText
-            android:id="@+id/starting_date_write_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/starting_date_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginHorizontal="20dp"
-            android:inputType="date"
-            android:importantForAutofill="no"
-            tools:ignore="LabelFor" />
-
-        <TextView
-            android:id="@+id/ending_date_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/starting_date_write_view"
-            app:layout_constraintBottom_toTopOf="@id/ending_date_write_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="parent"
-            android:gravity="start"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:text="@string/ending_date"
-            app:layout_constraintVertical_chainStyle="packed"
-            android:paddingHorizontal="20dp"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            android:layout_marginTop="20dp"/>
-
-        <EditText
-            android:id="@+id/ending_date_write_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/ending_date_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginHorizontal="20dp"
-            android:inputType="date"
-            android:importantForAutofill="no"
-            tools:ignore="LabelFor" />
-
-        <Button
-            style="@style/form_button"
-            android:id="@+id/save_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/save"
-            app:layout_constraintTop_toBottomOf="@id/ending_date_write_view"
-            app:layout_constraintBottom_toTopOf="@id/cancel_button"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="50dp"/>
-
-        <Button
-            style="@style/form_button"
-            android:id="@+id/cancel_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel"
-            app:layout_constraintTop_toBottomOf="@id/search_button"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="@string/save"
+            android:textSize="18sp"
+            android:textColor="@color/turquoise_super_light"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="50dp"/>
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="20dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/top_bar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="20dp"
+        android:paddingBottom="50dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="80dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/company_name_layout"
+                style="@style/edit_page_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/company_name_write_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:hint="@string/company_name_star"
+                    android:textSize="18sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/sector_layout"
+                style="@style/edit_page_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/company_name_layout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/sector_write_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:hint="@string/company_sector_star"
+                    android:textSize="18sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/role_layout"
+                style="@style/edit_page_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/sector_layout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/roles_write_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:hint="@string/role_star"
+                    android:textSize="18sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/starting_date_layout"
+                style="@style/edit_page_edit_text"
+                android:weightSum="2"
+                app:layout_constraintHorizontal_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/role_layout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/ending_date_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/starting_date_write_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:hint="@string/starting_date_star"
+                    android:textSize="18sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ending_date_layout"
+                style="@style/edit_page_edit_text"
+                app:layout_constraintHorizontal_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/role_layout"
+                app:layout_constraintLeft_toRightOf="@id/starting_date_layout"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ending_date_write_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:hint="@string/ending_date_star"
+                    android:textSize="18sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/job_description_layout"
+                style="@style/edit_page_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/ending_date_layout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/job_description_write_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:hint="@string/description"
+                    android:textSize="18sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/delete_experience_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/delete_experience"
+                app:layout_constraintTop_toBottomOf="@id/job_description_layout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginTop="50dp"
+                android:textColor="@color/turquoise_super_light"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

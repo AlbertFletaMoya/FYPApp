@@ -12,6 +12,8 @@
     <string name="user_email">User Email</string>
     <string name="bio_text">User Bio</string>
     <string name="company">Company</string>
+    <string name="company_name">Company name</string>
+    <string name="company_name_star">Company name*</string>
     <string name="position">Position</string>
     <string name="dates">10/10/2020–10/10/2021</string>
     <string name="job_description">Job description</string>
@@ -31,9 +33,19 @@
     <string name="search">Search</string>
     <string name="minimum_years_of_experience_needed">Minimum years of experience needed</string>
     <string name="what_sector_best_describes_the_company">What sector best describes the company?</string>
-    <string name="starting_date">Starting date</string>
-    <string name="ending_date">Ending date</string>
+    <string name="company_sector">Company sector</string>
+    <string name="company_sector_star">Company sector*</string>
+    <string name="starting_date">Start date</string>
+    <string name="ending_date">End date</string>
+    <string name="starting_date_star">Start date*</string>
+    <string name="ending_date_star">End date*</string>
     <string name="i_am_an">I\'m an</string>
     <string name="entrepreneur">Entrepreneur</string>
     <string name="a_retiree_looking_for_opportunities">A retiree looking for opportunities</string>
+    <string name="role">Role</string>
+    <string name="role_star">Role*</string>
+    <string name="cross">✕</string>
+    <string name="edit_experience">Edit experience</string>
+    <string name="description">Description</string>
+    <string name="delete_experience">Delete experience</string>
 </resources>
