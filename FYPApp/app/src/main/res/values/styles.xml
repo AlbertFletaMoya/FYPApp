@@ -111,4 +111,8 @@
         <item name="android:textColor">@color/opposite_main</item>
         <item name="backgroundTint">@color/fui_transparent</item>
     </style>
+
+    <style name="NumberPickerText">
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>

@@ -48,4 +48,9 @@
     <string name="edit_experience">Edit experience</string>
     <string name="description">Description</string>
     <string name="delete_experience">Delete experience</string>
+    <string name="add_experience">Add experience</string>
+    <string name="ok">OK</string>
+    <string name="set">Set</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
