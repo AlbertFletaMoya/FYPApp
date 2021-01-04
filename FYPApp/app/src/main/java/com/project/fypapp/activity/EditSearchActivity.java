@@ -108,12 +108,31 @@ public class EditSearchActivity extends AppCompatActivity {
     }
 
     private boolean validateInputs() {
+        boolean valid = true;
         if (jobDescriptionEditText.getText().toString().trim().equals("")) {
             final TextInputLayout jobDescriptionLayout = findViewById(R.id.description_layout);
             jobDescriptionLayout.setError("Please enter a description");
-            return false;
+            valid = false;
         }
 
-        return true;
+        final String minYearsString = minYearsEditText.getText().toString().trim();
+        final TextInputLayout minYearsLayout = findViewById(R.id.years_experience_layout);
+
+        if (!minYearsString.equals("")) {
+            try {
+                int years = Integer.parseInt(minYearsString);
+                if (years < 0) {
+                    minYearsLayout.setError("Please enter a positive number");
+                    valid = false;
+                }
+            }
+
+            catch (NumberFormatException e) {
+                minYearsLayout.setError("Please enter a valid number");
+                valid = false;
+            }
+        }
+
+        return valid;
     }
 }
