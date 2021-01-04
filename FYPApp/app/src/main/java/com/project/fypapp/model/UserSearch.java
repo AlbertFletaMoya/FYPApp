@@ -22,4 +22,22 @@ public class UserSearch {
         listOfRoles = new ArrayList<>(Arrays.asList("Software Engineer", "Technical Manager"));
         listOfSectors = new ArrayList<>(Arrays.asList("Tech", "Finance", "Health"));
     }
+
+    public String getListOfRolesAsString() {
+        StringBuilder sb = new StringBuilder();
+        for (String role : listOfRoles) {
+            sb.append(role).append(", ");
+        }
+        sb.setLength(sb.length() - 2);
+        return sb.toString();
+    }
+
+    public String getListOfSectorsAsString() {
+        StringBuilder sb = new StringBuilder();
+        for (String sector : listOfSectors) {
+            sb.append(sector).append(", ");
+        }
+        sb.setLength(sb.length() - 2);
+        return sb.toString();
+    }
 }

@@ -210,9 +210,7 @@ public class EditJobExperienceActivity extends AppCompatActivity {
             new AlertDialog.Builder(this)
                     .setTitle("Discard changes")
                     .setMessage("Do you really want to discard your changes?")
-                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
-                        goToIndex();
-                    })
+                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToIndex())
                     .setNegativeButton(android.R.string.no, null).show();
         }
 
@@ -228,9 +226,7 @@ public class EditJobExperienceActivity extends AppCompatActivity {
             new AlertDialog.Builder(this)
                     .setTitle("Discard changes")
                     .setMessage("Do you really want to discard your changes?")
-                    .setPositiveButton(R.string.yes, (dialog, whichButton) -> {
-                        goToIndex();
-                    })
+                    .setPositiveButton(R.string.yes, (dialog, whichButton) -> goToIndex())
                     .setNegativeButton(R.string.no, null).show();
         }
 
