@@ -17,14 +17,14 @@
     <string name="position">Position</string>
     <string name="dates">10/10/2020–10/10/2021</string>
     <string name="job_description">Job description</string>
-    <string name="edit">EDIT</string>
+    <string name="edit">Edit</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="location">Location</string>
     <string name="vertical_bar">|</string>
     <string name="experience">Experience</string>
     <string name="edit_add">EDIT/ADD</string>
-    <string name="add">ADD</string>
+    <string name="add">Add</string>
     <string name="profile_headline">Profile headline</string>
     <string name="profile_headline_star">Profile headline*</string>
     <string name="what_is_your_current_location">What is your current location?</string>
@@ -43,8 +43,8 @@
     <string name="starting_date_star">Start date*</string>
     <string name="ending_date_star">End date*</string>
     <string name="i_am_an">I\'m an</string>
-    <string name="entrepreneur">Entrepreneur</string>
-    <string name="a_retiree_looking_for_opportunities">A retiree looking for opportunities</string>
+    <string name="entrepreneur">I\'m an Entrepreneur</string>
+    <string name="a_retiree_looking_for_opportunities">I\'m a retiree looking for opportunities</string>
     <string name="role">Role</string>
     <string name="role_star">Role*</string>
     <string name="cross">✕</string>
@@ -63,4 +63,5 @@
     <string name="edit_search">Edit search</string>
     <string name="create_search">Create search</string>
     <string name="separate_multiple_with_commas">(Separate multiple with commas)</string>
+    <string name="why_do_you_want_to_use_this_app">Why are you using this app?</string>
 </resources>

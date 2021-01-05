@@ -4,29 +4,73 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/add_job_view"
-        android:layout_width="wrap_content"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/recycler_view"
-        android:gravity="end"
-        android:paddingHorizontal="20dp"
-        android:textSize="18sp"
-        android:textColor="@color/turquoise_super_light"
-        app:layout_constraintVertical_chainStyle="packed"
-        android:paddingVertical="10dp"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/shadow_bottom"
+        android:paddingVertical="5dp">
+
+        <TextView
+            android:id="@+id/cancel_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/page_title_view"
+            android:text="@string/cross"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:textSize="24sp"
+            android:textColor="@color/grey"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"/>
+
+        <TextView
+            android:id="@+id/page_title_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/cancel_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/experience"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            android:textColor="@color/opposite_main"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp" />
+
+        <TextView
+            android:id="@+id/add_job_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/add"
+            android:textSize="18sp"
+            android:textColor="@color/turquoise_super_light"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintRight_toRightOf="parent"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="20dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/add_job_view"
+        app:layout_constraintTop_toBottomOf="@id/top_bar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:orientation="vertical"
-        android:overScrollMode="never"/>
+        android:overScrollMode="never"
+        android:layout_marginTop="20dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

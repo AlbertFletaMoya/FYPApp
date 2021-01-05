@@ -24,9 +24,12 @@ public class ExperienceIndexActivity extends AppCompatActivity {
 
         final TextView addExperienceView = findViewById(R.id.add_job_view);
         addExperienceView.setOnClickListener(view -> addExperience());
+
+        final TextView cancelView = findViewById(R.id.cancel_view);
+        cancelView.setOnClickListener(view -> cancel());
     }
 
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -46,5 +49,14 @@ public class ExperienceIndexActivity extends AppCompatActivity {
         Intent i = new Intent(ExperienceIndexActivity.this, EditJobExperienceActivity.class);
         i.putExtra("experienceId", ADD_NEW_EXPERIENCE);
         startActivity(i);
+    }
+
+    private void cancel() {
+        Intent i = new Intent(ExperienceIndexActivity.this, MainActivity.class);
+        i.putExtra("profileBelongsToUser", true);
+        i.putExtra("firstLogIn", false);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+        finish();
     }
 }

@@ -11,9 +11,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/entrepreneur_button"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:text="@string/i_am_an"
-        android:textSize="18sp"
-        android:layout_marginHorizontal="20dp"/>
+        android:text="@string/why_do_you_want_to_use_this_app"
+        android:textSize="20sp"
+        android:layout_marginHorizontal="50dp"
+        android:textColor="@color/opposite_main"
+        app:layout_constraintVertical_chainStyle="packed"/>
 
     <Button
         style="@style/form_button"
@@ -25,7 +27,8 @@
         app:layout_constraintBottom_toTopOf="@id/retired_user_button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="50dp"/>
+        android:layout_marginTop="30dp"
+        app:layout_constraintVertical_chainStyle="packed"/>
 
     <Button
         style="@style/form_button"
@@ -37,6 +40,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="50dp"/>
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginTop="30dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
