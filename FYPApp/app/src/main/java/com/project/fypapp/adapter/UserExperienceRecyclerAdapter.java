@@ -25,7 +25,6 @@ public class UserExperienceRecyclerAdapter extends RecyclerView.Adapter<Recycler
         private final TextView company;
         private final TextView position;
         private final TextView dates;
-        private final TextView edit;
 
         public UserExperienceViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -33,7 +32,7 @@ public class UserExperienceRecyclerAdapter extends RecyclerView.Adapter<Recycler
             company = itemView.findViewById(R.id.company_view);
             position = itemView.findViewById(R.id.position_view);
             dates = itemView.findViewById(R.id.date_view);
-            edit = itemView.findViewById(R.id.edit_experience_view);
+            TextView edit = itemView.findViewById(R.id.edit_experience_view);
 
             edit.setOnClickListener(view -> onClickListener.editExperienceOnClick(view, getAdapterPosition()));
         }

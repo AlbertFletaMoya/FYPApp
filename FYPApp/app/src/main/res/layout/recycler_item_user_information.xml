@@ -35,7 +35,8 @@
         android:textStyle="bold"
         android:paddingHorizontal="20dp"
         app:layout_constraintVertical_bias="0"
-        android:paddingVertical="10dp"/>
+        android:paddingVertical="10dp"
+        android:textColor="@color/opposite_main"/>
 
     <TextView
         android:id="@+id/bio_view"
@@ -49,7 +50,8 @@
         android:textSize="18sp"
         android:text="@string/bio_text"
         app:layout_constraintVertical_chainStyle="packed"
-        android:paddingHorizontal="20dp" />
+        android:paddingHorizontal="20dp"
+        android:textColor="@color/opposite_main"/>
 
     <TextView
         android:id="@+id/email_view"
@@ -131,7 +133,8 @@
         app:layout_constraintTop_toBottomOf="@id/email_view"
         app:layout_constraintVertical_bias="0"
         android:layout_marginTop="50dp"
-        android:paddingVertical="10dp"/>
+        android:paddingVertical="10dp"
+        android:textColor="@color/opposite_main"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

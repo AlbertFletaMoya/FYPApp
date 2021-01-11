@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.project.fypapp.R;
 import com.project.fypapp.model.JobDescription;
 import com.project.fypapp.model.UserProfile;
+import com.project.fypapp.view.ExpandableTextView;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -55,7 +56,7 @@ public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         private final TextView company;
         private final TextView position;
         private final TextView dates;
-        private final TextView jobDescription;
+        private final ExpandableTextView jobDescription;
 
         public JobDescriptionViewHolder(@NonNull View itemView) {
             super(itemView);

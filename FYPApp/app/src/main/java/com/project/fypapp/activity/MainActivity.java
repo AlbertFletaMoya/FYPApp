@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Button logoutButton = findViewById(R.id.logout_button);
-        logoutButton.setOnClickListener(view -> signOut());
+       // final Button logoutButton = findViewById(R.id.logout_button);
+       // logoutButton.setOnClickListener(view -> signOut());
 
         boolean profileBelongsToUser = true;
 
