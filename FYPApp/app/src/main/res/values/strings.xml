@@ -66,4 +66,5 @@
     <string name="why_do_you_want_to_use_this_app">Why are you using this app?</string>
     <string name="plus">+</string>
     <string name="city_and_country_star">City and country*</string>
+    <string name="sign_out">Sign out</string>
 </resources>

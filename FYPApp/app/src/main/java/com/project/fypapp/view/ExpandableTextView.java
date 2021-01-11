@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.project.fypapp.R;
 
 public class ExpandableTextView extends androidx.appcompat.widget.AppCompatTextView {
-    private static final int DEFAULT_TRIM_LENGTH = 97;
+    private static final int DEFAULT_TRIM_LENGTH = 100;
     private static final String ELLIPSIS = "... show more";
 
     private CharSequence originalText;

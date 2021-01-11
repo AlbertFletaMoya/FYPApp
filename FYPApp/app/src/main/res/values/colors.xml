@@ -11,8 +11,11 @@
     <color name="turquoise_dark">#044343</color>
     <color name="turquoise_super_light">#46737D</color>
     <color name="lavender">#EEE5E9</color>
+    <color name="lavender_transparent">#80EEE5E9</color>
     <!-- Light specific colors-->
     <color name="text_box">#EEE5E9</color>
     <color name="main">#FFFFFF</color>
     <color name="opposite_main">#FF000000</color>
+    <color name="light_grey">#f7f7f7</color>
+    <color name="card_view_color">#FFFFFFFF</color>
 </resources>

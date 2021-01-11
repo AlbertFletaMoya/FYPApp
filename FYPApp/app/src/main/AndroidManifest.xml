@@ -22,6 +22,7 @@
         <activity android:name=".activity.EditProfileActivity"/>
         <activity android:name=".activity.EditJobExperienceActivity"/>
         <activity android:name=".activity.UserTypeActivity"/>
+        <activity android:name=".activity.FirebaseUIActivity"/>
     </application>
 
 </manifest>
