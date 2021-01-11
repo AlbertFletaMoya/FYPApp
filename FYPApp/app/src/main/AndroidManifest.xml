@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FYPApp">
-        <activity android:name=".activity.UserTypeActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +21,7 @@
         <activity android:name=".activity.ExperienceIndexActivity"/>
         <activity android:name=".activity.EditProfileActivity"/>
         <activity android:name=".activity.EditJobExperienceActivity"/>
-        <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".activity.UserTypeActivity"/>
     </application>
 
 </manifest>

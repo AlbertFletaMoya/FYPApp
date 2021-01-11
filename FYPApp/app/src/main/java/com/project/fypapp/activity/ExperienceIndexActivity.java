@@ -2,10 +2,12 @@ package com.project.fypapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,7 +24,7 @@ public class ExperienceIndexActivity extends AppCompatActivity {
         setContentView(R.layout.activity_experience_index);
         initRecyclerView();
 
-        final TextView addExperienceView = findViewById(R.id.add_job_view);
+        final ConstraintLayout addExperienceView = findViewById(R.id.add_job_layout);
         addExperienceView.setOnClickListener(view -> addExperience());
 
         final TextView cancelView = findViewById(R.id.cancel_view);
