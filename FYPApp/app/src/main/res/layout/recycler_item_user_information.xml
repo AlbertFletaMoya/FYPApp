@@ -107,7 +107,7 @@
     <View android:background="#4D7C7C7C"
         android:layout_width = "match_parent"
         android:layout_height="1dp"
-        app:layout_constraintBottom_toTopOf="@id/edit_experience_view"
+        app:layout_constraintBottom_toTopOf="@id/section_view"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginBottom="10dp"/>
 

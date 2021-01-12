@@ -3,6 +3,7 @@ package com.project.fypapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,10 +35,20 @@ public class MainActivity extends AppCompatActivity {
        final TextView logoutButton = findViewById(R.id.logout_view);
        logoutButton.setOnClickListener(view -> signOut());
 
+       final TextView cancelButton = findViewById(R.id.cancel_view);
+       cancelButton.setOnClickListener(view -> finish());
+
         boolean profileBelongsToUser = true;
 
         if (getIntent().getExtras() != null) {
             profileBelongsToUser = getIntent().getBooleanExtra("profileBelongsToUser", false);
+            if (!profileBelongsToUser) {
+                ((ViewGroup) logoutButton.getParent()).removeView(logoutButton);
+            }
+        }
+
+        if (profileBelongsToUser) {
+            ((ViewGroup) cancelButton.getParent()).removeView(cancelButton);
         }
 
         initRecyclerView(profileBelongsToUser);

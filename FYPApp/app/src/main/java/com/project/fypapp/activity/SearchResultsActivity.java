@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.fypapp.R;
@@ -39,17 +39,14 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     private void initRecyclerView() {
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(gridLayoutManager);
 
         final List<UserProfile> users = createUsers();
-        SearchResultsRecyclerAdapter recyclerAdapter = new SearchResultsRecyclerAdapter(users, new SearchResultsRecyclerAdapter.SearchResultsOnClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                Intent i = new Intent(SearchResultsActivity.this, MainActivity.class);
-                i.putExtra("profileBelongsToUser", false);
-                startActivity(i);
-            }
+        SearchResultsRecyclerAdapter recyclerAdapter = new SearchResultsRecyclerAdapter(users, (v, position) -> {
+            Intent i = new Intent(SearchResultsActivity.this, MainActivity.class);
+            i.putExtra("profileBelongsToUser", false);
+            startActivity(i);
         });
 
         recyclerView.setAdapter(recyclerAdapter);
@@ -58,7 +55,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     private List<UserProfile> createUsers() {
         final List<UserProfile> users = new ArrayList<>();
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 30; i++) {
             users.add(new UserProfile());
         }
 

@@ -67,4 +67,6 @@
     <string name="plus">+</string>
     <string name="city_and_country_star">City and country*</string>
     <string name="sign_out">Sign out</string>
+    <string name="edit_search_parameters">Edit search parameters</string>
+    <string name="search_results">Search results</string>
 </resources>

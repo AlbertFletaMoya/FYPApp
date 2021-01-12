@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.fypapp.R;
@@ -14,6 +13,7 @@ import com.project.fypapp.model.UserProfile;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -23,6 +23,7 @@ public class SearchResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     private final SearchResultsOnClickListener onClickListener;
 
     class SearchResultsViewHolder extends RecyclerView.ViewHolder {
+        private final CircleImageView profilePictureView;
         private final TextView nameView;
         private final TextView bioView;
 
@@ -31,6 +32,7 @@ public class SearchResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
 
             nameView = itemView.findViewById(R.id.name_view);
             bioView = itemView.findViewById(R.id.bio_view);
+            profilePictureView = itemView.findViewById(R.id.profile_picture_view);
 
             itemView.setOnClickListener(view -> onClickListener.onItemClick(view, getAdapterPosition()));
         }
@@ -48,6 +50,14 @@ public class SearchResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         SearchResultsViewHolder viewHolder = (SearchResultsViewHolder) holder;
         viewHolder.nameView.setText(users.get(position).getName());
         viewHolder.bioView.setText(users.get(position).getBio());
+
+        if (position % 2 == 0) {
+            viewHolder.profilePictureView.setImageResource(R.drawable.pp);
+        }
+
+        else {
+            viewHolder.profilePictureView.setImageResource(R.drawable.ic_baseline_person_120);
+        }
     }
 
     @Override
