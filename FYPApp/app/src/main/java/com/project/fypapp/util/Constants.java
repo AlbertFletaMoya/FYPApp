@@ -29,4 +29,10 @@ public class Constants {
             {12, "Dec"},
     }).collect(Collectors.toMap(data -> (Integer) data[0], data -> (String) data[1]));
 
+    public enum UserType {
+        UNDEFINED,
+        RETIREE,
+        ENTREPRENEUR
+    }
+
 }
