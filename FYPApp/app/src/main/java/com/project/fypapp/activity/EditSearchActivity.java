@@ -2,6 +2,7 @@ package com.project.fypapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ViewManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,12 +12,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.fypapp.R;
-import com.project.fypapp.model.UserSearch;
+import com.project.fypapp.model.SearchDocument;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class EditSearchActivity extends AppCompatActivity {
+    private static final String TAG = "EditSearchActivity";
+
     private EditText rolesEditText;
     private EditText sectorsEditText;
     private EditText minYearsEditText;
@@ -38,46 +45,66 @@ public class EditSearchActivity extends AppCompatActivity {
         jobDescriptionEditText = findViewById(R.id.description_write_view);
 
         if (getIntent().getExtras() != null) {
-            UserSearch userSearch = new UserSearch();
+            String documentId = getIntent().getStringExtra("documentId");
+            boolean newSearch = getIntent().getBooleanExtra("newSearch", false);
 
-            rolesEditText.setText(userSearch.getListOfRolesAsString());
-            sectorsEditText.setText(userSearch.getListOfSectorsAsString());
-            minYearsEditText.setText(String.valueOf(userSearch.getMinYearsOfExperience()));
-            jobDescriptionEditText.setText(userSearch.getJobDescription());
+            if (!newSearch && documentId != null) {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("searches")
+                        .document(documentId)
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                SearchDocument userSearch = Objects.requireNonNull(task.getResult()).toObject(SearchDocument.class);
+                                assert userSearch != null;
+                                rolesEditText.setText(userSearch.getListOfRolesAsString());
+                                sectorsEditText.setText(userSearch.getListOfSectorsAsString());
+                                minYearsEditText.setText(String.valueOf(userSearch.getMin_years_of_experience()));
+                                jobDescriptionEditText.setText(userSearch.getJob_description());
 
-            searchButton.setOnClickListener(view -> createSearch(false));
-            cancelButton.setOnClickListener(view -> cancel(rolesEditText.getText().toString().trim(),
-                    sectorsEditText.getText().toString().trim(),
-                    minYearsEditText.getText().toString().trim(),
-                    jobDescriptionEditText.getText().toString().trim()));
-        }
+                                cancelButton.setOnClickListener(view -> cancel(documentId, rolesEditText.getText().toString().trim(),
+                                        sectorsEditText.getText().toString().trim(),
+                                        minYearsEditText.getText().toString().trim(),
+                                        jobDescriptionEditText.getText().toString().trim()));
+                            } else {
+                                Log.w(TAG, "Error getting documents.", task.getException());
+                            }
+                        });
+            }
 
-        else {
-            ((ViewManager)cancelButton.getParent()).removeView(cancelButton);
-            searchButton.setOnClickListener(view -> createSearch(true));
-            pageTitle.setText(R.string.create_search);
-            searchButton.setText(R.string.search);
+            else {
+                ((ViewManager)cancelButton.getParent()).removeView(cancelButton);
+                pageTitle.setText(R.string.create_search);
+                searchButton.setText(R.string.search);
+            }
+
+            searchButton.setOnClickListener(view -> createSearch(documentId));
         }
     }
 
-    private void createSearch(boolean newSearch) {
+    private void createSearch(String documentId) {
         final String rolesString = rolesEditText.getText().toString().trim();
         final String sectorsString = sectorsEditText.getText().toString().trim();
         final String yearsString = minYearsEditText.getText().toString().trim();
         final String jobDescriptionString = jobDescriptionEditText.getText().toString().trim();
 
         if (validateInputs()) {
-            UserSearch userSearch = new UserSearch(
-                    Arrays.asList(rolesString.split(" ")),
-                    Arrays.asList(sectorsString.split(" ")),
-                    Integer.parseInt(yearsString),
-                    jobDescriptionString
-            );
+            final Map<String, Object> search = new HashMap<>();
+            search.put("roles", Arrays.asList(Arrays.stream(rolesString.split(",")).map(String::trim).toArray(String[]::new)));
+            search.put("sectors", Arrays.asList(Arrays.stream(sectorsString.split(",")).map(String::trim).toArray(String[]::new)));
+            search.put("min_years_of_experience", Integer.parseInt(yearsString));
+            search.put("job_description", jobDescriptionString);
 
-            // save the user search if newSearch save if false just overwrite the existing one potentially
-            // using the id passed in the intent
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("searches")
+                    .document(documentId)
+                    .update(search)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "Search was successfully updated");
+                        goToSearchResults();
+                    })
 
-            goToSearchResults();
+                    .addOnFailureListener(e -> Log.d(TAG, "Search couldn't be updated"));
         }
     }
 
@@ -88,23 +115,34 @@ public class EditSearchActivity extends AppCompatActivity {
         finish();
     }
 
-    private void cancel(String roles, String sectors, String yearsOfExperience, String description) {
-        UserSearch userSearch = new UserSearch();
-        if (!userSearch.getListOfRoles().equals(Arrays.asList(Arrays.stream(roles.split(",")).map(String::trim).toArray(String[]::new)))
-        || !userSearch.getListOfSectors().equals(Arrays.asList(Arrays.stream(sectors.split(",")).map(String::trim).toArray(String[]::new)))
-        || userSearch.getMinYearsOfExperience() != Integer.parseInt(yearsOfExperience)
-        || !userSearch.getJobDescription().equals(description)){
+    private void cancel(String documentId, String roles, String sectors, String yearsOfExperience, String description) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("searches")
+                .document(documentId)
+                .get()
+                .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            SearchDocument searchDocument = Objects.requireNonNull(task.getResult()).toObject(SearchDocument.class);
+                            assert searchDocument != null;
+                            if (!searchDocument.getRoles().equals(Arrays.asList(Arrays.stream(roles.split(",")).map(String::trim).toArray(String[]::new)))
+                                    || !searchDocument.getSectors().equals(Arrays.asList(Arrays.stream(sectors.split(",")).map(String::trim).toArray(String[]::new)))
+                                    || searchDocument.getMin_years_of_experience() != Integer.parseInt(yearsOfExperience)
+                                    || !searchDocument.getJob_description().equals(description)){
 
-            new AlertDialog.Builder(this)
-                    .setTitle("Discard changes")
-                    .setMessage("Do you really want to discard your changes?")
-                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToSearchResults())
-                    .setNegativeButton(android.R.string.no, null).show();
-        }
+                                new AlertDialog.Builder(this)
+                                        .setTitle("Discard changes")
+                                        .setMessage("Do you really want to discard your changes?")
+                                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToSearchResults())
+                                        .setNegativeButton(android.R.string.no, null).show();
+                            }
 
-        else {
-            goToSearchResults();
-        }
+                            else {
+                                goToSearchResults();
+                            }
+                        } else {
+                            Log.d(TAG, "Couldn't retrieve data");
+                        }
+                });
     }
 
     private boolean validateInputs() {
@@ -118,19 +156,17 @@ public class EditSearchActivity extends AppCompatActivity {
         final String minYearsString = minYearsEditText.getText().toString().trim();
         final TextInputLayout minYearsLayout = findViewById(R.id.years_experience_layout);
 
-        if (!minYearsString.equals("")) {
-            try {
-                int years = Integer.parseInt(minYearsString);
-                if (years < 0) {
-                    minYearsLayout.setError("Please enter a positive number");
-                    valid = false;
-                }
-            }
-
-            catch (NumberFormatException e) {
-                minYearsLayout.setError("Please enter a valid number");
+        try {
+            int years = Integer.parseInt(minYearsString);
+            if (years < 0) {
+                minYearsLayout.setError("Please enter a positive number");
                 valid = false;
             }
+        }
+
+        catch (NumberFormatException e) {
+            minYearsLayout.setError("Please enter a valid number");
+            valid = false;
         }
 
         return valid;

@@ -10,18 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.fypapp.R;
-import com.project.fypapp.util.Constants;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import static com.firebase.ui.auth.ErrorCodes.NO_NETWORK;
@@ -108,7 +103,6 @@ public class FirebaseUIActivity extends AppCompatActivity {
 
     private void proceedAfterLogin(FirebaseUser firebaseUser) {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final CollectionReference usersRef = db.collection("users");
 
         // Check if user is a retiree if it is create a new profile or go to main page depending if it's a new retiree
         db.collection("retiree_users")
@@ -118,9 +112,9 @@ public class FirebaseUIActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         if (!isQueryResultEmpty(task)) {
                             if (!isFieldEmpty(task, "headline")) {
-                                goToMainPage();
+                                goToMainPage(Objects.requireNonNull(task.getResult()).getDocuments().get(0).getId());
                             } else {
-                                goToCreateProfile();
+                                goToCreateProfile(Objects.requireNonNull(task.getResult()).getDocuments().get(0).getId());
                             }
                         }
 
@@ -131,11 +125,20 @@ public class FirebaseUIActivity extends AppCompatActivity {
                                     .addOnCompleteListener(task2 -> {
                                         if (task2.isSuccessful()) {
                                             if (!isQueryResultEmpty(task2)) {
-                                                if (!isFieldEmpty(task2, "search")) {
-                                                    goToSearchResults();
-                                                } else {
-                                                    goToCreateSearch();
-                                                }
+                                                db.collection("searches")
+                                                        .document(Objects.requireNonNull(Objects.requireNonNull(task2.getResult()).getDocuments().get(0).getString("search")))
+                                                        .get()
+                                                        .addOnCompleteListener(task3 -> {
+                                                            if (task3.isSuccessful()) {
+                                                                if (!Objects.equals(Objects.requireNonNull(task3.getResult()).getString("job_description"), "")) {
+                                                                    goToSearchResults();
+                                                                } else {
+                                                                    goToCreateSearch(Objects.requireNonNull(task2.getResult()).getDocuments().get(0).getId());
+                                                                }
+                                                            } else {
+                                                                Log.d(TAG, "Could not retrieve data from database");
+                                                            }
+                                                        });
                                             }
                                             else {
                                                 goToUserType();
@@ -155,15 +158,18 @@ public class FirebaseUIActivity extends AppCompatActivity {
                 });
     }
 
-    private void goToMainPage(){
+    private void goToMainPage(String documentId){
         Intent intent = new Intent(FirebaseUIActivity.this, MainActivity.class);
         intent.putExtra("profileBelongsToUser", true);
+        intent.putExtra("documentId", documentId);
         startActivity(intent);
         finish();
     }
 
-    private void goToCreateProfile(){
+    private void goToCreateProfile(String documentId){
         Intent intent = new Intent(FirebaseUIActivity.this, EditProfileActivity.class);
+        intent.putExtra("documentId", documentId);
+        intent.putExtra("newUser", true);
         startActivity(intent);
         finish();
     }
@@ -174,10 +180,21 @@ public class FirebaseUIActivity extends AppCompatActivity {
         finish();
     }
 
-    private void goToCreateSearch() {
-        Intent intent = new Intent(FirebaseUIActivity.this, EditSearchActivity.class);
-        startActivity(intent);
-        finish();
+    private void goToCreateSearch(String userId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("entrepreneur_users")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Intent intent = new Intent(FirebaseUIActivity.this, EditSearchActivity.class);
+                        intent.putExtra("documentId", Objects.requireNonNull(task.getResult()).getString("search"));
+                        intent.putExtra("newSearch", true);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
     }
 
     private void goToUserType() {

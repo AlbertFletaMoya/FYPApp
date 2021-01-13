@@ -34,7 +34,7 @@
     <string name="what_roles_are_you_looking_for">What previous roles are you interested in?</string>
     <string name="what_sectors_are_you_looking_for">What previous sectors are you interested in?</string>
     <string name="search">Search</string>
-    <string name="minimum_years_of_experience_needed">Minimum years of experience needed</string>
+    <string name="minimum_years_of_experience_needed">Minimum years of experience needed*</string>
     <string name="what_sector_best_describes_the_company">What sector best describes the company?</string>
     <string name="company_sector">Company sector</string>
     <string name="company_sector_star">Company sector*</string>
