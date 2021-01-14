@@ -13,27 +13,44 @@ public class Retiree {
     public static final String RETIREE_USERS = "retiree_users";
     public static final String EMAIL = "email";
     public static final String NAME = "name";
+    public static final String FIRST_NAME = "firstName";
+    public static final String LAST_NAME = "lastName";
+    public static final String CITY = "city";
+    public static final String COUNTRY = "country";
     public static final String HEADLINE = "headline";
     public static final String LOCATION = "location";
 
     private final String email;
-    private final String name;
+    private final String firstName;
+    private final String lastName;
     private final String headline;
-    private final String location;
+    private final String city;
+    private final String country;
 
     public Retiree() {
         email = "";
-        name = "";
+        firstName = "";
+        lastName = "";
         headline = "";
-        location = "";
+        city = "";
+        country = "";
+    }
+
+    public static String getName(Retiree retiree) {
+        return retiree.getFirstName() + " " + retiree.getLastName();
+    }
+
+    public static String getLocation(Retiree retiree) {
+        return retiree.getCity() + ", " + retiree.getCountry();
     }
 
     public Map<String, Object> toMap() {
         final Map<String, Object> retireeMap = new HashMap<>();
         retireeMap.put(EMAIL, this.email);
-        retireeMap.put(NAME, this.name);
+        retireeMap.put(FIRST_NAME, this.firstName);
         retireeMap.put(HEADLINE, this.headline);
-        retireeMap.put(LOCATION, this.location);
+        retireeMap.put(CITY, this.city);
+        retireeMap.put(COUNTRY, this.country);
         return retireeMap;
     }
 }

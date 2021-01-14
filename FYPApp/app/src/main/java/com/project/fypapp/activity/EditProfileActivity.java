@@ -18,9 +18,13 @@ import com.project.fypapp.model.Retiree;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
+import static com.project.fypapp.model.Retiree.CITY;
+import static com.project.fypapp.model.Retiree.COUNTRY;
+import static com.project.fypapp.model.Retiree.FIRST_NAME;
 import static com.project.fypapp.model.Retiree.HEADLINE;
-import static com.project.fypapp.model.Retiree.LOCATION;
+import static com.project.fypapp.model.Retiree.LAST_NAME;
 import static com.project.fypapp.model.Retiree.RETIREE_USERS;
 import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
 import static com.project.fypapp.util.Constants.DOCUMENT_ID;
@@ -33,8 +37,11 @@ import static com.project.fypapp.util.Constants.UNSUCCESSFULLY_UPDATED;
 public class EditProfileActivity extends AppCompatActivity {
     private static final String TAG = "EditProfileActivity";
 
-    private EditText profileHeadlineView;
-    private EditText locationView;
+    private EditText firstNameView;
+    private EditText lastNameView;
+    private EditText headlineView;
+    private EditText cityView;
+    private EditText countryView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,8 +52,11 @@ public class EditProfileActivity extends AppCompatActivity {
         final TextView saveButton = findViewById(R.id.save_view);
         final TextView cancelButton = findViewById(R.id.cancel_view);
 
-        profileHeadlineView = findViewById(R.id.headline_write_view);
-        locationView = findViewById(R.id.location_write_view);
+        firstNameView = findViewById(R.id.first_name_write_view);
+        lastNameView = findViewById(R.id.last_name_write_view);
+        headlineView = findViewById(R.id.headline_write_view);
+        cityView = findViewById(R.id.city_write_view);
+        countryView = findViewById(R.id.country_write_view);
 
         if (getIntent().getExtras() != null) {
             final String documentId = getIntent().getStringExtra(DOCUMENT_ID);
@@ -61,16 +71,24 @@ public class EditProfileActivity extends AppCompatActivity {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
-                                Retiree retiree = task.getResult().toObject(Retiree.class);
-                                profileHeadlineView.setText(retiree.getHeadline());
-                                locationView.setText(retiree.getLocation());
+                                Retiree retiree = Objects.requireNonNull(task.getResult()).toObject(Retiree.class);
+                                assert retiree != null;
+                                firstNameView.setText(retiree.getFirstName());
+                                lastNameView.setText(retiree.getLastName());
+                                headlineView.setText(retiree.getHeadline());
+                                cityView.setText(retiree.getCity());
+                                countryView.setText(retiree.getCountry());
                             } else {
                                 Log.d(TAG, COULD_NOT_RETRIEVE_DATA, task.getException());
                             }
                         });
 
-                cancelButton.setOnClickListener(view -> cancel(profileHeadlineView.getText().toString().trim(),
-                        locationView.getText().toString().trim(), documentId));
+                cancelButton.setOnClickListener(view -> cancel(firstNameView.getText().toString().trim(),
+                        lastNameView.getText().toString().trim(),
+                        headlineView.getText().toString().trim(),
+                        cityView.getText().toString().trim(),
+                        countryView.getText().toString().trim(),
+                        documentId));
             }
 
             else {
@@ -84,13 +102,19 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void saveProfile(String documentId) {
-        final String headline = profileHeadlineView.getText().toString().trim();
-        final String location = locationView.getText().toString().trim();
+        final String firstName = firstNameView.getText().toString().trim();
+        final String lastName = lastNameView.getText().toString().trim();
+        final String headline = headlineView.getText().toString().trim();
+        final String city = cityView.getText().toString().trim();
+        final String country = countryView.getText().toString().trim();
 
         if (validateFields()) {
            final Map<String, Object> retireeMap = new HashMap<>();
+           retireeMap.put(FIRST_NAME, firstName);
+           retireeMap.put(LAST_NAME, lastName);
            retireeMap.put(HEADLINE, headline);
-           retireeMap.put(LOCATION, location);
+           retireeMap.put(CITY, city);
+           retireeMap.put(COUNTRY, country);
 
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection(RETIREE_USERS)
@@ -114,7 +138,8 @@ public class EditProfileActivity extends AppCompatActivity {
         finish();
     }
 
-    private void cancel(String headline, String location, String documentId) {
+    private void cancel(String firstName, String lastName, String headline, String city,
+                        String country, String documentId) {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(RETIREE_USERS)
                 .document(documentId)
@@ -122,9 +147,13 @@ public class EditProfileActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
-                        final Retiree retiree = task.getResult().toObject(Retiree.class);
-                        if (!retiree.getHeadline().trim().equals(headline)
-                                || !retiree.getLocation().trim().equals(location)) {
+                        final Retiree retiree = Objects.requireNonNull(task.getResult()).toObject(Retiree.class);
+                        assert retiree != null;
+                        if (!retiree.getFirstName().trim().equals(firstName)
+                                || !retiree.getLastName().trim().equals(lastName)
+                                || !retiree.getHeadline().trim().equals(headline)
+                                || !retiree.getCity().trim().equals(city)
+                                || !retiree.getCountry().trim().equals(country)) {
 
                             new AlertDialog.Builder(this)
                                     .setTitle(R.string.discard_changes)
@@ -146,16 +175,34 @@ public class EditProfileActivity extends AppCompatActivity {
     private boolean validateFields() {
         boolean valid = true;
 
+        final TextInputLayout firstNameLayout = findViewById(R.id.first_name_layout);
+        final TextInputLayout lastNameLayout = findViewById(R.id.last_name_layout);
         final TextInputLayout headlineLayout = findViewById(R.id.headline_layout);
-        final TextInputLayout locationLayout = findViewById(R.id.location_layout);
+        final TextInputLayout cityLayout = findViewById(R.id.city_layout);
+        final TextInputLayout countryLayout = findViewById(R.id.country_layout);
 
-        if (profileHeadlineView.getText().toString().trim().equals("")) {
+        if (firstNameView.getText().toString().trim().equals("")) {
+            firstNameLayout.setError("Please enter your first name");
+            valid = false;
+        }
+
+        if (lastNameView.getText().toString().trim().equals("")) {
+            lastNameLayout.setError("Please enter your last name");
+            valid = false;
+        }
+
+        if (headlineView.getText().toString().trim().equals("")) {
             headlineLayout.setError("Please enter a profile headline");
             valid = false;
         }
 
-        if (locationView.getText().toString().trim().equals("")) {
-            locationLayout.setError("Please enter your current location");
+        if (cityView.getText().toString().trim().equals("")) {
+            cityLayout.setError("Please enter your current city");
+            valid = false;
+        }
+
+        if (countryView.getText().toString().trim().equals("")) {
+            countryLayout.setError("Please enter your current country");
             valid = false;
         }
 

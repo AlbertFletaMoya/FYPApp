@@ -23,13 +23,11 @@ import java.util.List;
 import static com.project.fypapp.model.JobExperience.JOB_EXPERIENCES;
 import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
 import static com.project.fypapp.util.Constants.DOCUMENT_ID;
-import static com.project.fypapp.util.Constants.ERROR_ADDING_DOCUMENT;
 import static com.project.fypapp.util.Constants.NEW_EXPERIENCE;
 import static com.project.fypapp.util.Constants.PROFILE_BELONGS_TO_USER;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
 import static com.project.fypapp.util.Constants.USER;
 import static com.project.fypapp.util.Constants.USER_ID;
-import static com.project.fypapp.util.Constants.addedSuccessfully;
 
 public class ExperienceIndexActivity extends AppCompatActivity {
     private static final String TAG = "ExperienceIndexActivity";

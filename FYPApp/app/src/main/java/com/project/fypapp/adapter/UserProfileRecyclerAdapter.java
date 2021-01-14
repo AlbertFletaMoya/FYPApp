@@ -91,9 +91,9 @@ public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (position == 0){
             UserInformationViewHolder userInformationViewHolder = (UserInformationViewHolder) holder;
-            userInformationViewHolder.name.setText(retiree.getName());
+            userInformationViewHolder.name.setText(Retiree.getName(retiree));
             userInformationViewHolder.email.setText(retiree.getEmail());
-            userInformationViewHolder.location.setText(retiree.getLocation());
+            userInformationViewHolder.location.setText(Retiree.getLocation(retiree));
             userInformationViewHolder.bio.setText(retiree.getHeadline());
 
             if (jobExperiences.isEmpty()){

@@ -48,8 +48,9 @@ public class SearchResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         SearchResultsViewHolder viewHolder = (SearchResultsViewHolder) holder;
-        viewHolder.nameView.setText(users.get(position).getName());
-        viewHolder.bioView.setText(users.get(position).getHeadline());
+        final Retiree retiree = users.get(position);
+        viewHolder.nameView.setText(Retiree.getName(retiree));
+        viewHolder.bioView.setText(retiree.getHeadline());
         viewHolder.profilePictureView.setImageResource(R.drawable.ic_baseline_person_120);
     }
 

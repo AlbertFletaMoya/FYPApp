@@ -84,7 +84,7 @@ public class UserTypeActivity extends AppCompatActivity {
         // TODO later on just save the email and specify name in create profile
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         assert firebaseUser != null;
-        final Retiree retiree = new Retiree(firebaseUser.getEmail(), firebaseUser.getDisplayName(),
+        final Retiree retiree = new Retiree(firebaseUser.getEmail(), "", "", "",
                 "", "");
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
