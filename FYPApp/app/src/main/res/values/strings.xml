@@ -69,4 +69,10 @@
     <string name="sign_out">Sign out</string>
     <string name="edit_search_parameters">Edit search parameters</string>
     <string name="search_results">Search results</string>
+    <string name="register">Register</string>
+    <string name="register_as_entrepreneur">Do you really want to register as an entrepreneur?</string>
+    <string name="register_as_retiree">Do you really want to register as a retiree?</string>
+    <string name="discard_changes">Discard changes</string>
+    <string name="want_to_discard_changes">Do you really want to discard your changes?</string>
+    <string name="want_to_delete_experience">Do you really want to delete this job experience?</string>
 </resources>

@@ -14,16 +14,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.fypapp.R;
 import com.project.fypapp.adapter.SearchResultsRecyclerAdapter;
-import com.project.fypapp.model.UserProfile;
+import com.project.fypapp.model.Retiree;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.project.fypapp.model.Entrepreneur.ENTREPRENEUR_USERS;
+import static com.project.fypapp.model.Retiree.RETIREE_USERS;
+import static com.project.fypapp.model.Search.SEARCH;
+import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
+import static com.project.fypapp.util.Constants.DOCUMENT_ID;
+import static com.project.fypapp.util.Constants.EMAIL;
 import static com.project.fypapp.util.Constants.LOGOUT_MESSAGE;
+import static com.project.fypapp.util.Constants.PROFILE_BELONGS_TO_USER;
+import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
 
 public class SearchResultsActivity extends AppCompatActivity {
     private static final String TAG = "SearchResultsActivity";
@@ -44,49 +53,56 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     private void goToEditSearch() {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         assert firebaseUser != null;
-        db.collection("entrepreneur_users")
-                .whereEqualTo("email", firebaseUser.getEmail())
+        db.collection(ENTREPRENEUR_USERS)
+                .whereEqualTo(EMAIL, firebaseUser.getEmail())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Intent i = new Intent(SearchResultsActivity.this, EditSearchActivity.class);
-                        i.putExtra("documentId", (String) Objects.requireNonNull(task.getResult()).getDocuments().get(0).get("search"));
+                        Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
+                        final Intent i = new Intent(SearchResultsActivity.this, EditSearchActivity.class);
+                        i.putExtra(DOCUMENT_ID, (String) Objects.requireNonNull(task.getResult()).getDocuments().get(0).get(SEARCH));
                         startActivity(i);
                     }
 
                     else {
-                        Log.d(TAG, "Task was not successful");
+                        Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
                     }
                 });
     }
 
     private void initRecyclerView() {
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        final List<UserProfile> users = createUsers();
-        SearchResultsRecyclerAdapter recyclerAdapter = new SearchResultsRecyclerAdapter(users, (v, position) -> {
-            Intent i = new Intent(SearchResultsActivity.this, MainActivity.class);
-            i.putExtra("profileBelongsToUser", false);
-            startActivity(i);
-        });
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(RETIREE_USERS)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
+                        final List<Retiree> users = new ArrayList<>();
+                        final List<String> userIds = new ArrayList<>();
+                        for (DocumentSnapshot document : task.getResult().getDocuments()) {
+                            users.add(document.toObject(Retiree.class));
+                            userIds.add(document.getId());
+                        }
+                        final SearchResultsRecyclerAdapter recyclerAdapter = new SearchResultsRecyclerAdapter(users, (v, position) -> {
+                            final Intent i = new Intent(SearchResultsActivity.this, MainActivity.class);
+                            i.putExtra(PROFILE_BELONGS_TO_USER, false);
+                            i.putExtra(DOCUMENT_ID, userIds.get(position));
+                            startActivity(i);
+                        });
 
-        recyclerView.setAdapter(recyclerAdapter);
-    }
-
-    private List<UserProfile> createUsers() {
-        final List<UserProfile> users = new ArrayList<>();
-
-        for (int i = 0; i < 30; i++) {
-            users.add(new UserProfile());
-        }
-
-        return users;
+                        recyclerView.setAdapter(recyclerAdapter);
+                    } else {
+                        Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
+                    }
+                });
     }
 
     private void signOut() {
@@ -99,7 +115,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     private void goToLogIn() {
-        Intent intent = new Intent(SearchResultsActivity.this, FirebaseUIActivity.class);
+        final Intent intent = new Intent(SearchResultsActivity.this, FirebaseUIActivity.class);
         startActivity(intent);
         finish();
     }

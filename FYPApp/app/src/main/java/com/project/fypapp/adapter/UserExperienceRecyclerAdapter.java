@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.fypapp.R;
-import com.project.fypapp.model.JobDescription;
+import com.project.fypapp.model.JobExperience;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class UserExperienceRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private final List<JobDescription> jobs;
+    private final List<JobExperience> jobs;
     private final UserExperienceRecyclerAdapterListener onClickListener;
 
     class UserExperienceViewHolder extends RecyclerView.ViewHolder {
@@ -41,14 +41,14 @@ public class UserExperienceRecyclerAdapter extends RecyclerView.Adapter<Recycler
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_experience_short, parent, false);
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_experience_short, parent, false);
         return new UserExperienceViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        UserExperienceViewHolder userExperienceViewHolder = (UserExperienceViewHolder) holder;
-        userExperienceViewHolder.company.setText(jobs.get(position).getCompanyName());
+        final UserExperienceViewHolder userExperienceViewHolder = (UserExperienceViewHolder) holder;
+        userExperienceViewHolder.company.setText(jobs.get(position).getCompany());
         userExperienceViewHolder.position.setText(jobs.get(position).getPosition());
 
         final String dates = jobs.get(position).getStartingDate() + " - " + jobs.get(position).getEndingDate();

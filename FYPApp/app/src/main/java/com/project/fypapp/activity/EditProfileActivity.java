@@ -14,12 +14,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.fypapp.R;
-import com.project.fypapp.model.UserProfile;
+import com.project.fypapp.model.Retiree;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+
+import static com.project.fypapp.model.Retiree.HEADLINE;
+import static com.project.fypapp.model.Retiree.LOCATION;
+import static com.project.fypapp.model.Retiree.RETIREE_USERS;
+import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
+import static com.project.fypapp.util.Constants.DOCUMENT_ID;
+import static com.project.fypapp.util.Constants.NEW_USER;
+import static com.project.fypapp.util.Constants.PROFILE_BELONGS_TO_USER;
+import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
+import static com.project.fypapp.util.Constants.SUCCESSFULLY_UPDATED;
+import static com.project.fypapp.util.Constants.UNSUCCESSFULLY_UPDATED;
 
 public class EditProfileActivity extends AppCompatActivity {
     private static final String TAG = "EditProfileActivity";
@@ -39,24 +48,24 @@ public class EditProfileActivity extends AppCompatActivity {
         profileHeadlineView = findViewById(R.id.headline_write_view);
         locationView = findViewById(R.id.location_write_view);
 
-        // User is editing the information instead of creating a new profile
         if (getIntent().getExtras() != null) {
-            final String documentId = getIntent().getStringExtra("documentId");
-            final boolean newUser = getIntent().getBooleanExtra("newUser", false);
+            final String documentId = getIntent().getStringExtra(DOCUMENT_ID);
+            final boolean newUser = getIntent().getBooleanExtra(NEW_USER, false);
 
             if (!newUser) {
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                final FirebaseFirestore db = FirebaseFirestore.getInstance();
                 assert documentId != null;
-                db.collection("retiree_users")
+                db.collection(RETIREE_USERS)
                         .document(documentId)
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                Log.d(TAG, "Successfully retrieved the document");
-                                profileHeadlineView.setText(Objects.requireNonNull(task.getResult()).getString("headline"));
-                                locationView.setText(task.getResult().getString("location"));
+                                Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
+                                Retiree retiree = task.getResult().toObject(Retiree.class);
+                                profileHeadlineView.setText(retiree.getHeadline());
+                                locationView.setText(retiree.getLocation());
                             } else {
-                                Log.d(TAG, "Error getting documents.", task.getException());
+                                Log.d(TAG, COULD_NOT_RETRIEVE_DATA, task.getException());
                             }
                         });
 
@@ -75,56 +84,51 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void saveProfile(String documentId) {
-        final EditText bioView = findViewById(R.id.headline_write_view);
-        final EditText locationView = findViewById(R.id.location_write_view);
-
-        final String bio = bioView.getText().toString().trim();
+        final String headline = profileHeadlineView.getText().toString().trim();
         final String location = locationView.getText().toString().trim();
 
         if (validateFields()) {
+           final Map<String, Object> retireeMap = new HashMap<>();
+           retireeMap.put(HEADLINE, headline);
+           retireeMap.put(LOCATION, location);
 
-            Map<String, Object> newData = new HashMap<>();
-            newData.put("headline", bio);
-            newData.put("location", location);
-
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("retiree_users")
+            final FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection(RETIREE_USERS)
                     .document(documentId)
-                    .update(newData)
+                    .update(retireeMap)
                     .addOnSuccessListener(aVoid -> {
-                        Log.d(TAG, "Profile was successfully saved");
+                        Log.d(TAG, SUCCESSFULLY_UPDATED);
                         goToMain(documentId);
                     })
 
-                    .addOnFailureListener(e -> Log.d(TAG, "Profile couldn't be saved"));
+                    .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
         }
     }
 
     private void goToMain(String documentId) {
         Intent i = new Intent(EditProfileActivity.this, MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.putExtra("documentId", documentId);
-        i.putExtra("profileBelongsToUser", true);
+        i.putExtra(DOCUMENT_ID, documentId);
+        i.putExtra(PROFILE_BELONGS_TO_USER, true);
         startActivity(i);
         finish();
     }
 
     private void cancel(String headline, String location, String documentId) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("retiree_users")
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(RETIREE_USERS)
                 .document(documentId)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        UserProfile userProfile = new UserProfile("", "", new ArrayList<>(),
-                                Objects.requireNonNull(task.getResult()).getString("headline"),
-                                task.getResult().getString("location"));
-                        if (!userProfile.getBio().trim().equals(headline)
-                                || !userProfile.getRegion().trim().equals(location)) {
+                        Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
+                        final Retiree retiree = task.getResult().toObject(Retiree.class);
+                        if (!retiree.getHeadline().trim().equals(headline)
+                                || !retiree.getLocation().trim().equals(location)) {
 
                             new AlertDialog.Builder(this)
-                                    .setTitle("Discard changes")
-                                    .setMessage("Do you really want to discard your changes?")
+                                    .setTitle(R.string.discard_changes)
+                                    .setMessage(R.string.want_to_discard_changes)
                                     .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToMain(documentId))
                                     .setNegativeButton(android.R.string.no, null).show();
                         }
@@ -133,7 +137,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             goToMain(documentId);
                         }
                     } else {
-                        Log.d(TAG, "Couldn't retrieve data");
+                        Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
                     }
                 });
     }

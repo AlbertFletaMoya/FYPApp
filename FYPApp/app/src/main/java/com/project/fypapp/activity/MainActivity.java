@@ -18,9 +18,21 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.fypapp.R;
 import com.project.fypapp.adapter.UserProfileRecyclerAdapter;
-import com.project.fypapp.model.UserProfile;
+import com.project.fypapp.model.JobExperience;
+import com.project.fypapp.model.Retiree;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.project.fypapp.model.JobExperience.JOB_EXPERIENCES;
+import static com.project.fypapp.model.Retiree.RETIREE_USERS;
+import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
+import static com.project.fypapp.util.Constants.DOCUMENT_DOES_NOT_EXIST;
+import static com.project.fypapp.util.Constants.DOCUMENT_ID;
 import static com.project.fypapp.util.Constants.LOGOUT_MESSAGE;
+import static com.project.fypapp.util.Constants.PROFILE_BELONGS_TO_USER;
+import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
+import static com.project.fypapp.util.Constants.USER;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -30,28 +42,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       final TextView logoutButton = findViewById(R.id.logout_view);
-       logoutButton.setOnClickListener(view -> signOut());
+        final TextView logoutButton = findViewById(R.id.logout_view);
+        logoutButton.setOnClickListener(view -> signOut());
 
-       final TextView cancelButton = findViewById(R.id.cancel_view);
-       cancelButton.setOnClickListener(view -> finish());
-
-        boolean profileBelongsToUser = true;
-        String documentId = "";
+        final TextView cancelButton = findViewById(R.id.cancel_view);
+        cancelButton.setOnClickListener(view -> finish());
 
         if (getIntent().getExtras() != null) {
-            documentId = getIntent().getStringExtra("documentId");
-            profileBelongsToUser = getIntent().getBooleanExtra("profileBelongsToUser", false);
+            final String documentId = getIntent().getStringExtra(DOCUMENT_ID);
+            final boolean profileBelongsToUser = getIntent().getBooleanExtra(PROFILE_BELONGS_TO_USER, false);
             if (!profileBelongsToUser) {
                 ((ViewGroup) logoutButton.getParent()).removeView(logoutButton);
+            } else {
+                ((ViewGroup) cancelButton.getParent()).removeView(cancelButton);
             }
-        }
 
-        if (profileBelongsToUser) {
-            ((ViewGroup) cancelButton.getParent()).removeView(cancelButton);
+            initRecyclerView(profileBelongsToUser, documentId);
         }
-
-        initRecyclerView(profileBelongsToUser, documentId);
     }
 
     private void signOut() {
@@ -64,47 +71,64 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goToLogIn() {
-        Intent intent = new Intent(MainActivity.this, FirebaseUIActivity.class);
+        final Intent intent = new Intent(MainActivity.this, FirebaseUIActivity.class);
         startActivity(intent);
         finish();
     }
 
     private void initRecyclerView(boolean profileBelongsToUser, String documentId) {
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final DocumentReference docRef = db.collection("retiree_users").document(documentId);
+        final DocumentReference docRef = db.collection(RETIREE_USERS).document(documentId);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
+                Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
+                final DocumentSnapshot document = task.getResult();
                 assert document != null;
                 if (document.exists()) {
-                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                    final UserProfile userProfile = new UserProfile(document);
-                    UserProfileRecyclerAdapter userProfileRecyclerAdapter =
-                            new UserProfileRecyclerAdapter(userProfile, new UserProfileRecyclerAdapter.UserProfileRecyclerAdapterListener() {
-                                @Override
-                                public void editProfileOnClick(View v, int position) {
-                                    Intent i = new Intent(MainActivity.this, EditProfileActivity.class);
-                                    i.putExtra("documentId", documentId);
-                                    startActivity(i);
-                                }
+                    final Retiree retiree = document.toObject(Retiree.class);
+                    Log.d(TAG, "DOCUMENT ID: " + documentId);
 
-                                @Override
-                                public void editExperienceOnClick(View v, int position) {
-                                    Intent i = new Intent(MainActivity.this, ExperienceIndexActivity.class);
-                                    i.putExtra("documentId", documentId);
-                                    startActivity(i);
+                    db.collection(JOB_EXPERIENCES)
+                            .whereEqualTo(USER, documentId)
+                            .get()
+                            .addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
+                                    final List<JobExperience> experiences = new ArrayList<>();
+                                    for (DocumentSnapshot document1 : task1.getResult().getDocuments()) {
+                                        experiences.add(document1.toObject(JobExperience.class));
+                                    }
+                                    final UserProfileRecyclerAdapter userProfileRecyclerAdapter =
+                                            new UserProfileRecyclerAdapter(retiree, experiences, new UserProfileRecyclerAdapter.UserProfileRecyclerAdapterListener() {
+                                                @Override
+                                                public void editProfileOnClick(View v, int position) {
+                                                    final Intent i = new Intent(MainActivity.this, EditProfileActivity.class);
+                                                    i.putExtra(DOCUMENT_ID, documentId);
+                                                    startActivity(i);
+                                                }
+
+                                                @Override
+                                                public void editExperienceOnClick(View v, int position) {
+                                                    final Intent i = new Intent(MainActivity.this, ExperienceIndexActivity.class);
+                                                    i.putExtra(DOCUMENT_ID, documentId);
+                                                    startActivity(i);
+                                                }
+                                            }, profileBelongsToUser);
+                                    recyclerView.setAdapter(userProfileRecyclerAdapter);
+                                } else {
+                                    Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
                                 }
-                            }, profileBelongsToUser); // set to false if don't want user to belong to profile
-                    recyclerView.setAdapter(userProfileRecyclerAdapter);
+                            });
+
                 } else {
-                    Log.d(TAG, "No such document");
+                    Log.d(TAG, DOCUMENT_DOES_NOT_EXIST);
                 }
             } else {
-                Log.d(TAG, "get failed with ", task.getException());
+                Log.d(TAG, COULD_NOT_RETRIEVE_DATA, task.getException());
             }
         });
     }

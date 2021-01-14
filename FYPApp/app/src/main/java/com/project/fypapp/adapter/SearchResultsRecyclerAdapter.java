@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.fypapp.R;
-import com.project.fypapp.model.UserProfile;
+import com.project.fypapp.model.Retiree;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class SearchResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private final List<UserProfile> users;
+    private final List<Retiree> users;
     private final SearchResultsOnClickListener onClickListener;
 
     class SearchResultsViewHolder extends RecyclerView.ViewHolder {
@@ -49,15 +49,8 @@ public class SearchResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         SearchResultsViewHolder viewHolder = (SearchResultsViewHolder) holder;
         viewHolder.nameView.setText(users.get(position).getName());
-        viewHolder.bioView.setText(users.get(position).getBio());
-
-        if (position % 2 == 0) {
-            viewHolder.profilePictureView.setImageResource(R.drawable.pp);
-        }
-
-        else {
-            viewHolder.profilePictureView.setImageResource(R.drawable.ic_baseline_person_120);
-        }
+        viewHolder.bioView.setText(users.get(position).getHeadline());
+        viewHolder.profilePictureView.setImageResource(R.drawable.ic_baseline_person_120);
     }
 
     @Override

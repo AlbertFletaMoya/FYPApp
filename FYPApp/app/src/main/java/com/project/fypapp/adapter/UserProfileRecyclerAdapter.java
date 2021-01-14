@@ -9,9 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.fypapp.R;
-import com.project.fypapp.model.JobDescription;
-import com.project.fypapp.model.UserProfile;
+import com.project.fypapp.model.JobExperience;
+import com.project.fypapp.model.Retiree;
 import com.project.fypapp.view.ExpandableTextView;
+
+import java.util.List;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,7 +22,8 @@ import lombok.AllArgsConstructor;
 public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String ADD = "ADD";
 
-    private final UserProfile userProfile;
+    private final Retiree retiree;
+    private final List<JobExperience> jobExperiences;
     private final UserProfileRecyclerAdapterListener onClickListener;
     private final boolean profileBelongsToUser;
 
@@ -88,31 +91,31 @@ public class UserProfileRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (position == 0){
             UserInformationViewHolder userInformationViewHolder = (UserInformationViewHolder) holder;
-            userInformationViewHolder.name.setText(userProfile.getName());
-            userInformationViewHolder.email.setText(userProfile.getEmail());
-            userInformationViewHolder.location.setText(userProfile.getRegion());
-            userInformationViewHolder.bio.setText(userProfile.getBio());
+            userInformationViewHolder.name.setText(retiree.getName());
+            userInformationViewHolder.email.setText(retiree.getEmail());
+            userInformationViewHolder.location.setText(retiree.getLocation());
+            userInformationViewHolder.bio.setText(retiree.getHeadline());
 
-            if (userProfile.getJobs().isEmpty()){
+            if (jobExperiences.isEmpty()){
                 userInformationViewHolder.editExperience.setText(ADD);
             }
         }
 
         else {
-            JobDescription jobDescription = userProfile.getJobs().get(position-1);
+            JobExperience jobExperience = jobExperiences.get(position-1);
             JobDescriptionViewHolder jobDescriptionViewHolder = (JobDescriptionViewHolder) holder;
-            jobDescriptionViewHolder.company.setText(jobDescription.getCompanyName());
-            jobDescriptionViewHolder.position.setText(jobDescription.getPosition());
-            jobDescriptionViewHolder.jobDescription.setText(jobDescription.getJobDescription());
+            jobDescriptionViewHolder.company.setText(jobExperience.getCompany());
+            jobDescriptionViewHolder.position.setText(jobExperience.getPosition());
+            jobDescriptionViewHolder.jobDescription.setText(jobExperience.getJobDescription());
 
-            final String dates = jobDescription.getStartingDate() + " - " + jobDescription.getEndingDate();
+            final String dates = jobExperience.getStartingDate() + " - " + jobExperience.getEndingDate();
             jobDescriptionViewHolder.dates.setText(dates);
         }
     }
 
     @Override
     public int getItemCount() {
-        return userProfile.getJobs().size() + 1;
+        return jobExperiences.size() + 1;
     }
 
     public interface UserProfileRecyclerAdapterListener {

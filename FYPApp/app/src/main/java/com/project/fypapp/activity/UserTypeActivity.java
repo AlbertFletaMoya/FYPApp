@@ -13,10 +13,20 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.fypapp.R;
+import com.project.fypapp.model.Entrepreneur;
+import com.project.fypapp.model.Retiree;
+import com.project.fypapp.model.Search;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
+import static com.project.fypapp.model.Entrepreneur.ENTREPRENEUR_USERS;
+import static com.project.fypapp.model.Retiree.RETIREE_USERS;
+import static com.project.fypapp.model.Search.SEARCHES;
+import static com.project.fypapp.util.Constants.DOCUMENT_ID;
+import static com.project.fypapp.util.Constants.ERROR_ADDING_DOCUMENT;
+import static com.project.fypapp.util.Constants.NEW_SEARCH;
+import static com.project.fypapp.util.Constants.NEW_USER;
+import static com.project.fypapp.util.Constants.addedSuccessfully;
 
 public class UserTypeActivity extends AppCompatActivity {
     private static final String TAG = "UserTypeActivity";
@@ -31,87 +41,76 @@ public class UserTypeActivity extends AppCompatActivity {
         final Button retiredUserButton = findViewById(R.id.retired_user_button);
 
         entrepreneurButton.setOnClickListener(view -> new AlertDialog.Builder(this)
-                .setTitle("Register")
-                .setMessage("Do you really want to register as an Entrepreneur?")
+                .setTitle(R.string.register)
+                .setMessage(R.string.register_as_entrepreneur)
                 .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> saveEntrepreneur())
                 .setNegativeButton(android.R.string.no, null).show());
 
         retiredUserButton.setOnClickListener(view -> new AlertDialog.Builder(this)
-                .setTitle("Register")
-                .setMessage("Do you really want to register as a Retiree?")
+                .setTitle(R.string.register)
+                .setMessage(R.string.register_as_retiree)
                 .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> saveRetiredUser())
                 .setNegativeButton(android.R.string.no, null).show());
     }
 
     private void saveEntrepreneur() {
-        // save that the user is an entrepreneur
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> search = new HashMap<>();
-        search.put("min_years_of_experience", 0);
-        search.put("roles", new ArrayList<String>());
-        search.put("sectors", new ArrayList<String>());
-        search.put("job_description", "");
+        final Search search = new Search(new ArrayList<>(), new ArrayList<>(),
+                0, "");
 
-        db.collection("searches")
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(SEARCHES)
                 .add(search)
                 .addOnSuccessListener(documentReference -> {
-                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                    Map<String, Object> user = new HashMap<>();
+                    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                     assert firebaseUser != null;
-                    user.put("email", firebaseUser.getEmail());
-                    user.put("name", firebaseUser.getDisplayName());
-                    user.put("search", documentReference.getId());
-                    db.collection("entrepreneur_users")
-                            .add(user)
+                    final Entrepreneur entrepreneur = new Entrepreneur(firebaseUser.getEmail(),
+                            documentReference.getId());
+
+                    db.collection(ENTREPRENEUR_USERS)
+                            .add(entrepreneur)
                             .addOnSuccessListener(documentReference2 -> {
-                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference2.getId());
+                                Log.d(TAG, addedSuccessfully(documentReference2.getId()));
                                 goToCreateSearch(documentReference.getId());
                             })
-                            .addOnFailureListener(e -> Log.d(TAG, "Error adding document", e));
+                            .addOnFailureListener(e -> Log.d(TAG, ERROR_ADDING_DOCUMENT, e));
                 })
 
-                .addOnFailureListener(e -> Log.d(TAG, "Error adding document", e));
-
-
-
+                .addOnFailureListener(e -> Log.d(TAG, ERROR_ADDING_DOCUMENT, e));
     }
 
-    private void goToCreateSearch(String documentId) {
-        Intent i = new Intent(UserTypeActivity.this, EditSearchActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.putExtra("documentId", documentId);
-        i.putExtra("newSearch", true);
-        startActivity(i);
-        finish();
-    }
 
     private void saveRetiredUser() {
         // save that the user is a retired user
         // TODO later on just save the email and specify name in create profile
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        Map<String, Object> user = new HashMap<>();
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         assert firebaseUser != null;
-        user.put("email", firebaseUser.getEmail());
-        user.put("name", firebaseUser.getDisplayName());
-        user.put("headline", "");
-        user.put("location", "");
-        user.put("job_experiences", new ArrayList <String>());
+        final Retiree retiree = new Retiree(firebaseUser.getEmail(), firebaseUser.getDisplayName(),
+                "", "");
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("retiree_users")
-                .add(user)
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(RETIREE_USERS)
+                .add(retiree)
                 .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    Log.d(TAG, addedSuccessfully(documentReference.getId()));
                     goToCreateProfile(documentReference.getId());
                 })
-                .addOnFailureListener(e -> Log.d(TAG, "Error adding document", e));
+                .addOnFailureListener(e -> Log.d(TAG, ERROR_ADDING_DOCUMENT, e));
+    }
+
+    private void goToCreateSearch(String documentId) {
+        final Intent i = new Intent(UserTypeActivity.this, EditSearchActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.putExtra(DOCUMENT_ID, documentId);
+        i.putExtra(NEW_SEARCH, true);
+        startActivity(i);
+        finish();
     }
 
     private void goToCreateProfile(String documentId) {
-        Intent i = new Intent(UserTypeActivity.this, EditProfileActivity.class);
+        final Intent i = new Intent(UserTypeActivity.this, EditProfileActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.putExtra("documentId", documentId);
-        i.putExtra("newUser", true);
+        i.putExtra(DOCUMENT_ID, documentId);
+        i.putExtra(NEW_USER, true);
         startActivity(i);
         finish();
     }

@@ -11,6 +11,14 @@ public class Constants {
     public static final String NO_NETWORK_ERROR_MESSAGE = "You have no network connection";
 
     public static final String LOGOUT_MESSAGE = "Successfully signed out";
+    public static final String DOCUMENT_ID = "documentId";
+    public static final String NEW_USER = "newUser";
+    public static final String NEW_SEARCH = "newSearch";
+    public static final String NEW_EXPERIENCE = "newExperience";
+    public static final String EMAIL = "email";
+    public static final String PROFILE_BELONGS_TO_USER = "profileBelongsToUser";
+    public static final String USER_ID = "userId";
+    public static final String USER = "user";
 
     public static final int ADD_NEW_EXPERIENCE = -1;
 
@@ -29,10 +37,16 @@ public class Constants {
             {12, "Dec"},
     }).collect(Collectors.toMap(data -> (Integer) data[0], data -> (String) data[1]));
 
-    public enum UserType {
-        UNDEFINED,
-        RETIREE,
-        ENTREPRENEUR
+    public static String addedSuccessfully(String id) {
+        return String.format("DocumentSnapshot added with ID: %s", id);
     }
 
+    public static final String SUCCESSFULLY_RETRIEVED_DATA = "Successfully retrieve object";
+    public static final String ERROR_ADDING_DOCUMENT = "Error adding document";
+    public static final String COULD_NOT_RETRIEVE_DATA = "Could not retrieve data from database";
+    public static final String SUCCESSFULLY_UPDATED = "Object successfully updated";
+    public static final String UNSUCCESSFULLY_UPDATED = "Object could not be updated";
+    public static final String SUCCESSFULLY_DELETED = "DocumentSnapshot successfully deleted";
+    public static final String UNSUCCESSFULLY_DELETED = "Could not delete DocumentSnapshot";
+    public static final String DOCUMENT_DOES_NOT_EXIST = "No such document";
 }

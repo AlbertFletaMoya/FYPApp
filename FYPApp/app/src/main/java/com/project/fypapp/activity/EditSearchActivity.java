@@ -14,12 +14,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.fypapp.R;
-import com.project.fypapp.model.SearchDocument;
+import com.project.fypapp.model.Search;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
+
+import static com.project.fypapp.model.Search.SEARCHES;
+import static com.project.fypapp.model.Search.stringToList;
+import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
+import static com.project.fypapp.util.Constants.DOCUMENT_ID;
+import static com.project.fypapp.util.Constants.NEW_SEARCH;
+import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
+import static com.project.fypapp.util.Constants.SUCCESSFULLY_UPDATED;
+import static com.project.fypapp.util.Constants.UNSUCCESSFULLY_UPDATED;
 
 public class EditSearchActivity extends AppCompatActivity {
     private static final String TAG = "EditSearchActivity";
@@ -45,29 +51,30 @@ public class EditSearchActivity extends AppCompatActivity {
         jobDescriptionEditText = findViewById(R.id.description_write_view);
 
         if (getIntent().getExtras() != null) {
-            String documentId = getIntent().getStringExtra("documentId");
-            boolean newSearch = getIntent().getBooleanExtra("newSearch", false);
+            String documentId = getIntent().getStringExtra(DOCUMENT_ID);
+            boolean newSearch = getIntent().getBooleanExtra(NEW_SEARCH, false);
 
             if (!newSearch && documentId != null) {
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("searches")
+                final FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection(SEARCHES)
                         .document(documentId)
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                SearchDocument userSearch = Objects.requireNonNull(task.getResult()).toObject(SearchDocument.class);
+                                Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
+                                final Search userSearch = Objects.requireNonNull(task.getResult()).toObject(Search.class);
                                 assert userSearch != null;
                                 rolesEditText.setText(userSearch.getListOfRolesAsString());
                                 sectorsEditText.setText(userSearch.getListOfSectorsAsString());
-                                minYearsEditText.setText(String.valueOf(userSearch.getMin_years_of_experience()));
-                                jobDescriptionEditText.setText(userSearch.getJob_description());
+                                minYearsEditText.setText(String.valueOf(userSearch.getMinYearsOfExperience()));
+                                jobDescriptionEditText.setText(userSearch.getJobDescription());
 
                                 cancelButton.setOnClickListener(view -> cancel(documentId, rolesEditText.getText().toString().trim(),
                                         sectorsEditText.getText().toString().trim(),
                                         minYearsEditText.getText().toString().trim(),
                                         jobDescriptionEditText.getText().toString().trim()));
                             } else {
-                                Log.w(TAG, "Error getting documents.", task.getException());
+                                Log.d(TAG, COULD_NOT_RETRIEVE_DATA, task.getException());
                             }
                         });
             }
@@ -89,49 +96,48 @@ public class EditSearchActivity extends AppCompatActivity {
         final String jobDescriptionString = jobDescriptionEditText.getText().toString().trim();
 
         if (validateInputs()) {
-            final Map<String, Object> search = new HashMap<>();
-            search.put("roles", Arrays.asList(Arrays.stream(rolesString.split(",")).map(String::trim).toArray(String[]::new)));
-            search.put("sectors", Arrays.asList(Arrays.stream(sectorsString.split(",")).map(String::trim).toArray(String[]::new)));
-            search.put("min_years_of_experience", Integer.parseInt(yearsString));
-            search.put("job_description", jobDescriptionString);
+            final Search search = new Search(stringToList(rolesString), stringToList(sectorsString),
+                    Integer.parseInt(yearsString), jobDescriptionString);
 
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("searches")
+
+            final FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection(SEARCHES)
                     .document(documentId)
-                    .update(search)
+                    .update(search.toMap())
                     .addOnSuccessListener(aVoid -> {
-                        Log.d(TAG, "Search was successfully updated");
+                        Log.d(TAG, SUCCESSFULLY_UPDATED);
                         goToSearchResults();
                     })
 
-                    .addOnFailureListener(e -> Log.d(TAG, "Search couldn't be updated"));
+                    .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
         }
     }
 
     private void goToSearchResults() {
-        Intent i = new Intent(EditSearchActivity.this, SearchResultsActivity.class);
+        final Intent i = new Intent(EditSearchActivity.this, SearchResultsActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
         finish();
     }
 
     private void cancel(String documentId, String roles, String sectors, String yearsOfExperience, String description) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("searches")
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(SEARCHES)
                 .document(documentId)
                 .get()
                 .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            SearchDocument searchDocument = Objects.requireNonNull(task.getResult()).toObject(SearchDocument.class);
-                            assert searchDocument != null;
-                            if (!searchDocument.getRoles().equals(Arrays.asList(Arrays.stream(roles.split(",")).map(String::trim).toArray(String[]::new)))
-                                    || !searchDocument.getSectors().equals(Arrays.asList(Arrays.stream(sectors.split(",")).map(String::trim).toArray(String[]::new)))
-                                    || searchDocument.getMin_years_of_experience() != Integer.parseInt(yearsOfExperience)
-                                    || !searchDocument.getJob_description().equals(description)){
+                            Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
+                            final Search search = Objects.requireNonNull(task.getResult()).toObject(Search.class);
+                            assert search != null;
+                            if (!search.getRoles().equals(Search.stringToList(roles))
+                                    || !search.getSectors().equals(Search.stringToList(sectors))
+                                    || search.getMinYearsOfExperience() != Integer.parseInt(yearsOfExperience)
+                                    || !search.getJobDescription().equals(description)){
 
                                 new AlertDialog.Builder(this)
-                                        .setTitle("Discard changes")
-                                        .setMessage("Do you really want to discard your changes?")
+                                        .setTitle(R.string.discard_changes)
+                                        .setMessage(R.string.want_to_discard_changes)
                                         .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToSearchResults())
                                         .setNegativeButton(android.R.string.no, null).show();
                             }
@@ -140,7 +146,7 @@ public class EditSearchActivity extends AppCompatActivity {
                                 goToSearchResults();
                             }
                         } else {
-                            Log.d(TAG, "Couldn't retrieve data");
+                            Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
                         }
                 });
     }
