@@ -3,6 +3,7 @@ package com.project.fypapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,6 +77,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     private void initRecyclerView() {
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        final TextView noResultsView = findViewById(R.id.no_results_view);
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(gridLayoutManager);
 
@@ -91,14 +93,24 @@ public class SearchResultsActivity extends AppCompatActivity {
                             users.add(document.toObject(Retiree.class));
                             userIds.add(document.getId());
                         }
-                        final SearchResultsRecyclerAdapter recyclerAdapter = new SearchResultsRecyclerAdapter(users, (v, position) -> {
-                            final Intent i = new Intent(SearchResultsActivity.this, MainActivity.class);
-                            i.putExtra(PROFILE_BELONGS_TO_USER, false);
-                            i.putExtra(DOCUMENT_ID, userIds.get(position));
-                            startActivity(i);
-                        });
 
-                        recyclerView.setAdapter(recyclerAdapter);
+                        if (users.size() > 0) {
+                            final SearchResultsRecyclerAdapter recyclerAdapter = new SearchResultsRecyclerAdapter(users, (v, position) -> {
+                                final Intent i = new Intent(SearchResultsActivity.this, MainActivity.class);
+                                i.putExtra(PROFILE_BELONGS_TO_USER, false);
+                                i.putExtra(DOCUMENT_ID, userIds.get(position));
+                                startActivity(i);
+                            });
+
+                            ((ViewManager)noResultsView.getParent()).removeView(noResultsView);
+                            recyclerView.setAdapter(recyclerAdapter);
+                        }
+
+                        else {
+                            ((ViewManager)recyclerView.getParent()).removeView(recyclerView);
+                            noResultsView.setText(R.string.no_results);
+                        }
+
                     } else {
                         Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
                     }

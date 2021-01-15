@@ -128,7 +128,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
                     android:hint="@string/profile_headline_star"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp"
+                    android:maxLength="200"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout

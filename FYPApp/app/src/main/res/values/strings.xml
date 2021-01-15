@@ -31,8 +31,8 @@
     <string name="current_location">Current location</string>
     <string name="current_location_star">Current location*</string>
     <string name="next">Next</string>
-    <string name="what_roles_are_you_looking_for">What previous roles are you interested in?</string>
-    <string name="what_sectors_are_you_looking_for">What previous sectors are you interested in?</string>
+    <string name="what_roles_are_you_looking_for">What roles would fulfill your business needs?</string>
+    <string name="what_sectors_are_you_looking_for">What sectors are related to your business needs?</string>
     <string name="search">Search</string>
     <string name="minimum_years_of_experience_needed">Minimum years of experience needed*</string>
     <string name="what_sector_best_describes_the_company">What sector best describes the company?</string>
@@ -58,8 +58,8 @@
     <string name="no">No</string>
     <string name="edit_profile">Edit profile</string>
     <string name="create_profile">Create profile</string>
-    <string name="describe_what_you_are_looking_for">Describe what you\'re looking for</string>
-    <string name="describe_what_you_are_looking_for_star">Describe what you\'re looking for*</string>
+    <string name="describe_what_you_are_looking_for">Describe your business needs</string>
+    <string name="describe_what_you_are_looking_for_star">Describe your business needs*</string>
     <string name="edit_search">Edit search</string>
     <string name="create_search">Create search</string>
     <string name="separate_multiple_with_commas">(Separate multiple with commas)</string>
@@ -79,4 +79,5 @@
     <string name="last_name_star">Last name*</string>
     <string name="city_star">City*</string>
     <string name="country_star">Country*</string>
+    <string name="no_results">We couldn\'t match your search parameters to any profile, try again later</string>
 </resources>

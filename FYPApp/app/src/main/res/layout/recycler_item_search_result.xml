@@ -46,7 +46,8 @@
             app:layout_constraintVertical_chainStyle="packed"
             android:paddingHorizontal="20dp"
             app:layout_constraintHorizontal_chainStyle="packed"
-            android:textColor="@color/opposite_main"/>
+            android:textColor="@color/opposite_main"
+            android:layout_marginTop="5dp"/>
 
         <TextView
             android:id="@+id/bio_view"
