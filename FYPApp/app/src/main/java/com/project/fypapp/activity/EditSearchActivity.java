@@ -72,7 +72,7 @@ public class EditSearchActivity extends AppCompatActivity {
                                 cancelButton.setOnClickListener(view -> cancel(documentId, rolesEditText.getText().toString().trim(),
                                         sectorsEditText.getText().toString().trim(),
                                         minYearsEditText.getText().toString().trim(),
-                                        jobDescriptionEditText.getText().toString().trim()));
+                                        jobDescriptionEditText.getText().toString().trim(), newSearch));
                             } else {
                                 Log.d(TAG, COULD_NOT_RETRIEVE_DATA, task.getException());
                             }
@@ -85,11 +85,11 @@ public class EditSearchActivity extends AppCompatActivity {
                 searchButton.setText(R.string.search);
             }
 
-            searchButton.setOnClickListener(view -> createSearch(documentId));
+            searchButton.setOnClickListener(view -> createSearch(documentId, newSearch));
         }
     }
 
-    private void createSearch(String documentId) {
+    private void createSearch(String documentId, boolean newSearch) {
         final String rolesString = rolesEditText.getText().toString().trim();
         final String sectorsString = sectorsEditText.getText().toString().trim();
         final String yearsString = minYearsEditText.getText().toString().trim();
@@ -106,21 +106,24 @@ public class EditSearchActivity extends AppCompatActivity {
                     .update(search.toMap())
                     .addOnSuccessListener(aVoid -> {
                         Log.d(TAG, SUCCESSFULLY_UPDATED);
-                        goToSearchResults();
+                        goToSearchResults(newSearch);
                     })
 
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
         }
     }
 
-    private void goToSearchResults() {
-        final Intent i = new Intent(EditSearchActivity.this, SearchResultsActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
+    private void goToSearchResults(boolean newSearch) {
+        if (newSearch) {
+            final Intent i = new Intent(EditSearchActivity.this, SearchResultsActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+        }
         finish();
     }
 
-    private void cancel(String documentId, String roles, String sectors, String yearsOfExperience, String description) {
+    private void cancel(String documentId, String roles, String sectors, String yearsOfExperience,
+                        String description, boolean newSearch) {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(SEARCHES)
                 .document(documentId)
@@ -138,12 +141,12 @@ public class EditSearchActivity extends AppCompatActivity {
                                 new AlertDialog.Builder(this)
                                         .setTitle(R.string.discard_changes)
                                         .setMessage(R.string.want_to_discard_changes)
-                                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToSearchResults())
+                                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToSearchResults(newSearch))
                                         .setNegativeButton(android.R.string.no, null).show();
                             }
 
                             else {
-                                goToSearchResults();
+                                goToSearchResults(newSearch);
                             }
                         } else {
                             Log.d(TAG, COULD_NOT_RETRIEVE_DATA);

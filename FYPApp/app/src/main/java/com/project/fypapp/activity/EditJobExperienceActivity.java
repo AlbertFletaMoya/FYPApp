@@ -2,7 +2,6 @@ package com.project.fypapp.activity;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -93,7 +92,7 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                         companyView.getText().toString().trim(),
                         sectorView.getText().toString().trim(),
                         roleView.getText().toString().trim(),
-                        jobDescriptionView.getText().toString().trim(), userId));
+                        jobDescriptionView.getText().toString().trim()));
             }
 
             else {
@@ -120,7 +119,7 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                         });
 
 
-                deleteButton.setOnClickListener(view -> deleteExperience(documentId, userId));
+                deleteButton.setOnClickListener(view -> deleteExperience(documentId));
                 saveButton.setOnClickListener(view -> updateExperience(documentId, userId));
 
                 cancelButton.setOnClickListener(view -> cancel(documentId, startingDateView.getText().toString().trim(),
@@ -144,7 +143,7 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                 .add(jobExperience)
                 .addOnSuccessListener(documentReference -> {
                     Log.d(TAG, addedSuccessfully(documentReference.getId()));
-                    goToIndex(userId);
+                    goToIndex();
                 })
                 .addOnFailureListener(e -> Log.d(TAG, ERROR_ADDING_DOCUMENT));
     }
@@ -162,14 +161,14 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                     .update(jobExperience.toMap())
                     .addOnSuccessListener(aVoid -> {
                         Log.d(TAG, SUCCESSFULLY_UPDATED);
-                        goToIndex(userId);
+                        goToIndex();
                     })
 
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
         }
     }
 
-    private void deleteExperience(String documentId, String userId) {
+    private void deleteExperience(String documentId) {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.delete_experience)
                 .setMessage(R.string.want_to_delete_experience)
@@ -179,18 +178,14 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                             .delete()
                             .addOnSuccessListener(aVoid -> {
                                 Log.d(TAG, SUCCESSFULLY_DELETED);
-                                goToIndex(userId);})
+                                goToIndex();})
                             .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_DELETED, e));
                 })
                 .setNegativeButton(R.string.no, null).show();
 
     }
 
-    private void goToIndex(String userId) {
-        Intent i = new Intent(EditJobExperienceActivity.this, ExperienceIndexActivity.class);
-        i.putExtra(DOCUMENT_ID, userId);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
+    private void goToIndex() {
         finish();
     }
 
@@ -271,13 +266,13 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                             new AlertDialog.Builder(this)
                                     .setTitle(R.string.discard_changes)
                                     .setMessage(R.string.want_to_discard_changes)
-                                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToIndex(userId))
+                                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToIndex())
                                     .setNegativeButton(android.R.string.no, null).show();
                         }
 
                         else {
                             Log.d(TAG, "User id is: " + userId);
-                            goToIndex(userId);
+                            goToIndex();
                         }
                     }
 
@@ -288,16 +283,16 @@ public class EditJobExperienceActivity extends AppCompatActivity {
     }
 
     private void cancelNewExperience(String startingDate, String endingDate, String companyName,
-                                     String sector, String role, String jobDescriptionString, String userId) {
+                                     String sector, String role, String jobDescriptionString) {
         if (!startingDate.equals("") || !endingDate.equals("") || !companyName.equals("")
             || !sector.equals("") || !role.equals("") || !jobDescriptionString.equals("")) {
             new AlertDialog.Builder(getApplicationContext())
                     .setTitle(R.string.discard_changes)
                     .setMessage(R.string.want_to_discard_changes)
-                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToIndex(userId))
+                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToIndex())
                     .setNegativeButton(android.R.string.no, null).show();
         } else {
-            goToIndex(userId);
+            goToIndex();
         }
     }
 

@@ -77,12 +77,51 @@
             android:layout_height="wrap_content"
             android:paddingBottom="80dp">
 
+            <TextView
+                android:id="@+id/profile_photo_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:gravity="center"
+                android:textColor="@color/opposite_main"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginTop="30dp"
+                android:text="@string/profile_photo"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_picture_view"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_photo_text"
+                android:background="@drawable/back_avatar"
+                android:src="@drawable/ic_baseline_person_120"
+                android:contentDescription="@string/profile_photo"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/edit_profile_photo_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profile_picture_view"
+                android:text="@string/edit_profile_photo"
+                android:textColor="@color/turquoise_light"
+                android:textSize="18sp"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"/>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/first_name_layout"
                 style="@style/edit_page_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_profile_photo_view"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent">
 

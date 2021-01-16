@@ -41,6 +41,9 @@ public class Constants {
         return String.format("DocumentSnapshot added with ID: %s", id);
     }
 
+    public static final String TAKE_A_PHOTO = "Take a photo";
+    public static final String CHOOSE_FROM_GALLERY = "Choose from gallery";
+
     public static final String SUCCESSFULLY_RETRIEVED_DATA = "Successfully retrieve object";
     public static final String ERROR_ADDING_DOCUMENT = "Error adding document";
     public static final String COULD_NOT_RETRIEVE_DATA = "Could not retrieve data from database";

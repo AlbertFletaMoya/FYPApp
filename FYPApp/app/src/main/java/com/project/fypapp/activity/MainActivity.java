@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,14 +25,18 @@ import com.project.fypapp.model.Retiree;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static com.project.fypapp.model.JobExperience.JOB_EXPERIENCES;
 import static com.project.fypapp.model.Retiree.RETIREE_USERS;
+import static com.project.fypapp.util.Constants.CHOOSE_FROM_GALLERY;
 import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
 import static com.project.fypapp.util.Constants.DOCUMENT_DOES_NOT_EXIST;
 import static com.project.fypapp.util.Constants.DOCUMENT_ID;
 import static com.project.fypapp.util.Constants.LOGOUT_MESSAGE;
 import static com.project.fypapp.util.Constants.PROFILE_BELONGS_TO_USER;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
+import static com.project.fypapp.util.Constants.TAKE_A_PHOTO;
 import static com.project.fypapp.util.Constants.USER;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
         final TextView cancelButton = findViewById(R.id.cancel_view);
         cancelButton.setOnClickListener(view -> finish());
 
+        final CircleImageView circleImageView = findViewById(R.id.profile_picture_view);
+        circleImageView.setOnClickListener(view -> profilePictureDialogue());
+
         if (getIntent().getExtras() != null) {
             final String documentId = getIntent().getStringExtra(DOCUMENT_ID);
             final boolean profileBelongsToUser = getIntent().getBooleanExtra(PROFILE_BELONGS_TO_USER, false);
@@ -57,6 +65,16 @@ public class MainActivity extends AppCompatActivity {
                 ((ViewGroup) cancelButton.getParent()).removeView(cancelButton);
             }
 
+            initRecyclerView(profileBelongsToUser, documentId);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getIntent().getExtras() != null) {
+            final String documentId = getIntent().getStringExtra(DOCUMENT_ID);
+            final boolean profileBelongsToUser = getIntent().getBooleanExtra(PROFILE_BELONGS_TO_USER, false);
             initRecyclerView(profileBelongsToUser, documentId);
         }
     }
@@ -131,6 +149,17 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, COULD_NOT_RETRIEVE_DATA, task.getException());
             }
         });
+    }
+
+    private void profilePictureDialogue() {
+        String[] options = {TAKE_A_PHOTO, CHOOSE_FROM_GALLERY};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.profile_photo);
+        builder.setItems(options, (dialog, which) -> {
+                // the user clicked on colors[which]
+        });
+        builder.show();
     }
 
 }

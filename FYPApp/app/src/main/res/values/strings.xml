@@ -80,4 +80,6 @@
     <string name="city_star">City*</string>
     <string name="country_star">Country*</string>
     <string name="no_results">We couldn\'t match your search parameters to any profile, try again later</string>
+    <string name="profile_photo">Profile photo</string>
+    <string name="edit_profile_photo">Edit profile photo</string>
 </resources>

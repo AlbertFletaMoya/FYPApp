@@ -53,6 +53,12 @@ public class SearchResultsActivity extends AppCompatActivity {
         initRecyclerView();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initRecyclerView();
+    }
+
     private void goToEditSearch() {
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseFirestore db = FirebaseFirestore.getInstance();

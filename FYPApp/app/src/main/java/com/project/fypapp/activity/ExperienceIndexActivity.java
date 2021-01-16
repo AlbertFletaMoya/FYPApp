@@ -50,6 +50,14 @@ public class ExperienceIndexActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getIntent().getExtras() != null) {
+            initRecyclerView(getIntent().getStringExtra(DOCUMENT_ID));
+        }
+    }
+
     private void initRecyclerView(String documentId) {
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -90,11 +98,6 @@ public class ExperienceIndexActivity extends AppCompatActivity {
     }
 
     private void cancel(String documentId) {
-        Intent i = new Intent(ExperienceIndexActivity.this, MainActivity.class);
-        i.putExtra(PROFILE_BELONGS_TO_USER, true);
-        i.putExtra(DOCUMENT_ID, documentId);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
         finish();
     }
 }

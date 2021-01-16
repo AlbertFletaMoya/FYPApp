@@ -20,18 +20,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static com.project.fypapp.model.Retiree.CITY;
 import static com.project.fypapp.model.Retiree.COUNTRY;
 import static com.project.fypapp.model.Retiree.FIRST_NAME;
 import static com.project.fypapp.model.Retiree.HEADLINE;
 import static com.project.fypapp.model.Retiree.LAST_NAME;
 import static com.project.fypapp.model.Retiree.RETIREE_USERS;
+import static com.project.fypapp.util.Constants.CHOOSE_FROM_GALLERY;
 import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
 import static com.project.fypapp.util.Constants.DOCUMENT_ID;
 import static com.project.fypapp.util.Constants.NEW_USER;
 import static com.project.fypapp.util.Constants.PROFILE_BELONGS_TO_USER;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_UPDATED;
+import static com.project.fypapp.util.Constants.TAKE_A_PHOTO;
 import static com.project.fypapp.util.Constants.UNSUCCESSFULLY_UPDATED;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -48,6 +52,11 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_edit_profile);
+
+        final CircleImageView circleImageView = findViewById(R.id.profile_picture_view);
+        final TextView editProfilePhotoView = findViewById(R.id.edit_profile_photo_view);
+        circleImageView.setOnClickListener(view -> profilePictureDialogue());
+        editProfilePhotoView.setOnClickListener(view -> profilePictureDialogue());
 
         final TextView saveButton = findViewById(R.id.save_view);
         final TextView cancelButton = findViewById(R.id.cancel_view);
@@ -88,7 +97,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         headlineView.getText().toString().trim(),
                         cityView.getText().toString().trim(),
                         countryView.getText().toString().trim(),
-                        documentId));
+                        documentId, newUser));
             }
 
             else {
@@ -97,11 +106,11 @@ public class EditProfileActivity extends AppCompatActivity {
                 ((ViewManager)cancelButton.getParent()).removeView(cancelButton);
             }
 
-            saveButton.setOnClickListener(view -> saveProfile(documentId));
+            saveButton.setOnClickListener(view -> saveProfile(documentId, newUser));
         }
     }
 
-    private void saveProfile(String documentId) {
+    private void saveProfile(String documentId, boolean newUser) {
         final String firstName = firstNameView.getText().toString().trim();
         final String lastName = lastNameView.getText().toString().trim();
         final String headline = headlineView.getText().toString().trim();
@@ -122,24 +131,26 @@ public class EditProfileActivity extends AppCompatActivity {
                     .update(retireeMap)
                     .addOnSuccessListener(aVoid -> {
                         Log.d(TAG, SUCCESSFULLY_UPDATED);
-                        goToMain(documentId);
+                        goToMain(newUser, documentId);
                     })
 
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
         }
     }
 
-    private void goToMain(String documentId) {
-        Intent i = new Intent(EditProfileActivity.this, MainActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.putExtra(DOCUMENT_ID, documentId);
-        i.putExtra(PROFILE_BELONGS_TO_USER, true);
-        startActivity(i);
+    private void goToMain(boolean newUser, String documentId) {
+        if (newUser) {
+            Intent i = new Intent(EditProfileActivity.this, MainActivity.class);
+            i.putExtra(PROFILE_BELONGS_TO_USER, true);
+            i.putExtra(DOCUMENT_ID, documentId);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+        }
         finish();
     }
 
     private void cancel(String firstName, String lastName, String headline, String city,
-                        String country, String documentId) {
+                        String country, String documentId, boolean newUser) {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(RETIREE_USERS)
                 .document(documentId)
@@ -158,12 +169,12 @@ public class EditProfileActivity extends AppCompatActivity {
                             new AlertDialog.Builder(this)
                                     .setTitle(R.string.discard_changes)
                                     .setMessage(R.string.want_to_discard_changes)
-                                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToMain(documentId))
+                                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToMain(newUser, ""))
                                     .setNegativeButton(android.R.string.no, null).show();
                         }
 
                         else {
-                            goToMain(documentId);
+                            goToMain(newUser, "");
                         }
                     } else {
                         Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
@@ -207,5 +218,16 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    private void profilePictureDialogue() {
+        String[] options = {TAKE_A_PHOTO, CHOOSE_FROM_GALLERY};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.profile_photo);
+        builder.setItems(options, (dialog, which) -> {
+            // the user clicked on colors[which]
+        });
+        builder.show();
     }
 }
