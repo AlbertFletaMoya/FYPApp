@@ -114,7 +114,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                                 i.putExtra(PROFILE_BELONGS_TO_USER, false);
                                 i.putExtra(DOCUMENT_ID, userIds.get(position));
                                 startActivity(i);
-                            });
+                            }, this);
 
                             noResultsView.setVisibility(View.GONE);
                             recyclerView.setAdapter(recyclerAdapter);

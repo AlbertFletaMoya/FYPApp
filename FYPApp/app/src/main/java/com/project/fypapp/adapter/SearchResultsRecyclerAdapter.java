@@ -1,13 +1,23 @@
 package com.project.fypapp.adapter;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.project.fypapp.R;
 import com.project.fypapp.model.Retiree;
 
@@ -17,10 +27,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
+import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
+import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
+
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class SearchResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final List<Retiree> users;
     private final SearchResultsOnClickListener onClickListener;
+    Context context;
 
     class SearchResultsViewHolder extends RecyclerView.ViewHolder {
         private final CircleImageView profilePictureView;
@@ -51,7 +65,12 @@ public class SearchResultsRecyclerAdapter extends RecyclerView.Adapter<RecyclerV
         final Retiree retiree = users.get(position);
         viewHolder.nameView.setText(Retiree.getName(retiree));
         viewHolder.bioView.setText(retiree.getHeadline());
-        viewHolder.profilePictureView.setImageResource(R.drawable.ic_baseline_person_120);
+        Glide.with(context)
+                .load(Uri.parse(retiree.getProfilePictureUri()))
+                .centerCrop()
+                .placeholder(R.drawable.ic_baseline_person_120)
+                .error(R.drawable.ic_baseline_person_120)
+                .into(viewHolder.profilePictureView);
     }
 
     @Override
