@@ -19,6 +19,7 @@ public class Retiree {
     public static final String COUNTRY = "country";
     public static final String HEADLINE = "headline";
     public static final String LOCATION = "location";
+    public static final String PROFILE_PICTURE_URI = "profilePictureUri";
 
     private final String email;
     private final String firstName;
@@ -26,6 +27,7 @@ public class Retiree {
     private final String headline;
     private final String city;
     private final String country;
+    private final String profilePictureUri;
 
     public Retiree() {
         email = "";
@@ -34,6 +36,7 @@ public class Retiree {
         headline = "";
         city = "";
         country = "";
+        profilePictureUri = "";
     }
 
     public static String getName(Retiree retiree) {
@@ -51,6 +54,7 @@ public class Retiree {
         retireeMap.put(HEADLINE, this.headline);
         retireeMap.put(CITY, this.city);
         retireeMap.put(COUNTRY, this.country);
+        retireeMap.put(PROFILE_PICTURE_URI, this.profilePictureUri);
         return retireeMap;
     }
 }

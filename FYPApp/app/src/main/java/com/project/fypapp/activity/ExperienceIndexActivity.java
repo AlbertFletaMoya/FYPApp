@@ -3,6 +3,8 @@ package com.project.fypapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -24,7 +26,7 @@ import static com.project.fypapp.model.JobExperience.JOB_EXPERIENCES;
 import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
 import static com.project.fypapp.util.Constants.DOCUMENT_ID;
 import static com.project.fypapp.util.Constants.NEW_EXPERIENCE;
-import static com.project.fypapp.util.Constants.PROFILE_BELONGS_TO_USER;
+import static com.project.fypapp.util.Constants.NEW_INFO;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
 import static com.project.fypapp.util.Constants.USER;
 import static com.project.fypapp.util.Constants.USER_ID;
@@ -40,25 +42,29 @@ public class ExperienceIndexActivity extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             final String documentId = getIntent().getStringExtra(DOCUMENT_ID);
 
+            final boolean newInfo = getIntent().getBooleanExtra(NEW_INFO, false);
+
             final ConstraintLayout addExperienceView = findViewById(R.id.add_job_layout);
             addExperienceView.setOnClickListener(view -> addExperience(documentId));
 
             final TextView cancelView = findViewById(R.id.cancel_view);
             cancelView.setOnClickListener(view -> cancel(documentId));
 
+            final ProgressBar progressBar = findViewById(R.id.progress_bar);
+
+            if (newInfo) {
+                progressBar.setVisibility(View.VISIBLE);
+            } else {
+                progressBar.setVisibility(View.GONE);
+            }
+
             initRecyclerView(documentId);
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (getIntent().getExtras() != null) {
-            initRecyclerView(getIntent().getStringExtra(DOCUMENT_ID));
-        }
-    }
-
     private void initRecyclerView(String documentId) {
+        final ProgressBar progressBar = findViewById(R.id.progress_bar);
+
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -84,6 +90,7 @@ public class ExperienceIndexActivity extends AppCompatActivity {
                                     startActivity(i);
                                 });
                         recyclerView.setAdapter(userExperienceRecyclerAdapter);
+                        progressBar.setVisibility(View.GONE);
                     } else {
                         Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
                     }

@@ -1,6 +1,5 @@
 package com.project.fypapp.util;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,8 +18,8 @@ public class Constants {
     public static final String PROFILE_BELONGS_TO_USER = "profileBelongsToUser";
     public static final String USER_ID = "userId";
     public static final String USER = "user";
+    public static final String NEW_INFO = "newInfo";
 
-    public static final int ADD_NEW_EXPERIENCE = -1;
 
     public static final Map<Integer, String> MONTH_MAP = Stream.of(new Object[][] {
             {1, "Jan"},
@@ -43,6 +42,8 @@ public class Constants {
 
     public static final String TAKE_A_PHOTO = "Take a photo";
     public static final String CHOOSE_FROM_GALLERY = "Choose from gallery";
+    public static final int TAKE_A_PHOTO_REQUEST_CODE = 0;
+    public static final int CHOOSE_FROM_GALLERY_REQUEST_CODE = 1;
 
     public static final String SUCCESSFULLY_RETRIEVED_DATA = "Successfully retrieve object";
     public static final String ERROR_ADDING_DOCUMENT = "Error adding document";

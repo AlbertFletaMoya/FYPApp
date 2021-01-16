@@ -178,6 +178,7 @@ public class FirebaseUIActivity extends AppCompatActivity {
         final Intent intent = new Intent(FirebaseUIActivity.this, MainActivity.class);
         intent.putExtra(PROFILE_BELONGS_TO_USER, true);
         intent.putExtra(DOCUMENT_ID, documentId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
         finish();
     }

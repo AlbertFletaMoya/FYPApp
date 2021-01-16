@@ -85,7 +85,7 @@ public class UserTypeActivity extends AppCompatActivity {
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         assert firebaseUser != null;
         final Retiree retiree = new Retiree(firebaseUser.getEmail(), "", "", "",
-                "", "");
+                "", "", "");
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(RETIREE_USERS)

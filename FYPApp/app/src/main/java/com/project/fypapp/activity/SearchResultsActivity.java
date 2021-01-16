@@ -3,7 +3,8 @@ package com.project.fypapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ViewManager;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,12 +51,15 @@ public class SearchResultsActivity extends AppCompatActivity {
         final TextView logoutView = findViewById(R.id.logout_view);
         logoutView.setOnClickListener(view -> signOut());
 
+        final RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setVisibility(View.INVISIBLE);
+
         initRecyclerView();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onRestart() {
+        super.onRestart();
         initRecyclerView();
     }
 
@@ -82,6 +86,10 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
+        final ProgressBar progressBar = findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.showContextMenu();
+
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
         final TextView noResultsView = findViewById(R.id.no_results_view);
         final GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
@@ -108,13 +116,17 @@ public class SearchResultsActivity extends AppCompatActivity {
                                 startActivity(i);
                             });
 
-                            ((ViewManager)noResultsView.getParent()).removeView(noResultsView);
+                            noResultsView.setVisibility(View.GONE);
                             recyclerView.setAdapter(recyclerAdapter);
+                            recyclerView.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
                         }
 
                         else {
-                            ((ViewManager)recyclerView.getParent()).removeView(recyclerView);
+                            recyclerView.setVisibility(View.GONE);
+                            noResultsView.setVisibility(View.VISIBLE);
                             noResultsView.setText(R.string.no_results);
+                            progressBar.setVisibility(View.GONE);
                         }
 
                     } else {

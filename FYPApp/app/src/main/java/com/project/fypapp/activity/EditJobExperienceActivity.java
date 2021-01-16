@@ -2,6 +2,7 @@ package com.project.fypapp.activity;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -25,6 +26,7 @@ import static com.project.fypapp.util.Constants.DOCUMENT_ID;
 import static com.project.fypapp.util.Constants.ERROR_ADDING_DOCUMENT;
 import static com.project.fypapp.util.Constants.MONTH_MAP;
 import static com.project.fypapp.util.Constants.NEW_EXPERIENCE;
+import static com.project.fypapp.util.Constants.NEW_INFO;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_DELETED;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_UPDATED;
@@ -42,6 +44,8 @@ public class EditJobExperienceActivity extends AppCompatActivity {
     private EditText sectorView;
     private EditText roleView;
     private EditText jobDescriptionView;
+
+    private String userId;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -79,7 +83,7 @@ public class EditJobExperienceActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
             String documentId = getIntent().getStringExtra(DOCUMENT_ID);
-            final String userId = getIntent().getStringExtra(USER_ID);
+            userId = getIntent().getStringExtra(USER_ID);
             final boolean newExperience = getIntent().getBooleanExtra(NEW_EXPERIENCE, false);
 
             if (newExperience) {
@@ -186,6 +190,11 @@ public class EditJobExperienceActivity extends AppCompatActivity {
     }
 
     private void goToIndex() {
+        Intent i = new Intent(EditJobExperienceActivity.this, ExperienceIndexActivity.class);
+        i.putExtra(DOCUMENT_ID, userId);
+        i.putExtra(NEW_INFO, true);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
         finish();
     }
 
@@ -266,13 +275,13 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                             new AlertDialog.Builder(this)
                                     .setTitle(R.string.discard_changes)
                                     .setMessage(R.string.want_to_discard_changes)
-                                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToIndex())
+                                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> finish())
                                     .setNegativeButton(android.R.string.no, null).show();
                         }
 
                         else {
                             Log.d(TAG, "User id is: " + userId);
-                            goToIndex();
+                            finish();
                         }
                     }
 
@@ -289,10 +298,10 @@ public class EditJobExperienceActivity extends AppCompatActivity {
             new AlertDialog.Builder(getApplicationContext())
                     .setTitle(R.string.discard_changes)
                     .setMessage(R.string.want_to_discard_changes)
-                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToIndex())
+                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> finish())
                     .setNegativeButton(android.R.string.no, null).show();
         } else {
-            goToIndex();
+            finish();
         }
     }
 
