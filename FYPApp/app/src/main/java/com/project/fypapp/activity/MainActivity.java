@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(view -> finish());
 
         circleImageView = findViewById(R.id.profile_picture_view);
-        circleImageView.setOnClickListener(view -> profilePictureDialogue());
 
         materialCardView = findViewById(R.id.card_view);
         progressBar = findViewById(R.id.progress_bar);
@@ -106,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             if (!profileBelongsToUser) {
                 ((ViewGroup) logoutButton.getParent()).removeView(logoutButton);
             } else {
+                circleImageView.setOnClickListener(view -> profilePictureDialogue());
                 ((ViewGroup) cancelButton.getParent()).removeView(cancelButton);
             }
 
