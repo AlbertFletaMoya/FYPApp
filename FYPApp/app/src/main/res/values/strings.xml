@@ -82,4 +82,21 @@
     <string name="no_results">We couldn\'t match your search parameters to any profile, try again later</string>
     <string name="profile_photo">Profile photo</string>
     <string name="edit_profile_photo">Edit profile photo</string>
+    <string name="what_is_your_name">What\'s your name?</string>
+    <string name="add_profile_headline">Do you want to write a short description about yourself for your profile?</string>
+    <string name="add_location">Do you want to add your current location to your profile?</string>
+    <string name="add_skills">Do you want to select skills and show them on your profile?</string>
+    <string name="add_interests">Do you want to select interests and show them on your profile?</string>
+    <string name="add_profile_picture">Do you want to add a profile picture?</string>
+    <string name="maybe_later">No, maybe later</string>
+    <string name="write_your_profile_headline">Write your profile headline</string>
+    <string name="skip">Skip</string>
+    <string name="keep_profile_picture">Do you want to keep this as your profile picture?</string>
+    <string name="choose_another_picture">No, choose another picture</string>
+    <string name="search_and_select_skills">Search and select your skills</string>
+    <string name="search_and_select_interests">Search and select your interests</string>
+    <string name="select_skills">Select skills</string>
+    <string name="select_interests">Select interests</string>
+    <string name="skill">Skill</string>
+    <string name="skills">Skills</string>
 </resources>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:background="@drawable/progress_bar_background"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="170dp"
+        android:indeterminate="true"
+        android:visibility="visible"
+        android:elevation="5dp"/>
+
+    <TextView
+        android:id="@+id/profile_photo_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:gravity="center"
+        android:textColor="@color/opposite_main"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_marginTop="90dp"
+        android:text="@string/keep_profile_picture"
+        android:paddingHorizontal="20dp"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_picture_view"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_photo_text"
+        android:background="@drawable/back_avatar"
+        android:src="@drawable/ic_baseline_person_120"
+        android:contentDescription="@string/profile_photo"
+        android:layout_marginTop="10dp"/>
+
+
+    <Button
+        style="@style/form_button"
+        android:id="@+id/yes_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/yes"
+        app:layout_constraintBottom_toTopOf="@id/no_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginBottom="50dp"/>
+
+    <Button
+        style="@style/form_button"
+        android:id="@+id/no_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_another_picture"
+        app:layout_constraintBottom_toTopOf="@id/skip_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginBottom="50dp"/>
+
+    <Button
+        style="@style/form_button"
+        android:id="@+id/skip_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/skip"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginBottom="50dp"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
