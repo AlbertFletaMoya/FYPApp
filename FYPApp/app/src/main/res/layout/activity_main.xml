@@ -32,7 +32,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0"
-        android:layout_marginTop="20dp"
+        android:paddingTop="20dp"
         android:layout_marginBottom="-30dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -199,11 +199,125 @@
                         app:layout_constraintVertical_chainStyle="packed" />
 
                     <View
-                        android:id="@+id/line"
+                        android:id="@+id/line1"
                         android:background="#4D7C7C7C"
                         android:layout_width = "match_parent"
                         android:layout_height="1dp"
                         app:layout_constraintTop_toBottomOf="@id/location_view"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="20dp"/>
+
+                    <TextView
+                        android:id="@+id/edit_skills_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/edit"
+                        app:layout_constraintTop_toBottomOf="@id/line1"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:layout_marginTop="10dp"
+                        android:gravity="end"
+                        android:paddingHorizontal="20dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/turquoise_light"
+                        app:layout_constraintVertical_chainStyle="packed"
+                        android:layout_marginBottom="10dp"
+                        android:paddingVertical="10dp"
+                        app:layout_constraintBottom_toTopOf="@id/skills_view"/>
+
+                    <TextView
+                        android:id="@+id/skills_title_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="20dp"
+                        android:text="@string/skills"
+                        android:textSize="18sp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/line1"
+                        app:layout_constraintVertical_bias="0"
+                        android:paddingVertical="10dp"
+                        android:textColor="@color/opposite_main"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintBottom_toTopOf="@id/skills_view"/>
+
+                    <TextView
+                        android:id="@+id/skills_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/skills_title_view"
+                        app:layout_constraintBottom_toTopOf="@id/line2"
+                        android:text="@string/placeholder_skills"
+                        android:layout_marginHorizontal="20dp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/opposite_main"/>
+
+                    <View
+                        android:id="@+id/line2"
+                        android:background="#4D7C7C7C"
+                        android:layout_width = "match_parent"
+                        android:layout_height="1dp"
+                        app:layout_constraintTop_toBottomOf="@id/skills_view"
+                        app:layout_constraintBottom_toTopOf="@id/interests_title_view"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="20dp"/>
+
+                    <TextView
+                        android:id="@+id/edit_interests_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/edit"
+                        app:layout_constraintTop_toBottomOf="@id/line2"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:layout_marginTop="10dp"
+                        android:gravity="end"
+                        android:paddingHorizontal="20dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/turquoise_light"
+                        app:layout_constraintVertical_chainStyle="packed"
+                        android:layout_marginBottom="10dp"
+                        android:paddingVertical="10dp"
+                        app:layout_constraintBottom_toTopOf="@id/interests_view"/>
+
+                    <TextView
+                        android:id="@+id/interests_title_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="20dp"
+                        android:text="@string/interests"
+                        android:textSize="18sp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/line2"
+                        app:layout_constraintVertical_bias="0"
+                        android:paddingVertical="10dp"
+                        android:textColor="@color/opposite_main"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:layout_constraintBottom_toTopOf="@id/interests_view"/>
+
+                    <TextView
+                        android:id="@+id/interests_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/interests_title_view"
+                        app:layout_constraintBottom_toTopOf="@id/line3"
+                        android:text="@string/placeholder_interests"
+                        android:layout_marginHorizontal="20dp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/opposite_main"/>
+
+                    <View
+                        android:id="@+id/line3"
+                        android:background="#4D7C7C7C"
+                        android:layout_width = "match_parent"
+                        android:layout_height="1dp"
+                        app:layout_constraintTop_toBottomOf="@id/interests_view"
                         app:layout_constraintBottom_toTopOf="@id/section_view"
                         app:layout_constraintLeft_toLeftOf="parent"
                         android:layout_marginBottom="10dp"
@@ -214,9 +328,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/edit"
-                        app:layout_constraintTop_toBottomOf="@id/line"
+                        app:layout_constraintTop_toBottomOf="@id/line3"
                         app:layout_constraintRight_toRightOf="parent"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:gravity="end"
                         android:paddingHorizontal="20dp"
                         android:textSize="18sp"
@@ -233,11 +347,11 @@
                         android:text="@string/experience"
                         android:textSize="18sp"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/line"
+                        app:layout_constraintTop_toBottomOf="@id/line3"
                         app:layout_constraintVertical_bias="0"
                         android:paddingVertical="10dp"
                         android:textColor="@color/opposite_main"
-                        android:layout_marginTop="20dp"/>
+                        android:layout_marginTop="10dp"/>
 
 
                     <androidx.recyclerview.widget.RecyclerView

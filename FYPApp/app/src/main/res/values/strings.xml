@@ -101,4 +101,7 @@
     <string name="skills">Skills</string>
     <string name="full_name">%1$s %2$s</string>
     <string name="full_location">%1$s, %2$s</string>
+    <string name="placeholder_skills">C++, MATLAB, Python, Management, Teamwork</string>
+    <string name="placeholder_interests">Movies, IT, Traveling</string>
+    <string name="interests">Interests</string>
 </resources>
