@@ -20,7 +20,8 @@ public class CameraHelper {
 
     private static File createImageFile(File storageDir) throws IOException {
         // Create an image file name
-        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        @SuppressLint("SimpleDateFormat") String timeStamp =
+                new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
 
         return File.createTempFile(

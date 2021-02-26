@@ -8,7 +8,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,7 +51,6 @@ import static com.project.fypapp.model.Retiree.RETIREE_USERS;
 import static com.project.fypapp.util.Constants.CHOOSE_FROM_GALLERY;
 import static com.project.fypapp.util.Constants.CHOOSE_FROM_GALLERY_REQUEST_CODE;
 import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
-import static com.project.fypapp.util.Constants.DOCUMENT_DOES_NOT_EXIST;
 import static com.project.fypapp.util.Constants.DOCUMENT_ID;
 import static com.project.fypapp.util.Constants.LOGOUT_MESSAGE;
 import static com.project.fypapp.util.Constants.PROFILE_BELONGS_TO_USER;
@@ -68,15 +66,21 @@ public class MainActivity extends AppCompatActivity {
 
     private Uri cameraUri = null;
     private String documentId;
-    private boolean profileBelongsToUser;
     private boolean recyclerReady = false;
     private boolean imageReady = false;
+    private boolean profileBelongsToUser;
 
     private TextView logoutButton;
     private TextView cancelButton;
     private CircleImageView circleImageView;
     private MaterialCardView materialCardView;
     private ProgressBar progressBar;
+
+    private TextView nameView;
+    private TextView locationView;
+    private TextView bioView;
+    private TextView emailView;
+    private TextView editExperienceView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,19 +101,41 @@ public class MainActivity extends AppCompatActivity {
         materialCardView = findViewById(R.id.card_view);
         progressBar = findViewById(R.id.progress_bar);
 
+        nameView = findViewById(R.id.name_view);
+        locationView = findViewById(R.id.location_view);
+        bioView = findViewById(R.id.bio_view);
+        emailView = findViewById(R.id.email_view);
+        TextView editProfileView = findViewById(R.id.edit_profile_view);
+        editExperienceView = findViewById(R.id.edit_experience_view);
+
+        editProfileView.setOnClickListener(view -> {
+            Intent i = new Intent(MainActivity.this, EditProfileActivity.class);
+            i.putExtra(DOCUMENT_ID, documentId);
+            startActivity(i);
+        });
+
+        editExperienceView.setOnClickListener(view -> {
+            Intent i = new Intent(MainActivity.this, ExperienceIndexActivity.class);
+            i.putExtra(DOCUMENT_ID, documentId);
+            startActivity(i);
+        });
+
         hideViews();
 
         if (getIntent().getExtras() != null) {
             documentId = getIntent().getStringExtra(DOCUMENT_ID);
             profileBelongsToUser = getIntent().getBooleanExtra(PROFILE_BELONGS_TO_USER, false);
             if (!profileBelongsToUser) {
-                ((ViewGroup) logoutButton.getParent()).removeView(logoutButton);
+                logoutButton.setVisibility(View.INVISIBLE);
+                editExperienceView.setVisibility(View.INVISIBLE);
+                editProfileView.setVisibility(View.INVISIBLE);
             } else {
                 circleImageView.setOnClickListener(view -> profilePictureDialogue());
-                ((ViewGroup) cancelButton.getParent()).removeView(cancelButton);
+                cancelButton.setVisibility(View.INVISIBLE);
             }
 
-            initRecyclerView();
+            getProfile();
+            initRecyclerView(documentId);
             setProfilePicture();
         }
     }
@@ -118,8 +144,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         if (getIntent().getExtras() != null) {
-            initRecyclerView();
+            getProfile();
         }
+    }
+
+    private void getProfile() {
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final DocumentReference docRef = db.collection(RETIREE_USERS).document(documentId);
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
+                final DocumentSnapshot document = task.getResult();
+                assert document != null;
+                if (document.exists()) {
+                    Log.d(TAG, "DOCUMENT ID: " + documentId);
+                    final Retiree retiree = document.toObject(Retiree.class);
+                    nameView.setText(getString(R.string.full_name, retiree.getFirstName(), retiree.getLastName()));
+                    bioView.setText(retiree.getHeadline());
+                    emailView.setText(retiree.getEmail());
+                    locationView.setText(getString(R.string.full_location, retiree.getCity(),
+                            retiree.getCountry()));
+                }
+            } else {
+            Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
+            }
+        });
     }
 
     private void signOut() {
@@ -137,64 +186,35 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    private void initRecyclerView() {
+    private void initRecyclerView(String retireeId) {
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final DocumentReference docRef = db.collection(RETIREE_USERS).document(documentId);
-        docRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
-                final DocumentSnapshot document = task.getResult();
-                assert document != null;
-                if (document.exists()) {
-                    final Retiree retiree = document.toObject(Retiree.class);
-                    Log.d(TAG, "DOCUMENT ID: " + documentId);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(JOB_EXPERIENCES)
+                .whereEqualTo(USER, retireeId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
+                        final List<JobExperience> experiences = new ArrayList<>();
+                        for (DocumentSnapshot document : task.getResult().getDocuments()) {
+                            experiences.add(document.toObject(JobExperience.class));
+                        }
+                        if (experiences.isEmpty()) {
+                            editExperienceView.setText(getString(R.string.add));
+                        }
+                        final UserProfileRecyclerAdapter userProfileRecyclerAdapter =
+                                new UserProfileRecyclerAdapter(experiences);
 
-                    db.collection(JOB_EXPERIENCES)
-                            .whereEqualTo(USER, documentId)
-                            .get()
-                            .addOnCompleteListener(task1 -> {
-                                if (task1.isSuccessful()) {
-                                    Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
-                                    final List<JobExperience> experiences = new ArrayList<>();
-                                    for (DocumentSnapshot document1 : task1.getResult().getDocuments()) {
-                                        experiences.add(document1.toObject(JobExperience.class));
-                                    }
-                                    final UserProfileRecyclerAdapter userProfileRecyclerAdapter =
-                                            new UserProfileRecyclerAdapter(retiree, experiences, new UserProfileRecyclerAdapter.UserProfileRecyclerAdapterListener() {
-                                                @Override
-                                                public void editProfileOnClick(View v, int position) {
-                                                    final Intent i = new Intent(MainActivity.this, EditProfileActivity.class);
-                                                    i.putExtra(DOCUMENT_ID, documentId);
-                                                    startActivity(i);
-                                                }
-
-                                                @Override
-                                                public void editExperienceOnClick(View v, int position) {
-                                                    final Intent i = new Intent(MainActivity.this, ExperienceIndexActivity.class);
-                                                    i.putExtra(DOCUMENT_ID, documentId);
-                                                    startActivity(i);
-                                                }
-                                            }, profileBelongsToUser);
-
-                                    recyclerView.setAdapter(userProfileRecyclerAdapter);
-                                    recyclerReady = true;
-                                    showViews();
-                                } else {
-                                    Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
-                                }
-                            });
-
-                } else {
-                    Log.d(TAG, DOCUMENT_DOES_NOT_EXIST);
-                }
-            } else {
-                Log.d(TAG, COULD_NOT_RETRIEVE_DATA, task.getException());
-            }
-        });
+                        recyclerView.setAdapter(userProfileRecyclerAdapter);
+                        recyclerReady = true;
+                        showViews();
+                    } else {
+                        Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
+                    }
+                });
     }
 
     private void setProfilePicture() {
@@ -263,16 +283,16 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         imageReady = false;
         Uri selectedImage = null;
-        switch(requestCode) {
+        switch (requestCode) {
             case TAKE_A_PHOTO_REQUEST_CODE:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     selectedImage = cameraUri;
                     Log.d(TAG, "The chosen photo URI is: " + selectedImage);
                 }
 
                 break;
             case CHOOSE_FROM_GALLERY_REQUEST_CODE:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     selectedImage = imageReturnedIntent.getData();
                     Log.d(TAG, "The chosen photo URI is: " + selectedImage);
                 }
@@ -313,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void hideViews() {
         progressBar.setVisibility(View.GONE);
-        materialCardView.setVisibility(View.INVISIBLE);
+        materialCardView.setVisibility(View.GONE);
         logoutButton.setVisibility(View.INVISIBLE);
         cancelButton.setVisibility(View.INVISIBLE);
         circleImageView.setVisibility(View.INVISIBLE);
@@ -324,9 +344,12 @@ public class MainActivity extends AppCompatActivity {
         if (recyclerReady && imageReady) {
             materialCardView.setVisibility(View.VISIBLE);
             logoutButton.setVisibility(View.VISIBLE);
-            cancelButton.setVisibility(View.VISIBLE);
             circleImageView.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
+
+            if (!profileBelongsToUser) {
+                cancelButton.setVisibility(View.VISIBLE);
+            }
         }
     }
 }
