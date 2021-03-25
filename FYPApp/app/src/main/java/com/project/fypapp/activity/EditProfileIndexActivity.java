@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.project.fypapp.util.Constants.DOCUMENT_ID;
+import static com.project.fypapp.util.Constants.IS_REGISTRATION;
 
 public class EditProfileIndexActivity extends AppCompatActivity {
     private static final List<String> ACTIVITIES = new ArrayList<String>(){{
@@ -52,20 +53,18 @@ public class EditProfileIndexActivity extends AppCompatActivity {
                             i = new Intent(EditProfileIndexActivity.this, EditNameActivity.class);
                             break;
                         case 1:
-                            // TODO Navigate to change location activity
-                            i = new Intent(EditProfileIndexActivity.this, EditProfileActivity.class);
+                            i = new Intent(EditProfileIndexActivity.this, EditLocationActivity.class);
                             break;
                         case 2:
-                            // TODO Navigate to change profile activity
-                            i = new Intent(EditProfileIndexActivity.this, EditProfileActivity.class);
+                            i = new Intent(EditProfileIndexActivity.this, EditProfileHeadlineActivity.class);
                             break;
                         case 3:
-                            // TODO Navigate to change profile photo activity
-                            i = new Intent(EditProfileIndexActivity.this, EditProfileActivity.class);
+                            i = new Intent(EditProfileIndexActivity.this, EditProfilePhotoActivity.class);
                             break;
                     }
                     assert i != null;
                     i.putExtra(DOCUMENT_ID, documentId);
+                    i.putExtra(IS_REGISTRATION, false);
                     startActivity(i);
                 });
         recyclerView.setAdapter(basicRecyclerAdapter);

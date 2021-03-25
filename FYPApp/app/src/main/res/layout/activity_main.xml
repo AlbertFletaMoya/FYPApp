@@ -251,7 +251,6 @@
                         android:text="@string/placeholder_skills"
                         android:layout_marginHorizontal="20dp"
                         android:textSize="18sp"
-                        android:textStyle="bold"
                         android:textColor="@color/opposite_main"/>
 
                     <View
@@ -309,7 +308,6 @@
                         android:text="@string/placeholder_interests"
                         android:layout_marginHorizontal="20dp"
                         android:textSize="18sp"
-                        android:textStyle="bold"
                         android:textColor="@color/opposite_main"/>
 
                     <View

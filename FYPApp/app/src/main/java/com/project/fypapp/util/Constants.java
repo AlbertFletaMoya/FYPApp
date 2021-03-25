@@ -20,6 +20,7 @@ public class Constants {
     public static final String USER = "user";
     public static final String NEW_INFO = "newInfo";
 
+    public static final String IS_REGISTRATION = "isRegistration";
 
     public static final Map<Integer, String> MONTH_MAP = Stream.of(new Object[][] {
             {1, "Jan"},

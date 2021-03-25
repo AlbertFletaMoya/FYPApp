@@ -29,19 +29,19 @@ import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_UPDATED;
 import static com.project.fypapp.util.Constants.UNSUCCESSFULLY_UPDATED;
 
-public class EditNameActivity extends AppCompatActivity {
-    private static final String TAG = "EditNameActivity";
+public class EditLocationActivity extends AppCompatActivity {
+    private static final String TAG = "EditLocationActivity";
 
-    private TextInputEditText firstNameView;
-    private TextInputEditText lastNameView;
+    private TextInputEditText countryView;
+    private TextInputEditText cityView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_name);
+        setContentView(R.layout.activity_location);
 
-        firstNameView = findViewById(R.id.first_name_write_view);
-        lastNameView = findViewById(R.id.last_name_write_view);
+        countryView = findViewById(R.id.country_write_view);
+        cityView = findViewById(R.id.city_write_view);
 
         TextView saveButton = findViewById(R.id.save_view);
 
@@ -49,6 +49,7 @@ public class EditNameActivity extends AppCompatActivity {
 
         ConstraintLayout layout = findViewById(R.id.top_bar);
         Button nextButton = findViewById(R.id.next_button);
+        Button skipButton = findViewById(R.id.skip_button);
         TextView textView = findViewById(R.id.text_view);
 
         if (getIntent().getExtras() != null) {
@@ -59,6 +60,7 @@ public class EditNameActivity extends AppCompatActivity {
             else {
                 nextButton.setVisibility(View.GONE);
                 textView.setVisibility(View.GONE);
+                skipButton.setVisibility(View.GONE);
             }
 
             String documentId = getIntent().getStringExtra(DOCUMENT_ID);
@@ -76,11 +78,11 @@ public class EditNameActivity extends AppCompatActivity {
                                 Log.d(TAG, "DOCUMENT ID: " + documentId);
                                 final Retiree retiree = document.toObject(Retiree.class);
                                 assert retiree != null;
-                                firstNameView.setText(retiree.getFirstName());
-                                lastNameView.setText(retiree.getLastName());
+                                cityView.setText(retiree.getCity());
+                                countryView.setText(retiree.getCountry());
                                 cancelButton.setOnClickListener(view ->
-                                        cancel(retiree.getFirstName(), retiree.getLastName()));
-                                saveButton.setOnClickListener(view -> saveName(documentId, retiree));
+                                        cancel(retiree.getCity(), retiree.getCountry()));
+                                saveButton.setOnClickListener(view -> saveLocation(documentId, retiree));
                             }
                         }
 
@@ -91,9 +93,9 @@ public class EditNameActivity extends AppCompatActivity {
         }
     }
 
-    private void cancel(String originalFirstName, String originalLastName) {
-        if (Objects.requireNonNull(firstNameView.getText()).toString().trim().equals(originalFirstName)
-        && Objects.requireNonNull(lastNameView.getText()).toString().trim().equals(originalLastName)) {
+    private void cancel(String originalCity, String originalCountry) {
+        if (Objects.requireNonNull(cityView.getText()).toString().trim().equals(originalCity)
+                && Objects.requireNonNull(countryView.getText()).toString().trim().equals(originalCountry)) {
             finish();
         }
 
@@ -109,27 +111,27 @@ public class EditNameActivity extends AppCompatActivity {
     private boolean validateFields() {
         boolean valid = true;
 
-        final TextInputLayout firstNameLayout = findViewById(R.id.first_name_layout);
-        final TextInputLayout lastNameLayout = findViewById(R.id.last_name_layout);
+        final TextInputLayout cityLayout = findViewById(R.id.city_layout);
+        final TextInputLayout countryLayout = findViewById(R.id.country_layout);
 
-        if (Objects.requireNonNull(firstNameView.getText()).toString().trim().equals("")) {
-            firstNameLayout.setError("Please enter your first name");
+        if (Objects.requireNonNull(cityView.getText()).toString().trim().equals("")) {
+            cityLayout.setError("Please enter your current city");
             valid = false;
         }
 
-        if (Objects.requireNonNull(lastNameView.getText()).toString().trim().equals("")) {
-            lastNameLayout.setError("Please enter your last name");
+        if (Objects.requireNonNull(countryView.getText()).toString().trim().equals("")) {
+            countryLayout.setError("Please enter your current country");
             valid = false;
         }
 
         return valid;
     }
 
-    private void saveName(String documentId, Retiree retiree) {
+    private void saveLocation(String documentId, Retiree retiree) {
         if (validateFields()) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            retiree.setFirstName(Objects.requireNonNull(firstNameView.getText()).toString().trim());
-            retiree.setLastName(Objects.requireNonNull(lastNameView.getText()).toString().trim());
+            retiree.setCity(Objects.requireNonNull(cityView.getText()).toString().trim());
+            retiree.setCountry(Objects.requireNonNull(countryView.getText()).toString().trim());
             Map<String, Object> retireeMap = retiree.toMap();
             db.collection(RETIREE_USERS)
                     .document(documentId)

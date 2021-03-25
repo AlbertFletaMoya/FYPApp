@@ -2,7 +2,66 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/text_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/shadow_bottom"
+        android:paddingVertical="5dp"
+        tools:ignore="NotSibling">
+
+        <TextView
+            android:id="@+id/cancel_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/page_title_view"
+            android:text="@string/cross"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:textSize="24sp"
+            android:textColor="@color/grey"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"/>
+
+        <TextView
+            android:id="@+id/page_title_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/cancel_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/edit_profile_photo"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            android:textColor="@color/opposite_main"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp" />
+
+        <TextView
+            android:id="@+id/save_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/save"
+            android:textSize="18sp"
+            android:textColor="@color/turquoise_light"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintRight_toRightOf="parent"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="20dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -18,11 +77,12 @@
         android:elevation="5dp"/>
 
     <TextView
-        android:id="@+id/profile_photo_text"
+        android:id="@+id/text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/profile_picture_view"
         app:layout_constraintRight_toRightOf="parent"
         android:gravity="center"
         android:textColor="@color/opposite_main"
@@ -38,11 +98,25 @@
         android:layout_height="120dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_photo_text"
+        app:layout_constraintTop_toBottomOf="@id/text_view"
         android:background="@drawable/back_avatar"
         android:src="@drawable/ic_baseline_person_120"
         android:contentDescription="@string/profile_photo"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        app:layout_goneMarginTop="50dp"/>
+
+    <TextView
+        android:id="@+id/edit_profile_photo_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_picture_view"
+        android:text="@string/edit_profile_photo"
+        android:textColor="@color/turquoise_light"
+        android:textSize="18sp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"/>
 
 
     <Button

@@ -146,7 +146,14 @@ public class MainActivity extends AppCompatActivity {
         super.onRestart();
         if (getIntent().getExtras() != null) {
             getProfile();
+            setProfilePicture();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setProfilePicture();
     }
 
     private void getProfile() {
@@ -260,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
     private void profilePictureDialogue() {
         String[] options = {TAKE_A_PHOTO, CHOOSE_FROM_GALLERY};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.profile_photo);
+        builder.setTitle(R.string.edit_profile_photo);
         builder.setItems(options, (dialog, which) -> {
             if (options[which].equals(TAKE_A_PHOTO)) {
                 Intent takePhoto = CameraHelper.getTakePictureIntent(this,

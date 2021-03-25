@@ -105,4 +105,6 @@
     <string name="placeholder_interests">Movies, IT, Traveling</string>
     <string name="interests">Interests</string>
     <string name="edit_name">Edit name</string>
+    <string name="edit_location">Edit Location</string>
+    <string name="edit_profile_headline">Edit profile headline</string>
 </resources>

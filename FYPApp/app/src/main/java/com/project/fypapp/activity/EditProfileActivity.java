@@ -173,7 +173,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 UploadTask uploadTask = profilePictureStorageRef.putFile(selectedImage);
                 uploadTask.continueWithTask(task -> {
                     if (!task.isSuccessful()) {
-                        throw task.getException();
+                        throw Objects.requireNonNull(task.getException());
                     }
 
                     // Continue with the task to get the download URL
@@ -188,6 +188,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         retireeMap.put(HEADLINE, headline);
                         retireeMap.put(CITY, city);
                         retireeMap.put(COUNTRY, country);
+                        assert downloadUri != null;
                         retireeMap.put(PROFILE_PICTURE_URI, downloadUri.toString());
 
                         FirebaseFirestore db = FirebaseFirestore.getInstance();

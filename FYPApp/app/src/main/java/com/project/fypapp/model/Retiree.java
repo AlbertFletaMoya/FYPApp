@@ -26,10 +26,10 @@ public class Retiree {
     private final String email;
     private String firstName;
     private String lastName;
-    private final String headline;
-    private final String city;
-    private final String country;
-    private final String profilePictureUri;
+    private String headline;
+    private String city;
+    private String country;
+    private String profilePictureUri;
 
     public Retiree() {
         email = "";
