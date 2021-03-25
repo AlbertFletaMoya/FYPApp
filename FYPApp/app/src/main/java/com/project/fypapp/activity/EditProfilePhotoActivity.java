@@ -231,8 +231,9 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
                 }
                 break;
         }
-
-        profilePictureUri = selectedImage.toString();
-        circleImageView.setImageURI(selectedImage);
+        if (selectedImage != null) {
+            profilePictureUri = selectedImage.toString();
+            circleImageView.setImageURI(selectedImage);
+        }
     }
 }

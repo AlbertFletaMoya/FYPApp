@@ -312,36 +312,37 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference profilePictureStorageRef = storage.getReference().child("profilePictures/" + documentId);
-        assert selectedImage != null;
-        UploadTask uploadTask = profilePictureStorageRef.putFile(selectedImage);
-        uploadTask.continueWithTask(task -> {
-            if (!task.isSuccessful()) {
-                throw Objects.requireNonNull(task.getException());
-            }
+        if (selectedImage != null) {
+            UploadTask uploadTask = profilePictureStorageRef.putFile(selectedImage);
+            uploadTask.continueWithTask(task -> {
+                if (!task.isSuccessful()) {
+                    throw Objects.requireNonNull(task.getException());
+                }
 
-            // Continue with the task to get the download URL
-            return profilePictureStorageRef.getDownloadUrl();
-        }).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Uri downloadUri = task.getResult();
-                Log.d(TAG, "Download URI is: " + downloadUri);
-                Map<String, Object> retiree = new HashMap<>();
-                assert downloadUri != null;
-                retiree.put(PROFILE_PICTURE_URI, downloadUri.toString());
+                // Continue with the task to get the download URL
+                return profilePictureStorageRef.getDownloadUrl();
+            }).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    Log.d(TAG, "Download URI is: " + downloadUri);
+                    Map<String, Object> retiree = new HashMap<>();
+                    assert downloadUri != null;
+                    retiree.put(PROFILE_PICTURE_URI, downloadUri.toString());
 
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection(RETIREE_USERS)
-                        .document(documentId)
-                        .update(retiree)
-                        .addOnSuccessListener(aVoid -> {
-                            Log.d(TAG, SUCCESSFULLY_UPDATED);
-                            setProfilePicture();
-                        })
-                        .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
-            } else {
-                Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
-            }
-        });
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection(RETIREE_USERS)
+                            .document(documentId)
+                            .update(retiree)
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d(TAG, SUCCESSFULLY_UPDATED);
+                                setProfilePicture();
+                            })
+                            .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
+                } else {
+                    Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
+                }
+            });
+        }
     }
 
     private void hideViews() {
