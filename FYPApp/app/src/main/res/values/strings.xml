@@ -104,4 +104,5 @@
     <string name="placeholder_skills">C++, MATLAB, Python, Management, Teamwork</string>
     <string name="placeholder_interests">Movies, IT, Traveling</string>
     <string name="interests">Interests</string>
+    <string name="edit_name">Edit name</string>
 </resources>

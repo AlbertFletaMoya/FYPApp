@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.SneakyThrows;
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         editExperienceView = findViewById(R.id.edit_experience_view);
 
         editProfileView.setOnClickListener(view -> {
-            Intent i = new Intent(MainActivity.this, EditProfileActivity.class);
+            Intent i = new Intent(MainActivity.this, EditProfileIndexActivity.class);
             i.putExtra(DOCUMENT_ID, documentId);
             startActivity(i);
         });
@@ -159,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 if (document.exists()) {
                     Log.d(TAG, "DOCUMENT ID: " + documentId);
                     final Retiree retiree = document.toObject(Retiree.class);
+                    assert retiree != null;
                     nameView.setText(getString(R.string.full_name, retiree.getFirstName(), retiree.getLastName()));
                     bioView.setText(retiree.getHeadline());
                     emailView.setText(retiree.getEmail());
@@ -166,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                             retiree.getCountry()));
                 }
             } else {
-            Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
+                    Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
             }
         });
     }
@@ -199,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
                         final List<JobExperience> experiences = new ArrayList<>();
-                        for (DocumentSnapshot document : task.getResult().getDocuments()) {
+                        for (DocumentSnapshot document : Objects.requireNonNull(task.getResult()).getDocuments()) {
                             experiences.add(document.toObject(JobExperience.class));
                         }
                         if (experiences.isEmpty()) {
@@ -225,7 +227,8 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
-                        Retiree retiree = task.getResult().toObject(Retiree.class);
+                        Retiree retiree = Objects.requireNonNull(task.getResult()).toObject(Retiree.class);
+                        assert retiree != null;
                         Glide.with(this)
                                 .load(Uri.parse(retiree.getProfilePictureUri()))
                                 .centerCrop()
@@ -263,6 +266,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent takePhoto = CameraHelper.getTakePictureIntent(this,
                         getExternalFilesDir(Environment.DIRECTORY_PICTURES),
                         getPackageManager());
+                assert takePhoto != null;
                 cameraUri = (Uri) takePhoto.getExtras().get(MediaStore.EXTRA_OUTPUT);
                 Log.d(TAG, "URI is: " + cameraUri);
                 startActivityForResult(takePhoto, TAKE_A_PHOTO_REQUEST_CODE);
@@ -301,10 +305,11 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference profilePictureStorageRef = storage.getReference().child("profilePictures/" + documentId);
+        assert selectedImage != null;
         UploadTask uploadTask = profilePictureStorageRef.putFile(selectedImage);
         uploadTask.continueWithTask(task -> {
             if (!task.isSuccessful()) {
-                throw task.getException();
+                throw Objects.requireNonNull(task.getException());
             }
 
             // Continue with the task to get the download URL
@@ -314,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
                 Uri downloadUri = task.getResult();
                 Log.d(TAG, "Download URI is: " + downloadUri);
                 Map<String, Object> retiree = new HashMap<>();
+                assert downloadUri != null;
                 retiree.put(PROFILE_PICTURE_URI, downloadUri.toString());
 
                 FirebaseFirestore db = FirebaseFirestore.getInstance();

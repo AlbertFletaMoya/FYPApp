@@ -6,8 +6,10 @@ import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor (access = AccessLevel.PUBLIC)
 public class Retiree {
     public static final String RETIREE_USERS = "retiree_users";
@@ -22,8 +24,8 @@ public class Retiree {
     public static final String PROFILE_PICTURE_URI = "profilePictureUri";
 
     private final String email;
-    private final String firstName;
-    private final String lastName;
+    private String firstName;
+    private String lastName;
     private final String headline;
     private final String city;
     private final String country;
@@ -51,6 +53,7 @@ public class Retiree {
         final Map<String, Object> retireeMap = new HashMap<>();
         retireeMap.put(EMAIL, this.email);
         retireeMap.put(FIRST_NAME, this.firstName);
+        retireeMap.put(LAST_NAME, this.lastName);
         retireeMap.put(HEADLINE, this.headline);
         retireeMap.put(CITY, this.city);
         retireeMap.put(COUNTRY, this.country);

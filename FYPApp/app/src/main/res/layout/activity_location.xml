@@ -11,7 +11,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/city_layout"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:text="@string/write_your_profile_headline"
+        android:text="@string/what_is_your_current_location"
         android:textSize="20sp"
         android:layout_marginHorizontal="20dp"
         android:textColor="@color/opposite_main"
@@ -34,7 +34,7 @@
             android:inputType="textPostalAddress"
             android:hint="@string/city_star"
             android:textSize="18sp"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
 
     <com.google.android.material.textfield.TextInputLayout
