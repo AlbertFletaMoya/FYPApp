@@ -68,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/top_bar"
-        app:layout_constraintBottom_toTopOf="@id/first_name_layout"
+        app:layout_constraintBottom_toTopOf="@id/headline_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         android:text="@string/write_your_profile_headline"
         android:textSize="20sp"
@@ -78,7 +78,7 @@
         app:layout_constraintVertical_chainStyle="packed"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/first_name_layout"
+        android:id="@+id/headline_layout"
         style="@style/edit_page_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -72,7 +72,7 @@ public class EditSearchActivity extends AppCompatActivity {
                                 cancelButton.setOnClickListener(view -> cancel(documentId, rolesEditText.getText().toString().trim(),
                                         sectorsEditText.getText().toString().trim(),
                                         minYearsEditText.getText().toString().trim(),
-                                        jobDescriptionEditText.getText().toString().trim(), newSearch));
+                                        jobDescriptionEditText.getText().toString().trim()));
                             } else {
                                 Log.d(TAG, COULD_NOT_RETRIEVE_DATA, task.getException());
                             }
@@ -123,7 +123,7 @@ public class EditSearchActivity extends AppCompatActivity {
     }
 
     private void cancel(String documentId, String roles, String sectors, String yearsOfExperience,
-                        String description, boolean newSearch) {
+                        String description) {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(SEARCHES)
                 .document(documentId)
@@ -141,12 +141,12 @@ public class EditSearchActivity extends AppCompatActivity {
                                 new AlertDialog.Builder(this)
                                         .setTitle(R.string.discard_changes)
                                         .setMessage(R.string.want_to_discard_changes)
-                                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToSearchResults(newSearch))
+                                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToSearchResults(false))
                                         .setNegativeButton(android.R.string.no, null).show();
                             }
 
                             else {
-                                goToSearchResults(newSearch);
+                                goToSearchResults(false);
                             }
                         } else {
                             Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
