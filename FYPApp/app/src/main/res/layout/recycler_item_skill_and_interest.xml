@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
+        android:id="@+id/label"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -16,6 +17,7 @@
         android:textSize="18sp"/>
 
     <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleX="1.5"

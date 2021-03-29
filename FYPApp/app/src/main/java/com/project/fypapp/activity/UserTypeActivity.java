@@ -18,6 +18,7 @@ import com.project.fypapp.model.Retiree;
 import com.project.fypapp.model.Search;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static com.project.fypapp.model.Entrepreneur.ENTREPRENEUR_USERS;
 import static com.project.fypapp.model.Retiree.RETIREE_USERS;
@@ -84,7 +85,7 @@ public class UserTypeActivity extends AppCompatActivity {
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         assert firebaseUser != null;
         final Retiree retiree = new Retiree(firebaseUser.getEmail(), "", "", "",
-                "", "", "");
+                "", "", "", new ArrayList<>(), new ArrayList<>());
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(RETIREE_USERS)

@@ -53,6 +53,7 @@ import static com.project.fypapp.util.Constants.CHOOSE_FROM_GALLERY;
 import static com.project.fypapp.util.Constants.CHOOSE_FROM_GALLERY_REQUEST_CODE;
 import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
 import static com.project.fypapp.util.Constants.DOCUMENT_ID;
+import static com.project.fypapp.util.Constants.IS_REGISTRATION;
 import static com.project.fypapp.util.Constants.LOGOUT_MESSAGE;
 import static com.project.fypapp.util.Constants.PROFILE_BELONGS_TO_USER;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
@@ -108,6 +109,14 @@ public class MainActivity extends AppCompatActivity {
         emailView = findViewById(R.id.email_view);
         TextView editProfileView = findViewById(R.id.edit_profile_view);
         editExperienceView = findViewById(R.id.edit_experience_view);
+
+        TextView editInterestsView = findViewById(R.id.edit_interests_view);
+        editInterestsView.setOnClickListener(view -> {
+            Intent i = new Intent(MainActivity.this, EditInterestsActivity.class);
+            i.putExtra(DOCUMENT_ID, documentId);
+            i.putExtra(IS_REGISTRATION, false);
+            startActivity(i);
+        });
 
         editProfileView.setOnClickListener(view -> {
             Intent i = new Intent(MainActivity.this, EditProfileIndexActivity.class);

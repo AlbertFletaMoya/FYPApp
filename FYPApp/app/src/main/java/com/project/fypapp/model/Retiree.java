@@ -1,6 +1,8 @@
 package com.project.fypapp.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import lombok.AccessLevel;
@@ -22,6 +24,8 @@ public class Retiree {
     public static final String HEADLINE = "headline";
     public static final String LOCATION = "location";
     public static final String PROFILE_PICTURE_URI = "profilePictureUri";
+    public static final String SKILLS = "skills";
+    public static final String INTERESTS = "interests";
 
     private final String email;
     private String firstName;
@@ -30,6 +34,8 @@ public class Retiree {
     private String city;
     private String country;
     private String profilePictureUri;
+    private List<String> skills;
+    private List<String> interests;
 
     public Retiree() {
         email = "";
@@ -39,6 +45,8 @@ public class Retiree {
         city = "";
         country = "";
         profilePictureUri = "";
+        skills = null;
+        interests = null;
     }
 
     public static String getName(Retiree retiree) {
@@ -54,6 +62,19 @@ public class Retiree {
         return retiree.getCity() + ", " + retiree.getCountry();
     }
 
+    public static String customSetToString(List<String> list) {
+        if (list == null) {
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (String str : list) {
+            sb.append(str).append(", ");
+        }
+
+        return sb.substring(0, sb.length()-2);
+    }
+
     public Map<String, Object> toMap() {
         final Map<String, Object> retireeMap = new HashMap<>();
         retireeMap.put(EMAIL, this.email);
@@ -63,6 +84,8 @@ public class Retiree {
         retireeMap.put(CITY, this.city);
         retireeMap.put(COUNTRY, this.country);
         retireeMap.put(PROFILE_PICTURE_URI, this.profilePictureUri);
+        retireeMap.put(INTERESTS, this.interests);
+        retireeMap.put(SKILLS, this.skills);
         return retireeMap;
     }
 }

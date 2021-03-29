@@ -18,6 +18,7 @@ public class Constants {
     public static final String PROFILE_BELONGS_TO_USER = "profileBelongsToUser";
     public static final String USER_ID = "userId";
     public static final String USER = "user";
+    public static final String SKILLS_AND_INTERESTS = "skills_and_interests";
     public static final String NEW_INFO = "newInfo";
 
     public static final String IS_REGISTRATION = "isRegistration";
