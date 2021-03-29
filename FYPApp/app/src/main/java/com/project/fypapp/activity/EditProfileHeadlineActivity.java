@@ -131,7 +131,7 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
                     .addOnSuccessListener(aVoid -> {
                         Log.d(TAG, SUCCESSFULLY_UPDATED);
                         if (isRegistration) {
-                            skipToNext(documentId);
+                            goToNext(documentId);
                         }
                         finish();
                     })
@@ -139,10 +139,18 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
         // }
     }
 
-    private void skipToNext(String documentId) {
+    private void goToNext(String documentId) {
         Intent i = new Intent(EditProfileHeadlineActivity.this, EditProfilePhotoActivity.class);
         i.putExtra(IS_REGISTRATION, true);
         i.putExtra(DOCUMENT_ID, documentId);
         startActivity(i);
+    }
+
+    private void skipToNext(String documentId) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.skip_profile_headline)
+                .setMessage(R.string.want_to_skip)
+                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToNext(documentId))
+                .setNegativeButton(android.R.string.no, null).show();
     }
 }

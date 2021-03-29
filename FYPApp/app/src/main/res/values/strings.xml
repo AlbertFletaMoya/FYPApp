@@ -109,4 +109,9 @@
     <string name="edit_name">Edit name</string>
     <string name="edit_location">Edit Location</string>
     <string name="edit_profile_headline">Edit profile headline</string>
+    <string name="skip_location">Skip location</string>
+    <string name="skip_profile_headline">Skip profile headline</string>
+    <string name="skip_profile_photo">Skip profile photo</string>
+    <string name="want_to_skip">Providing more information will help us showing your profile to more people. Are you sure you want to skip this step?</string>
+    <string name="want_to_skip_short">Are you sure you want to skip this step?</string>
 </resources>

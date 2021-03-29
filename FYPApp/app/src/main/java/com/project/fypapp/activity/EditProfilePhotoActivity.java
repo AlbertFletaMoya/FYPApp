@@ -139,7 +139,7 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
                                         cancel());
                                 saveButton.setOnClickListener(view -> savePhoto(documentId, retiree, isRegistration));
                                 nextButton.setOnClickListener(view -> savePhoto(documentId, retiree, isRegistration));
-                                skipButton.setOnClickListener(view -> skipToNext(documentId));
+                                skipButton.setOnClickListener(view -> goToNext(documentId));
                                 noButton.setOnClickListener(view -> repeatPhoto());
                             }
                         }
@@ -167,7 +167,7 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
 
     private void savePhoto(String documentId, Retiree retiree, boolean isRegistration) {
         if (selectedImage == null) {
-            skipToNext(documentId);
+            goToNext(documentId);
         }
         progressBar.setVisibility(View.VISIBLE);
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -194,7 +194,7 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, SUCCESSFULLY_UPDATED);
                     if (isRegistration){
-                        skipToNext(documentId);
+                        goToNext(documentId);
                     }
                     finish();
                 })
@@ -252,7 +252,7 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
         }
     }
 
-    private void skipToNext(String documentId) {
+    private void goToNext(String documentId) {
         Intent i = new Intent(EditProfilePhotoActivity.this, MainActivity.class);
         i.putExtra(PROFILE_BELONGS_TO_USER, true);
         i.putExtra(DOCUMENT_ID, documentId);
@@ -260,8 +260,14 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
     }
 
     private void repeatPhoto() {
-        selectedImage = null;
-        circleImageView.setImageResource(R.drawable.ic_baseline_person_120);
-        noButton.setVisibility(View.GONE);
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.discard_changes)
+                .setMessage(R.string.want_to_discard_changes)
+                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                    selectedImage = null;
+                    circleImageView.setImageResource(R.drawable.ic_baseline_person_120);
+                    noButton.setVisibility(View.GONE);
+                })
+                .setNegativeButton(android.R.string.no, null).show();
     }
 }
