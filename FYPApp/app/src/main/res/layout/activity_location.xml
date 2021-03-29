@@ -91,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPostalAddress"
-            android:hint="@string/city_star"
+            android:hint="@string/city"
             android:textSize="18sp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -110,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPostalAddress"
-            android:hint="@string/country_star"
+            android:hint="@string/country"
             android:textSize="18sp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -120,11 +120,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/next"
+        app:layout_constraintTop_toBottomOf="@id/country_layout"
         app:layout_constraintBottom_toTopOf="@id/skip_button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        android:layout_marginBottom="50dp"/>
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="50dp"/>
 
     <Button
         style="@style/form_button"
@@ -132,10 +134,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/skip"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/next_button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        android:layout_marginBottom="50dp"/>
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="20dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

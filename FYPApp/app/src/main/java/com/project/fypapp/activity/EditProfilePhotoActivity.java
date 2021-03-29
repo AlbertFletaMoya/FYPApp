@@ -43,6 +43,7 @@ import static com.project.fypapp.util.Constants.CHOOSE_FROM_GALLERY_REQUEST_CODE
 import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
 import static com.project.fypapp.util.Constants.DOCUMENT_ID;
 import static com.project.fypapp.util.Constants.IS_REGISTRATION;
+import static com.project.fypapp.util.Constants.PROFILE_BELONGS_TO_USER;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_UPDATED;
 import static com.project.fypapp.util.Constants.TAKE_A_PHOTO;
@@ -58,6 +59,7 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     private CircleImageView circleImageView;
+    private Button noButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,14 +74,17 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
         ConstraintLayout layout = findViewById(R.id.top_bar);
         Button nextButton = findViewById(R.id.yes_button);
         Button skipButton = findViewById(R.id.skip_button);
-        Button noButton = findViewById(R.id.no_button);
+        noButton = findViewById(R.id.no_button);
         TextView textView = findViewById(R.id.text_view);
+
+        noButton.setVisibility(View.GONE);
 
         progressBar = findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
 
         if (getIntent().getExtras() != null) {
-            if (getIntent().getBooleanExtra(IS_REGISTRATION, false)) {
+            boolean isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
+            if (isRegistration) {
                 layout.setVisibility(View.GONE);
             }
 
@@ -132,7 +137,10 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
                                 editProfilePhotoView.setOnClickListener(view -> profilePictureDialogue());
                                 cancelButton.setOnClickListener(view ->
                                         cancel());
-                                saveButton.setOnClickListener(view -> savePhoto(documentId, retiree));
+                                saveButton.setOnClickListener(view -> savePhoto(documentId, retiree, isRegistration));
+                                nextButton.setOnClickListener(view -> savePhoto(documentId, retiree, isRegistration));
+                                skipButton.setOnClickListener(view -> skipToNext(documentId));
+                                noButton.setOnClickListener(view -> repeatPhoto());
                             }
                         }
 
@@ -157,7 +165,10 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
         }
     }
 
-    private void savePhoto(String documentId, Retiree retiree) {
+    private void savePhoto(String documentId, Retiree retiree, boolean isRegistration) {
+        if (selectedImage == null) {
+            skipToNext(documentId);
+        }
         progressBar.setVisibility(View.VISIBLE);
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference profilePictureStorageRef = storage.getReference().child("profilePictures/" + documentId);
@@ -182,6 +193,9 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
                 .update(retireeMap)
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, SUCCESSFULLY_UPDATED);
+                    if (isRegistration){
+                        skipToNext(documentId);
+                    }
                     finish();
                 })
                 .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
@@ -215,6 +229,7 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
 
     @SneakyThrows
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        noButton.setVisibility(View.VISIBLE);
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         switch(requestCode) {
             case TAKE_A_PHOTO_REQUEST_CODE:
@@ -235,5 +250,18 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
             profilePictureUri = selectedImage.toString();
             circleImageView.setImageURI(selectedImage);
         }
+    }
+
+    private void skipToNext(String documentId) {
+        Intent i = new Intent(EditProfilePhotoActivity.this, MainActivity.class);
+        i.putExtra(PROFILE_BELONGS_TO_USER, true);
+        i.putExtra(DOCUMENT_ID, documentId);
+        startActivity(i);
+    }
+
+    private void repeatPhoto() {
+        selectedImage = null;
+        circleImageView.setImageResource(R.drawable.ic_baseline_person_120);
+        noButton.setVisibility(View.GONE);
     }
 }

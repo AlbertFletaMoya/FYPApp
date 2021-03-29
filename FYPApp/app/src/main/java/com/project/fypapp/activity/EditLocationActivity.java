@@ -1,5 +1,6 @@
 package com.project.fypapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -53,7 +54,8 @@ public class EditLocationActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.text_view);
 
         if (getIntent().getExtras() != null) {
-            if (getIntent().getBooleanExtra(IS_REGISTRATION, false)) {
+            boolean isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
+            if (isRegistration) {
                 layout.setVisibility(View.GONE);
             }
 
@@ -82,7 +84,9 @@ public class EditLocationActivity extends AppCompatActivity {
                                 countryView.setText(retiree.getCountry());
                                 cancelButton.setOnClickListener(view ->
                                         cancel(retiree.getCity(), retiree.getCountry()));
-                                saveButton.setOnClickListener(view -> saveLocation(documentId, retiree));
+                                saveButton.setOnClickListener(view -> saveLocation(documentId, retiree, isRegistration));
+                                nextButton.setOnClickListener(view -> saveLocation(documentId, retiree, isRegistration));
+                                skipButton.setOnClickListener(view -> skipToNext(documentId));
                             }
                         }
 
@@ -127,8 +131,8 @@ public class EditLocationActivity extends AppCompatActivity {
         return valid;
     }
 
-    private void saveLocation(String documentId, Retiree retiree) {
-        if (validateFields()) {
+    private void saveLocation(String documentId, Retiree retiree, boolean isRegistration) {
+        // if (validateFields()) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             retiree.setCity(Objects.requireNonNull(cityView.getText()).toString().trim());
             retiree.setCountry(Objects.requireNonNull(countryView.getText()).toString().trim());
@@ -138,9 +142,19 @@ public class EditLocationActivity extends AppCompatActivity {
                     .update(retireeMap)
                     .addOnSuccessListener(aVoid -> {
                         Log.d(TAG, SUCCESSFULLY_UPDATED);
+                        if (isRegistration) {
+                            skipToNext(documentId);
+                        }
                         finish();
                     })
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
-        }
+        // }
+    }
+
+    private void skipToNext(String documentId) {
+        Intent i = new Intent(EditLocationActivity.this, EditProfileHeadlineActivity.class);
+        i.putExtra(IS_REGISTRATION, true);
+        i.putExtra(DOCUMENT_ID, documentId);
+        startActivity(i);
     }
 }

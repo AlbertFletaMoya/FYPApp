@@ -78,7 +78,9 @@
     <string name="first_name_star">First name*</string>
     <string name="last_name_star">Last name*</string>
     <string name="city_star">City*</string>
+    <string name="city">City</string>
     <string name="country_star">Country*</string>
+    <string name="country">Country</string>
     <string name="no_results">We couldn\'t match your search parameters to any profile, try again later</string>
     <string name="profile_photo">Profile photo</string>
     <string name="edit_profile_photo">Edit profile photo</string>
@@ -91,7 +93,7 @@
     <string name="maybe_later">No, maybe later</string>
     <string name="write_your_profile_headline">Write your profile headline</string>
     <string name="skip">Skip</string>
-    <string name="keep_profile_picture">Do you want to keep this as your profile picture?</string>
+    <string name="keep_profile_picture">Do you want to keep this as your profile photo?</string>
     <string name="choose_another_picture">No, choose another picture</string>
     <string name="search_and_select_skills">Search and select your skills</string>
     <string name="search_and_select_interests">Search and select your interests</string>

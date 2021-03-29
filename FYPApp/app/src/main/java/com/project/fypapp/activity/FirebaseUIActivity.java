@@ -30,8 +30,8 @@ import static com.project.fypapp.util.Constants.BACK_BUTTON_ERROR_MESSAGE;
 import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
 import static com.project.fypapp.util.Constants.DOCUMENT_ID;
 import static com.project.fypapp.util.Constants.EMAIL;
+import static com.project.fypapp.util.Constants.IS_REGISTRATION;
 import static com.project.fypapp.util.Constants.NEW_SEARCH;
-import static com.project.fypapp.util.Constants.NEW_USER;
 import static com.project.fypapp.util.Constants.NO_NETWORK_ERROR_MESSAGE;
 import static com.project.fypapp.util.Constants.PROFILE_BELONGS_TO_USER;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
@@ -117,7 +117,6 @@ public class FirebaseUIActivity extends AppCompatActivity {
     private void proceedAfterLogin(FirebaseUser firebaseUser) {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Check if user is a retiree if it is create a new profile or go to main page depending if it's a new retiree
         db.collection(RETIREE_USERS)
                 .whereEqualTo(EMAIL, firebaseUser.getEmail())
                 .get()
@@ -125,7 +124,7 @@ public class FirebaseUIActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
                         if (!isQueryResultEmpty(task)) {
-                            if (!isFieldEmpty(task, "headline")) {
+                            if (!isFieldEmpty(task, "firstName") && !isFieldEmpty(task, "lastName")) {
                                 goToMainPage(Objects.requireNonNull(task.getResult()).getDocuments().get(0).getId());
                             } else {
                                 goToCreateProfile(Objects.requireNonNull(task.getResult()).getDocuments().get(0).getId());
@@ -184,9 +183,9 @@ public class FirebaseUIActivity extends AppCompatActivity {
     }
 
     private void goToCreateProfile(String documentId){
-        final Intent intent = new Intent(FirebaseUIActivity.this, EditProfileActivity.class);
+        final Intent intent = new Intent(FirebaseUIActivity.this, EditNameActivity.class);
         intent.putExtra(DOCUMENT_ID, documentId);
-        intent.putExtra(NEW_USER, true);
+        intent.putExtra(IS_REGISTRATION, true);
         startActivity(intent);
         finish();
     }

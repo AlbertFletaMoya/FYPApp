@@ -171,8 +171,7 @@ public class MainActivity extends AppCompatActivity {
                     nameView.setText(getString(R.string.full_name, retiree.getFirstName(), retiree.getLastName()));
                     bioView.setText(retiree.getHeadline());
                     emailView.setText(retiree.getEmail());
-                    locationView.setText(getString(R.string.full_location, retiree.getCity(),
-                            retiree.getCountry()));
+                    locationView.setText(Retiree.getLocation(retiree));
                 }
             } else {
                     Log.d(TAG, COULD_NOT_RETRIEVE_DATA);

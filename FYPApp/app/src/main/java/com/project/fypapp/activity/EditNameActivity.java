@@ -1,5 +1,6 @@
 package com.project.fypapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -52,7 +53,8 @@ public class EditNameActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.text_view);
 
         if (getIntent().getExtras() != null) {
-            if (getIntent().getBooleanExtra(IS_REGISTRATION, false)) {
+            boolean isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
+            if (isRegistration) {
                 layout.setVisibility(View.GONE);
             }
 
@@ -80,7 +82,8 @@ public class EditNameActivity extends AppCompatActivity {
                                 lastNameView.setText(retiree.getLastName());
                                 cancelButton.setOnClickListener(view ->
                                         cancel(retiree.getFirstName(), retiree.getLastName()));
-                                saveButton.setOnClickListener(view -> saveName(documentId, retiree));
+                                saveButton.setOnClickListener(view -> saveName(documentId, retiree, isRegistration));
+                                nextButton.setOnClickListener(view -> saveName(documentId, retiree, isRegistration));
                             }
                         }
 
@@ -125,7 +128,7 @@ public class EditNameActivity extends AppCompatActivity {
         return valid;
     }
 
-    private void saveName(String documentId, Retiree retiree) {
+    private void saveName(String documentId, Retiree retiree, boolean isRegistration) {
         if (validateFields()) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             retiree.setFirstName(Objects.requireNonNull(firstNameView.getText()).toString().trim());
@@ -136,6 +139,12 @@ public class EditNameActivity extends AppCompatActivity {
                     .update(retireeMap)
                     .addOnSuccessListener(aVoid -> {
                         Log.d(TAG, SUCCESSFULLY_UPDATED);
+                        if (isRegistration) {
+                            Intent i = new Intent(EditNameActivity.this, EditLocationActivity.class);
+                            i.putExtra(DOCUMENT_ID, documentId);
+                            i.putExtra(IS_REGISTRATION, true);
+                            startActivity(i);
+                        }
                         finish();
                     })
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));

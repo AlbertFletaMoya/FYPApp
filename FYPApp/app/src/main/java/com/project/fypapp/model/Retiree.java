@@ -46,6 +46,11 @@ public class Retiree {
     }
 
     public static String getLocation(Retiree retiree) {
+        if (retiree.getCity().equals("")) {
+            return retiree.getCountry();
+        } else if (retiree.getCountry().equals("")) {
+            return retiree.getCity();
+        }
         return retiree.getCity() + ", " + retiree.getCountry();
     }
 

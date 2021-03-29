@@ -24,6 +24,7 @@ import static com.project.fypapp.model.Retiree.RETIREE_USERS;
 import static com.project.fypapp.model.Search.SEARCHES;
 import static com.project.fypapp.util.Constants.DOCUMENT_ID;
 import static com.project.fypapp.util.Constants.ERROR_ADDING_DOCUMENT;
+import static com.project.fypapp.util.Constants.IS_REGISTRATION;
 import static com.project.fypapp.util.Constants.NEW_SEARCH;
 import static com.project.fypapp.util.Constants.NEW_USER;
 import static com.project.fypapp.util.Constants.addedSuccessfully;
@@ -80,8 +81,6 @@ public class UserTypeActivity extends AppCompatActivity {
 
 
     private void saveRetiredUser() {
-        // save that the user is a retired user
-        // TODO later on just save the email and specify name in create profile
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         assert firebaseUser != null;
         final Retiree retiree = new Retiree(firebaseUser.getEmail(), "", "", "",
@@ -107,10 +106,10 @@ public class UserTypeActivity extends AppCompatActivity {
     }
 
     private void goToCreateProfile(String documentId) {
-        final Intent i = new Intent(UserTypeActivity.this, EditProfileActivity.class);
+        final Intent i = new Intent(UserTypeActivity.this, EditNameActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.putExtra(DOCUMENT_ID, documentId);
-        i.putExtra(NEW_USER, true);
+        i.putExtra(IS_REGISTRATION, true);
         startActivity(i);
         finish();
     }

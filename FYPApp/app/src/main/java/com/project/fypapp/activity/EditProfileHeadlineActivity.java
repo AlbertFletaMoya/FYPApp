@@ -1,5 +1,6 @@
 package com.project.fypapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,7 +51,8 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.text_view);
 
         if (getIntent().getExtras() != null) {
-            if (getIntent().getBooleanExtra(IS_REGISTRATION, false)) {
+            boolean isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
+            if (isRegistration) {
                 layout.setVisibility(View.GONE);
             }
 
@@ -78,7 +80,9 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
                                 headlineView.setText(retiree.getHeadline());
                                 cancelButton.setOnClickListener(view ->
                                         cancel(retiree.getHeadline()));
-                                saveButton.setOnClickListener(view -> saveHeadline(documentId, retiree));
+                                saveButton.setOnClickListener(view -> saveHeadline(documentId, retiree, isRegistration));
+                                nextButton.setOnClickListener(view -> saveHeadline(documentId, retiree, isRegistration));
+                                skipButton.setOnClickListener(view -> skipToNext(documentId));
                             }
                         }
 
@@ -116,8 +120,8 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
         return valid;
     }
 
-    private void saveHeadline(String documentId, Retiree retiree) {
-        if (validateFields()) {
+    private void saveHeadline(String documentId, Retiree retiree, boolean isRegistration) {
+        // if (validateFields()) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             retiree.setHeadline(Objects.requireNonNull(headlineView.getText()).toString().trim());
             Map<String, Object> retireeMap = retiree.toMap();
@@ -126,9 +130,19 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
                     .update(retireeMap)
                     .addOnSuccessListener(aVoid -> {
                         Log.d(TAG, SUCCESSFULLY_UPDATED);
+                        if (isRegistration) {
+                            skipToNext(documentId);
+                        }
                         finish();
                     })
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
-        }
+        // }
+    }
+
+    private void skipToNext(String documentId) {
+        Intent i = new Intent(EditProfileHeadlineActivity.this, EditProfilePhotoActivity.class);
+        i.putExtra(IS_REGISTRATION, true);
+        i.putExtra(DOCUMENT_ID, documentId);
+        startActivity(i);
     }
 }

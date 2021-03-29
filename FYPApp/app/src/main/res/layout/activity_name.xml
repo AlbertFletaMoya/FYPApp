@@ -120,10 +120,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/next"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/last_name_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        android:layout_marginBottom="50dp"/>
+        android:layout_marginTop="50dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
