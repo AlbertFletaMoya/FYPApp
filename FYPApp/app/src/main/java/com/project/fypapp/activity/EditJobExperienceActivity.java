@@ -20,6 +20,8 @@ import com.project.fypapp.R;
 import com.project.fypapp.dialog.MonthYearPickerDialog;
 import com.project.fypapp.model.JobExperience;
 
+import java.util.Objects;
+
 import static com.project.fypapp.model.JobExperience.JOB_EXPERIENCES;
 import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
 import static com.project.fypapp.util.Constants.DOCUMENT_ID;
@@ -41,7 +43,6 @@ public class EditJobExperienceActivity extends AppCompatActivity {
     private EditText startingDateView;
     private EditText endingDateView;
     private EditText companyView;
-    private EditText sectorView;
     private EditText roleView;
     private EditText jobDescriptionView;
 
@@ -56,7 +57,6 @@ public class EditJobExperienceActivity extends AppCompatActivity {
         startingDateView = findViewById(R.id.starting_date_write_view);
         endingDateView = findViewById(R.id.ending_date_write_view);
         companyView = findViewById(R.id.company_name_write_view);
-        sectorView = findViewById(R.id.sector_write_view);
         roleView = findViewById(R.id.roles_write_view);
         jobDescriptionView = findViewById(R.id.job_description_write_view);
 
@@ -94,7 +94,6 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                 cancelButton.setOnClickListener(view -> cancelNewExperience(startingDateView.getText().toString().trim(),
                         endingDateView.getText().toString().trim(),
                         companyView.getText().toString().trim(),
-                        sectorView.getText().toString().trim(),
                         roleView.getText().toString().trim(),
                         jobDescriptionView.getText().toString().trim()));
             }
@@ -108,10 +107,10 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
-                                final JobExperience jobExperience = task.getResult().toObject(JobExperience.class);
+                                final JobExperience jobExperience = Objects.requireNonNull(task.getResult()).toObject(JobExperience.class);
 
+                                assert jobExperience != null;
                                 companyView.setText(jobExperience.getCompany());
-                                sectorView.setText(jobExperience.getSector());
                                 roleView.setText(jobExperience.getPosition());
                                 startingDateView.setText(jobExperience.getStartingDate());
                                 endingDateView.setText(jobExperience.getEndingDate());
@@ -129,7 +128,6 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                 cancelButton.setOnClickListener(view -> cancel(documentId, startingDateView.getText().toString().trim(),
                         endingDateView.getText().toString().trim(),
                         companyView.getText().toString().trim(),
-                        sectorView.getText().toString().trim(),
                         roleView.getText().toString().trim(),
                         jobDescriptionView.getText().toString().trim(), userId));
             }
@@ -139,8 +137,7 @@ public class EditJobExperienceActivity extends AppCompatActivity {
     private void saveExperience(String userId) {
         final JobExperience jobExperience = new JobExperience(companyView.getText().toString().trim(),
                 roleView.getText().toString().trim(), startingDateView.getText().toString().trim(),
-                endingDateView.getText().toString().trim(), jobDescriptionView.getText().toString().trim(),
-                sectorView.getText().toString().trim(), userId);
+                endingDateView.getText().toString().trim(), jobDescriptionView.getText().toString().trim(), userId);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(JOB_EXPERIENCES)
@@ -156,8 +153,7 @@ public class EditJobExperienceActivity extends AppCompatActivity {
         if (validateFields()) {
             final JobExperience jobExperience = new JobExperience(companyView.getText().toString().trim(),
                     roleView.getText().toString().trim(), startingDateView.getText().toString().trim(),
-                    endingDateView.getText().toString().trim(), jobDescriptionView.getText().toString().trim(),
-                    sectorView.getText().toString().trim(), userId);
+                    endingDateView.getText().toString().trim(), jobDescriptionView.getText().toString().trim(), userId);
 
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection(JOB_EXPERIENCES)
@@ -201,21 +197,9 @@ public class EditJobExperienceActivity extends AppCompatActivity {
     private boolean validateFields() {
         boolean valid = true;
 
-        final TextInputLayout companyNameLayout = findViewById(R.id.company_name_layout);
-        final TextInputLayout sectorLayout = findViewById(R.id.sector_layout);
         final TextInputLayout roleLayout = findViewById(R.id.role_layout);
         final TextInputLayout startingDateLayout = findViewById(R.id.starting_date_layout);
         final TextInputLayout endingDateLayout = findViewById(R.id.ending_date_layout);
-
-        if (companyView.getText().toString().trim().equals("")) {
-            companyNameLayout.setError("Please enter the name of the company");
-            valid = false;
-        }
-
-        if (sectorView.getText().toString().trim().equals("")) {
-            sectorLayout.setError("Please enter the company's sector");
-            valid = false;
-        }
 
         if (roleView.getText().toString().trim().equals("")) {
             roleLayout.setError("Please enter your role in the company");
@@ -255,7 +239,7 @@ public class EditJobExperienceActivity extends AppCompatActivity {
     }
 
     private void cancel(String documentId ,String startingDate, String endingDate, String companyName,
-                        String sector, String role, String jobDescriptionString, String userId) {
+                        String role, String jobDescriptionString, String userId) {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(JOB_EXPERIENCES)
                 .document(documentId)
@@ -263,10 +247,10 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
-                        final JobExperience jobExperience = task.getResult().toObject(JobExperience.class);
+                        final JobExperience jobExperience = Objects.requireNonNull(task.getResult()).toObject(JobExperience.class);
 
+                        assert jobExperience != null;
                         if (!jobExperience.getCompany().trim().equals(companyName)
-                                || !jobExperience.getSector().trim().equals(sector)
                                 || !jobExperience.getPosition().trim().equals(role)
                                 || !jobExperience.getStartingDate().trim().equals(startingDate)
                                 || !jobExperience.getEndingDate().trim().equals(endingDate)
@@ -292,9 +276,9 @@ public class EditJobExperienceActivity extends AppCompatActivity {
     }
 
     private void cancelNewExperience(String startingDate, String endingDate, String companyName,
-                                     String sector, String role, String jobDescriptionString) {
+                                     String role, String jobDescriptionString) {
         if (!startingDate.equals("") || !endingDate.equals("") || !companyName.equals("")
-            || !sector.equals("") || !role.equals("") || !jobDescriptionString.equals("")) {
+            || !role.equals("") || !jobDescriptionString.equals("")) {
             new AlertDialog.Builder(getApplicationContext())
                     .setTitle(R.string.discard_changes)
                     .setMessage(R.string.want_to_discard_changes)

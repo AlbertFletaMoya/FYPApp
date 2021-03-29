@@ -24,7 +24,6 @@ public class JobExperience {
     private final String startingDate;
     private final String endingDate;
     private final String jobDescription;
-    private final String sector;
     private final String user;
 
     public JobExperience() {
@@ -33,7 +32,6 @@ public class JobExperience {
         startingDate = "";
         endingDate = "";
         jobDescription = "";
-        sector = "";
         user = "";
     }
 
@@ -45,7 +43,6 @@ public class JobExperience {
         jobExperienceMap.put(STARTING_DATE, this.startingDate);
         jobExperienceMap.put(ENDING_DATE, this.endingDate);
         jobExperienceMap.put(JOB_DESCRIPTION, this.jobDescription);
-        jobExperienceMap.put(SECTOR, this.sector);
         jobExperienceMap.put(USER, this.user);
         return jobExperienceMap;
     }

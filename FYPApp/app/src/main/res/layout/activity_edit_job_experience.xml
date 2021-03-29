@@ -75,25 +75,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="80dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/company_name_layout"
-                style="@style/edit_page_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/company_name_write_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
-                    android:hint="@string/company_name_star"
-                    android:textSize="18sp"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
+            <!--<com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/sector_layout"
                 style="@style/edit_page_edit_text"
                 android:layout_width="match_parent"
@@ -109,14 +91,14 @@
                     android:inputType="textMultiLine"
                     android:hint="@string/company_sector_star"
                     android:textSize="18sp"/>
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/role_layout"
                 style="@style/edit_page_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/sector_layout"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent">
 
@@ -173,7 +155,7 @@
                 style="@style/edit_page_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/ending_date_layout"
+                app:layout_constraintTop_toBottomOf="@id/starting_date_layout"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent">
 
@@ -186,12 +168,30 @@
                     android:textSize="18sp"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/company_name_layout"
+                style="@style/edit_page_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/job_description_layout"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/company_name_write_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:hint="@string/company_name"
+                    android:textSize="18sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
             <TextView
                 android:id="@+id/delete_experience_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/delete_experience"
-                app:layout_constraintTop_toBottomOf="@id/job_description_layout"
+                app:layout_constraintTop_toBottomOf="@id/company_name_layout"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginTop="50dp"
