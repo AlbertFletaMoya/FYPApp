@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView bioView;
     private TextView emailView;
     private TextView editExperienceView;
+    private TextView interestsView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
         locationView = findViewById(R.id.location_view);
         bioView = findViewById(R.id.bio_view);
         emailView = findViewById(R.id.email_view);
+        interestsView = findViewById(R.id.interests_view);
+
         TextView editProfileView = findViewById(R.id.edit_profile_view);
         editExperienceView = findViewById(R.id.edit_experience_view);
 
@@ -181,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
                     bioView.setText(retiree.getHeadline());
                     emailView.setText(retiree.getEmail());
                     locationView.setText(Retiree.getLocation(retiree));
+                    interestsView.setText(Retiree.customSetToString(retiree.getInterests()));
                 }
             } else {
                     Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
