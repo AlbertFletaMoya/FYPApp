@@ -174,22 +174,11 @@ public class EditSkillsActivity extends AppCompatActivity {
     private void save(String documentId, boolean isRegistration, Retiree retiree) {
         final List<String> cleanList = Lists.newArrayList(Sets.newHashSet(retiree.getSkills()));
         retiree.setSkills(cleanList);
-        final List<String> checked = new ArrayList<>();
-        initRecyclerView(skills, retiree);
-
-        for (int i = 0; i < skills.size(); i++) {
-            SkillsAndInterestsRecyclerAdapter.SkillsAndInterestsViewHolder viewHolder =
-                    (SkillsAndInterestsRecyclerAdapter.SkillsAndInterestsViewHolder)
-                            recyclerView.findViewHolderForAdapterPosition(i);
-            if (null != viewHolder && viewHolder.isCheckboxChecked()) {
-                checked.add(viewHolder.getLabelText());
-            }
-        }
 
         // TODO Store any new skills, for security measures we could limit the amount of new words
         // That a user can store, and validate with a dictionary that the user gave valid words and
         // Not just bogus strings to try and fill the storage up
-        for (String checkedElement : checked) {
+        for (String checkedElement : cleanList) {
             if (!skills.contains(checkedElement)) {
                 skills.add(checkedElement);
             }

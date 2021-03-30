@@ -167,21 +167,11 @@ public class EditInterestsActivity extends AppCompatActivity {
     private void save(String documentId, boolean isRegistration, Retiree retiree) {
         final List<String> cleanList = Lists.newArrayList(Sets.newHashSet(retiree.getInterests()));
         retiree.setInterests(cleanList);
-        final List<String> checked = new ArrayList<>();
-        initRecyclerView(interests, retiree);
-        for (int i = 0; i < interests.size(); i++) {
-            SkillsAndInterestsRecyclerAdapter.SkillsAndInterestsViewHolder viewHolder =
-                    (SkillsAndInterestsRecyclerAdapter.SkillsAndInterestsViewHolder)
-                    recyclerView.findViewHolderForAdapterPosition(i);
-            if (null != viewHolder && viewHolder.isCheckboxChecked()) {
-                checked.add(viewHolder.getLabelText());
-            }
-        }
 
         // TODO Store any new interests, for security measures we could limit the amount of new words
         // That a user can store, and validate with a dictionary that the user gave valid words and
         // Not just bogus strings to try and fill the storage up
-        for (String checkedElement : checked) {
+        for (String checkedElement : cleanList) {
             if (!interests.contains(checkedElement)) {
                 interests.add(checkedElement);
             }
