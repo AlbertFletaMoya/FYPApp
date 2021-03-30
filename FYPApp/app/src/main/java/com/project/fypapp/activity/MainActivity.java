@@ -84,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView emailView;
     private TextView editExperienceView;
     private TextView interestsView;
+    private TextView skillsView;
+    TextView editSkillsView;
+    TextView editInterestsView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,11 +112,20 @@ public class MainActivity extends AppCompatActivity {
         bioView = findViewById(R.id.bio_view);
         emailView = findViewById(R.id.email_view);
         interestsView = findViewById(R.id.interests_view);
+        skillsView = findViewById(R.id.skills_view);
 
         TextView editProfileView = findViewById(R.id.edit_profile_view);
         editExperienceView = findViewById(R.id.edit_experience_view);
 
-        TextView editInterestsView = findViewById(R.id.edit_interests_view);
+        editSkillsView = findViewById(R.id.edit_skills_view);
+        editSkillsView.setOnClickListener(view -> {
+            Intent i = new Intent(MainActivity.this, EditSkillsActivity.class);
+            i.putExtra(DOCUMENT_ID, documentId);
+            i.putExtra(IS_REGISTRATION, false);
+            startActivity(i);
+        });
+
+        editInterestsView = findViewById(R.id.edit_interests_view);
         editInterestsView.setOnClickListener(view -> {
             Intent i = new Intent(MainActivity.this, EditInterestsActivity.class);
             i.putExtra(DOCUMENT_ID, documentId);
@@ -185,6 +197,15 @@ public class MainActivity extends AppCompatActivity {
                     emailView.setText(retiree.getEmail());
                     locationView.setText(Retiree.getLocation(retiree));
                     interestsView.setText(Retiree.customSetToString(retiree.getInterests()));
+                    skillsView.setText(Retiree.customSetToString(retiree.getSkills()));
+
+                    if (Retiree.customSetToString(retiree.getInterests()).equals("")) {
+                        editInterestsView.setText(R.string.add);
+                    }
+
+                    if (Retiree.customSetToString(retiree.getSkills()).equals("")) {
+                        editSkillsView.setText(R.string.add);
+                    }
                 }
             } else {
                     Log.d(TAG, COULD_NOT_RETRIEVE_DATA);

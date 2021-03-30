@@ -85,7 +85,9 @@ public class EditInterestsActivity extends AppCompatActivity {
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
                                             Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
-                                            Retiree retiree = Objects.requireNonNull(task1.getResult()).toObject(Retiree.class);
+                                            Retiree retiree =
+                                                    Objects.requireNonNull(task1.getResult())
+                                                            .toObject(Retiree.class);
                                             assert retiree != null;
                                             if (retiree.getInterests() == null) {
                                                 retiree.setInterests(new ArrayList<>());
@@ -137,7 +139,6 @@ public class EditInterestsActivity extends AppCompatActivity {
         SkillsAndInterestsRecyclerAdapter skillsAndInterestsRecyclerAdapter =
                 new SkillsAndInterestsRecyclerAdapter(customInterests, retiree.getInterests(), (position, checked) -> {
                     List<String> currentUserInterests = retiree.getInterests();
-                    Log.d(TAG, customInterests.get(position));
                     if (checked) {
                         currentUserInterests.add(customInterests.get(position));
                         retiree.setInterests(currentUserInterests);
@@ -147,10 +148,10 @@ public class EditInterestsActivity extends AppCompatActivity {
                     } else {
                         currentUserInterests.removeIf(n -> n.equals(customInterests.get(position)));
                         retiree.setInterests(currentUserInterests);
-                        Log.d(TAG, retiree.getInterests().toString());
                     }
                 }, this);
         recyclerView.setAdapter(skillsAndInterestsRecyclerAdapter);
+
         for (int i = 0; i < customInterests.size(); i++) {
                 if (retiree.getInterests().contains(customInterests.get(i))) {
                     SkillsAndInterestsRecyclerAdapter.SkillsAndInterestsViewHolder viewHolder =
@@ -164,7 +165,6 @@ public class EditInterestsActivity extends AppCompatActivity {
     }
 
     private void save(String documentId, boolean isRegistration, Retiree retiree) {
-        Log.d(TAG, retiree.getInterests().toString());
         final List<String> cleanList = Lists.newArrayList(Sets.newHashSet(retiree.getInterests()));
         retiree.setInterests(cleanList);
         final List<String> checked = new ArrayList<>();
