@@ -1,9 +1,11 @@
 package com.project.fypapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -62,6 +64,11 @@ public class EditInterestsActivity extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             boolean isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
             String documentId = getIntent().getStringExtra(DOCUMENT_ID);
+
+            if (isRegistration) {
+                cancelView.setVisibility(View.GONE);
+                saveView.setText(R.string.next);
+            }
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection(SKILLS_AND_INTERESTS)
@@ -171,7 +178,9 @@ public class EditInterestsActivity extends AppCompatActivity {
             }
         }
 
-        // Store any new interests
+        // TODO Store any new interests, for security measures we could limit the amount of new words
+        // That a user can store, and validate with a dictionary that the user gave valid words and
+        // Not just bogus strings to try and fill the storage up
         for (String checkedElement : checked) {
             if (!interests.contains(checkedElement)) {
                 interests.add(checkedElement);
@@ -202,7 +211,10 @@ public class EditInterestsActivity extends AppCompatActivity {
     }
 
     private void goToNext(String documentId) {
-        // TODO implement
+        Intent i = new Intent(EditInterestsActivity.this, EditSkillsActivity.class);
+        i.putExtra(DOCUMENT_ID, documentId);
+        i.putExtra(IS_REGISTRATION, true);
+        startActivity(i);
     }
 
     private void cancel() {

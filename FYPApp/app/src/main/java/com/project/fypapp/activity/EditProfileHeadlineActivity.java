@@ -140,7 +140,7 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
     }
 
     private void goToNext(String documentId) {
-        Intent i = new Intent(EditProfileHeadlineActivity.this, EditProfilePhotoActivity.class);
+        Intent i = new Intent(EditProfileHeadlineActivity.this, EditInterestsActivity.class);
         i.putExtra(IS_REGISTRATION, true);
         i.putExtra(DOCUMENT_ID, documentId);
         startActivity(i);

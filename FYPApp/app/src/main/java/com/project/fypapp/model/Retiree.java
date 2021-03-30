@@ -63,7 +63,7 @@ public class Retiree {
     }
 
     public static String customSetToString(List<String> list) {
-        if (list == null) {
+        if (list == null || list.isEmpty()) {
             return "";
         }
 
