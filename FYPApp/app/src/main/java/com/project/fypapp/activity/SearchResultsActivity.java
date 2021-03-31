@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.auth.AuthUI;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.fypapp.R;
@@ -24,14 +22,10 @@ import com.project.fypapp.model.Retiree;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import static com.project.fypapp.model.Entrepreneur.ENTREPRENEUR_USERS;
 import static com.project.fypapp.model.Retiree.RETIREE_USERS;
-import static com.project.fypapp.model.Search.SEARCH;
 import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
 import static com.project.fypapp.util.Constants.DOCUMENT_ID;
-import static com.project.fypapp.util.Constants.EMAIL;
 import static com.project.fypapp.util.Constants.LOGOUT_MESSAGE;
 import static com.project.fypapp.util.Constants.PROFILE_BELONGS_TO_USER;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
@@ -46,13 +40,18 @@ public class SearchResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_results);
 
         final TextView editView = findViewById(R.id.edit_search_view);
-        editView.setOnClickListener(view -> goToEditSearch());
 
         final TextView logoutView = findViewById(R.id.logout_view);
         logoutView.setOnClickListener(view -> signOut());
 
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setVisibility(View.INVISIBLE);
+
+        if (getIntent().getExtras() != null) {
+            String documentId = getIntent().getStringExtra(DOCUMENT_ID);
+            editView.setOnClickListener(view -> goToEditSearch(documentId));
+
+        }
 
         initRecyclerView();
     }
@@ -63,26 +62,10 @@ public class SearchResultsActivity extends AppCompatActivity {
         initRecyclerView();
     }
 
-    private void goToEditSearch() {
-        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        assert firebaseUser != null;
-        db.collection(ENTREPRENEUR_USERS)
-                .whereEqualTo(EMAIL, firebaseUser.getEmail())
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
-                        final Intent i = new Intent(SearchResultsActivity.this, EditSearchActivity.class);
-                        i.putExtra(DOCUMENT_ID, (String) Objects.requireNonNull(task.getResult()).getDocuments().get(0).get(SEARCH));
-                        startActivity(i);
-                    }
-
-                    else {
-                        Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
-                    }
-                });
+    private void goToEditSearch(String documentId) {
+        final Intent i = new Intent(SearchResultsActivity.this, EditSearchActivity.class);
+        i.putExtra(DOCUMENT_ID, documentId);
+        startActivity(i);
     }
 
     private void initRecyclerView() {
@@ -119,15 +102,14 @@ public class SearchResultsActivity extends AppCompatActivity {
                             noResultsView.setVisibility(View.GONE);
                             recyclerView.setAdapter(recyclerAdapter);
                             recyclerView.setVisibility(View.VISIBLE);
-                            progressBar.setVisibility(View.GONE);
                         }
 
                         else {
                             recyclerView.setVisibility(View.GONE);
                             noResultsView.setVisibility(View.VISIBLE);
                             noResultsView.setText(R.string.no_results);
-                            progressBar.setVisibility(View.GONE);
                         }
+                        progressBar.setVisibility(View.GONE);
 
                     } else {
                         Log.d(TAG, COULD_NOT_RETRIEVE_DATA);

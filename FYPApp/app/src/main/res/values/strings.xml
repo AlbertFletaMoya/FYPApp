@@ -114,4 +114,8 @@
     <string name="skip_profile_photo">Skip profile photo</string>
     <string name="want_to_skip">Providing more information will help us showing your profile to more people. Are you sure you want to skip this step?</string>
     <string name="want_to_skip_short">Are you sure you want to skip this step?</string>
+    <string name="interests_you_are_looking_for">Interests you\'re looking for</string>
+    <string name="skills_you_are_looking_for">Skills you\'re looking for</string>
+    <string name="search_and_select_skills_you_are_looking_for">Search and select skills you\'re looking for</string>
+    <string name="search_and_select_interests_you_are_looking_for">Search and select interests you\'re looking for</string>
 </resources>

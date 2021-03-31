@@ -45,6 +45,9 @@ public class EditInterestsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
 
     private List<String> interests = new ArrayList<>();
+    private boolean isRegistration = false;
+    private List<String> originalUserInterests;
+    private Retiree retiree;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +65,7 @@ public class EditInterestsActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
 
         if (getIntent().getExtras() != null) {
-            boolean isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
+            isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
             String documentId = getIntent().getStringExtra(DOCUMENT_ID);
 
             if (isRegistration) {
@@ -85,13 +88,14 @@ public class EditInterestsActivity extends AppCompatActivity {
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
                                             Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
-                                            Retiree retiree =
+                                            retiree =
                                                     Objects.requireNonNull(task1.getResult())
                                                             .toObject(Retiree.class);
                                             assert retiree != null;
                                             if (retiree.getInterests() == null) {
                                                 retiree.setInterests(new ArrayList<>());
                                             }
+                                            originalUserInterests = new ArrayList<>(retiree.getInterests());
                                             cancelView.setOnClickListener(view -> cancel());
                                             saveView.setOnClickListener(view ->
                                                     save(documentId, isRegistration, retiree));
@@ -208,10 +212,24 @@ public class EditInterestsActivity extends AppCompatActivity {
     }
 
     private void cancel() {
+        originalUserInterests = Lists.newArrayList(Sets.newHashSet(originalUserInterests));
+        if (!originalUserInterests.equals(Lists.newArrayList(Sets.newHashSet(retiree.getInterests())))) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.discard_changes)
                     .setMessage(R.string.want_to_discard_changes)
                     .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> finish())
                     .setNegativeButton(android.R.string.no, null).show();
+        } else {
+            finish();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isRegistration) {
+            super.onBackPressed();
+        } else {
+            cancel();
+        }
     }
 }

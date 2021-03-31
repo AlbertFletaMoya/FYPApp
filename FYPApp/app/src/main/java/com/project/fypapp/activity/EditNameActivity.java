@@ -36,6 +36,10 @@ public class EditNameActivity extends AppCompatActivity {
     private TextInputEditText firstNameView;
     private TextInputEditText lastNameView;
 
+    private boolean isRegistration = false;
+    private String originalFirstName;
+    private String originalLastName;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +57,7 @@ public class EditNameActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.text_view);
 
         if (getIntent().getExtras() != null) {
-            boolean isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
+            isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
             if (isRegistration) {
                 layout.setVisibility(View.GONE);
             }
@@ -78,10 +82,12 @@ public class EditNameActivity extends AppCompatActivity {
                                 Log.d(TAG, "DOCUMENT ID: " + documentId);
                                 final Retiree retiree = document.toObject(Retiree.class);
                                 assert retiree != null;
-                                firstNameView.setText(retiree.getFirstName());
-                                lastNameView.setText(retiree.getLastName());
+                                originalFirstName = retiree.getFirstName();
+                                originalLastName = retiree.getLastName();
+                                firstNameView.setText(originalFirstName);
+                                lastNameView.setText(originalLastName);
                                 cancelButton.setOnClickListener(view ->
-                                        cancel(retiree.getFirstName(), retiree.getLastName()));
+                                        cancel());
                                 saveButton.setOnClickListener(view -> saveName(documentId, retiree, isRegistration));
                                 nextButton.setOnClickListener(view -> saveName(documentId, retiree, isRegistration));
                             }
@@ -94,7 +100,7 @@ public class EditNameActivity extends AppCompatActivity {
         }
     }
 
-    private void cancel(String originalFirstName, String originalLastName) {
+    private void cancel() {
         if (Objects.requireNonNull(firstNameView.getText()).toString().trim().equals(originalFirstName)
         && Objects.requireNonNull(lastNameView.getText()).toString().trim().equals(originalLastName)) {
             finish();
@@ -148,6 +154,15 @@ public class EditNameActivity extends AppCompatActivity {
                         finish();
                     })
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isRegistration) {
+            super.onBackPressed();
+        } else {
+            cancel();
         }
     }
 }

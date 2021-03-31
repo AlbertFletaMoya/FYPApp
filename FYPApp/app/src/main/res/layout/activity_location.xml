@@ -43,7 +43,7 @@
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             android:textColor="@color/opposite_main"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:paddingStart="20dp"
             android:paddingEnd="20dp" />
 
@@ -54,7 +54,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="@string/save"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textColor="@color/turquoise_light"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintRight_toRightOf="parent"

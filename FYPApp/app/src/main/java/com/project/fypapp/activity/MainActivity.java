@@ -9,12 +9,14 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -93,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final View separatorView = findViewById(R.id.separator_view);
+        separatorView.setVisibility(View.INVISIBLE);
+
         recyclerReady = false;
         imageReady = true;
 
@@ -168,16 +173,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
+        NestedScrollView sv = findViewById(R.id.nested_view);
+        sv.scrollTo(0, sv.getTop());
         if (getIntent().getExtras() != null) {
             getProfile();
             setProfilePicture();
+            initRecyclerView(documentId);
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        NestedScrollView sv = findViewById(R.id.nested_view);
+        sv.scrollTo(0, sv.getTop());
         setProfilePicture();
+        initRecyclerView(documentId);
     }
 
     private void getProfile() {
@@ -198,6 +209,10 @@ public class MainActivity extends AppCompatActivity {
                     locationView.setText(Retiree.getLocation(retiree));
                     interestsView.setText(Retiree.customSetToString(retiree.getInterests()));
                     skillsView.setText(Retiree.customSetToString(retiree.getSkills()));
+                    if (!Retiree.getLocation(retiree).equals("")) {
+                        final View separatorView = findViewById(R.id.separator_view);
+                        separatorView.setVisibility(View.VISIBLE);
+                    }
 
                     if (Retiree.customSetToString(retiree.getInterests()).equals("")) {
                         editInterestsView.setText(R.string.add);

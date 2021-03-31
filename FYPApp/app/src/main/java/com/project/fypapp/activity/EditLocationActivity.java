@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.fypapp.R;
@@ -36,6 +35,10 @@ public class EditLocationActivity extends AppCompatActivity {
     private TextInputEditText countryView;
     private TextInputEditText cityView;
 
+    private boolean isRegistration = false;
+    private String originalCity;
+    private String originalCountry;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +57,7 @@ public class EditLocationActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.text_view);
 
         if (getIntent().getExtras() != null) {
-            boolean isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
+            isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
             if (isRegistration) {
                 layout.setVisibility(View.GONE);
             }
@@ -80,12 +83,15 @@ public class EditLocationActivity extends AppCompatActivity {
                                 Log.d(TAG, "DOCUMENT ID: " + documentId);
                                 final Retiree retiree = document.toObject(Retiree.class);
                                 assert retiree != null;
-                                cityView.setText(retiree.getCity());
-                                countryView.setText(retiree.getCountry());
+                                originalCity = retiree.getCity();
+                                originalCountry = retiree.getCountry();
+                                cityView.setText(originalCity);
+                                countryView.setText(originalCountry);
+
                                 cancelButton.setOnClickListener(view ->
-                                        cancel(retiree.getCity(), retiree.getCountry()));
-                                saveButton.setOnClickListener(view -> saveLocation(documentId, retiree, isRegistration));
-                                nextButton.setOnClickListener(view -> saveLocation(documentId, retiree, isRegistration));
+                                        cancel());
+                                saveButton.setOnClickListener(view -> saveLocation(documentId, retiree));
+                                nextButton.setOnClickListener(view -> saveLocation(documentId, retiree));
                                 skipButton.setOnClickListener(view -> skipToNext(documentId));
                             }
                         }
@@ -97,7 +103,7 @@ public class EditLocationActivity extends AppCompatActivity {
         }
     }
 
-    private void cancel(String originalCity, String originalCountry) {
+    private void cancel() {
         if (Objects.requireNonNull(cityView.getText()).toString().trim().equals(originalCity)
                 && Objects.requireNonNull(countryView.getText()).toString().trim().equals(originalCountry)) {
             finish();
@@ -112,27 +118,7 @@ public class EditLocationActivity extends AppCompatActivity {
         }
     }
 
-    private boolean validateFields() {
-        boolean valid = true;
-
-        final TextInputLayout cityLayout = findViewById(R.id.city_layout);
-        final TextInputLayout countryLayout = findViewById(R.id.country_layout);
-
-        if (Objects.requireNonNull(cityView.getText()).toString().trim().equals("")) {
-            cityLayout.setError("Please enter your current city");
-            valid = false;
-        }
-
-        if (Objects.requireNonNull(countryView.getText()).toString().trim().equals("")) {
-            countryLayout.setError("Please enter your current country");
-            valid = false;
-        }
-
-        return valid;
-    }
-
-    private void saveLocation(String documentId, Retiree retiree, boolean isRegistration) {
-        // if (validateFields()) {
+    private void saveLocation(String documentId, Retiree retiree) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             retiree.setCity(Objects.requireNonNull(cityView.getText()).toString().trim());
             retiree.setCountry(Objects.requireNonNull(countryView.getText()).toString().trim());
@@ -148,7 +134,6 @@ public class EditLocationActivity extends AppCompatActivity {
                         finish();
                     })
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
-        // }
     }
 
     private void goToNext(String documentId) {
@@ -164,5 +149,14 @@ public class EditLocationActivity extends AppCompatActivity {
                 .setMessage(R.string.want_to_skip)
                 .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToNext(documentId))
                 .setNegativeButton(android.R.string.no, null).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isRegistration) {
+            super.onBackPressed();
+        } else {
+            cancel();
+        }
     }
 }

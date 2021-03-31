@@ -18,7 +18,6 @@ import com.project.fypapp.model.Retiree;
 import com.project.fypapp.model.Search;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import static com.project.fypapp.model.Entrepreneur.ENTREPRENEUR_USERS;
 import static com.project.fypapp.model.Retiree.RETIREE_USERS;
@@ -27,7 +26,6 @@ import static com.project.fypapp.util.Constants.DOCUMENT_ID;
 import static com.project.fypapp.util.Constants.ERROR_ADDING_DOCUMENT;
 import static com.project.fypapp.util.Constants.IS_REGISTRATION;
 import static com.project.fypapp.util.Constants.NEW_SEARCH;
-import static com.project.fypapp.util.Constants.NEW_USER;
 import static com.project.fypapp.util.Constants.addedSuccessfully;
 
 public class UserTypeActivity extends AppCompatActivity {
@@ -56,8 +54,7 @@ public class UserTypeActivity extends AppCompatActivity {
     }
 
     private void saveEntrepreneur() {
-        final Search search = new Search(new ArrayList<>(), new ArrayList<>(),
-                0, "");
+        final Search search = new Search("", new ArrayList<>(), new ArrayList<>());
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(SEARCHES)

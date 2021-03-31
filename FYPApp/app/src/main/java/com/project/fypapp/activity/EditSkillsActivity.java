@@ -46,6 +46,9 @@ public class EditSkillsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
 
     private List<String> skills = new ArrayList<>();
+    private boolean isRegistration = false;
+    private Retiree retiree;
+    private List<String> originalUserSkills;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,7 +69,7 @@ public class EditSkillsActivity extends AppCompatActivity {
         final TextView cancelView = findViewById(R.id.cancel_view);
 
         if (getIntent().getExtras() != null) {
-            boolean isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
+            isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
             String documentId = getIntent().getStringExtra(DOCUMENT_ID);
 
             if (isRegistration) {
@@ -89,13 +92,14 @@ public class EditSkillsActivity extends AppCompatActivity {
                                     .addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
                                             Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
-                                            Retiree retiree =
+                                            retiree =
                                                     Objects.requireNonNull(task1.getResult())
                                                             .toObject(Retiree.class);
                                             assert retiree != null;
                                             if (retiree.getSkills() == null) {
                                                 retiree.setSkills(new ArrayList<>());
                                             }
+                                            originalUserSkills = new ArrayList<>(retiree.getSkills());
                                             cancelView.setOnClickListener(view -> cancel());
                                             saveView.setOnClickListener(view ->
                                                     save(documentId, isRegistration, retiree));
@@ -119,14 +123,14 @@ public class EditSkillsActivity extends AppCompatActivity {
                                                             searchSkills.add(newSkill);
                                                         }
                                                     }
-                                                    initRecyclerView(searchSkills, retiree);
+                                                    initRecyclerView(searchSkills);
                                                 }
 
                                                 @Override
                                                 public void afterTextChanged(Editable editable) {
                                                 }
                                             });
-                                            initRecyclerView(skills, retiree);
+                                            initRecyclerView(skills);
                                         } else {
                                             Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
                                         }
@@ -138,7 +142,7 @@ public class EditSkillsActivity extends AppCompatActivity {
         }
     }
 
-    private void initRecyclerView(List<String> customSkills, Retiree retiree) {
+    private void initRecyclerView(List<String> customSkills) {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         SkillsAndInterestsRecyclerAdapter skillsAndInterestsRecyclerAdapter =
@@ -214,10 +218,24 @@ public class EditSkillsActivity extends AppCompatActivity {
     }
 
     private void cancel() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.discard_changes)
-                .setMessage(R.string.want_to_discard_changes)
-                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> finish())
-                .setNegativeButton(android.R.string.no, null).show();
+        originalUserSkills = Lists.newArrayList(Sets.newHashSet(originalUserSkills));
+        if (!originalUserSkills.equals(Lists.newArrayList(Sets.newHashSet(retiree.getSkills())))) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.discard_changes)
+                    .setMessage(R.string.want_to_discard_changes)
+                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> finish())
+                    .setNegativeButton(android.R.string.no, null).show();
+        } else {
+            finish();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isRegistration) {
+            super.onBackPressed();
+        } else {
+            cancel();
+        }
     }
 }

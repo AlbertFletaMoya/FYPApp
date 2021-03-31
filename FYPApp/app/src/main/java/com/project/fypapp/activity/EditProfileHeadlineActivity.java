@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.fypapp.R;
@@ -34,6 +33,8 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
     private static final String TAG = "EditProfileHeadlineActivity";
 
     private TextInputEditText headlineView;
+    private boolean isRegistration = false;
+    private String originalHeadline;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.text_view);
 
         if (getIntent().getExtras() != null) {
-            boolean isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
+            isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
             if (isRegistration) {
                 layout.setVisibility(View.GONE);
             }
@@ -77,9 +78,10 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
                                 Log.d(TAG, "DOCUMENT ID: " + documentId);
                                 final Retiree retiree = document.toObject(Retiree.class);
                                 assert retiree != null;
-                                headlineView.setText(retiree.getHeadline());
+                                originalHeadline = retiree.getHeadline();
+                                headlineView.setText(originalHeadline);
                                 cancelButton.setOnClickListener(view ->
-                                        cancel(retiree.getHeadline()));
+                                        cancel());
                                 saveButton.setOnClickListener(view -> saveHeadline(documentId, retiree, isRegistration));
                                 nextButton.setOnClickListener(view -> saveHeadline(documentId, retiree, isRegistration));
                                 skipButton.setOnClickListener(view -> skipToNext(documentId));
@@ -93,7 +95,7 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
         }
     }
 
-    private void cancel(String originalHeadline) {
+    private void cancel() {
         if (Objects.requireNonNull(headlineView.getText()).toString().trim().equals(originalHeadline)) {
             finish();
         }
@@ -107,21 +109,7 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
         }
     }
 
-    private boolean validateFields() {
-        boolean valid = true;
-
-        final TextInputLayout headlineLayout = findViewById(R.id.headline_layout);
-
-        if (Objects.requireNonNull(headlineView.getText()).toString().trim().equals("")) {
-            headlineLayout.setError("Please enter a profile headline");
-            valid = false;
-        }
-
-        return valid;
-    }
-
     private void saveHeadline(String documentId, Retiree retiree, boolean isRegistration) {
-        // if (validateFields()) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             retiree.setHeadline(Objects.requireNonNull(headlineView.getText()).toString().trim());
             Map<String, Object> retireeMap = retiree.toMap();
@@ -136,7 +124,6 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
                         finish();
                     })
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
-        // }
     }
 
     private void goToNext(String documentId) {
@@ -152,5 +139,14 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
                 .setMessage(R.string.want_to_skip)
                 .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> goToNext(documentId))
                 .setNegativeButton(android.R.string.no, null).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isRegistration) {
+            super.onBackPressed();
+        } else {
+            cancel();
+        }
     }
 }

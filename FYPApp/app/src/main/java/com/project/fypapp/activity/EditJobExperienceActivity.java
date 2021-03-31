@@ -2,7 +2,6 @@ package com.project.fypapp.activity;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -28,7 +27,6 @@ import static com.project.fypapp.util.Constants.DOCUMENT_ID;
 import static com.project.fypapp.util.Constants.ERROR_ADDING_DOCUMENT;
 import static com.project.fypapp.util.Constants.MONTH_MAP;
 import static com.project.fypapp.util.Constants.NEW_EXPERIENCE;
-import static com.project.fypapp.util.Constants.NEW_INFO;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_DELETED;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_UPDATED;
@@ -47,6 +45,9 @@ public class EditJobExperienceActivity extends AppCompatActivity {
     private EditText jobDescriptionView;
 
     private String userId;
+    private String documentId;
+    private boolean newExperience = false;
+    private JobExperience jobExperience;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -82,9 +83,9 @@ public class EditJobExperienceActivity extends AppCompatActivity {
         });
 
         if (getIntent().getExtras() != null) {
-            String documentId = getIntent().getStringExtra(DOCUMENT_ID);
+            documentId = getIntent().getStringExtra(DOCUMENT_ID);
             userId = getIntent().getStringExtra(USER_ID);
-            final boolean newExperience = getIntent().getBooleanExtra(NEW_EXPERIENCE, false);
+            newExperience = getIntent().getBooleanExtra(NEW_EXPERIENCE, false);
 
             if (newExperience) {
                 final TextView activityTitle = findViewById(R.id.page_title_view);
@@ -107,7 +108,7 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
-                                final JobExperience jobExperience = Objects.requireNonNull(task.getResult()).toObject(JobExperience.class);
+                                jobExperience = Objects.requireNonNull(task.getResult()).toObject(JobExperience.class);
 
                                 assert jobExperience != null;
                                 companyView.setText(jobExperience.getCompany());
@@ -115,6 +116,12 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                                 startingDateView.setText(jobExperience.getStartingDate());
                                 endingDateView.setText(jobExperience.getEndingDate());
                                 jobDescriptionView.setText(jobExperience.getJobDescription());
+
+                                cancelButton.setOnClickListener(view -> cancel(jobExperience, startingDateView.getText().toString().trim(),
+                                        endingDateView.getText().toString().trim(),
+                                        companyView.getText().toString().trim(),
+                                        roleView.getText().toString().trim(),
+                                        jobDescriptionView.getText().toString().trim(), userId));
 
                             } else {
                                 Log.d(TAG, COULD_NOT_RETRIEVE_DATA, task.getException());
@@ -124,12 +131,6 @@ public class EditJobExperienceActivity extends AppCompatActivity {
 
                 deleteButton.setOnClickListener(view -> deleteExperience(documentId));
                 saveButton.setOnClickListener(view -> updateExperience(documentId, userId));
-
-                cancelButton.setOnClickListener(view -> cancel(documentId, startingDateView.getText().toString().trim(),
-                        endingDateView.getText().toString().trim(),
-                        companyView.getText().toString().trim(),
-                        roleView.getText().toString().trim(),
-                        jobDescriptionView.getText().toString().trim(), userId));
             }
         }
     }
@@ -144,7 +145,7 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                 .add(jobExperience)
                 .addOnSuccessListener(documentReference -> {
                     Log.d(TAG, addedSuccessfully(documentReference.getId()));
-                    goToIndex();
+                    finish();
                 })
                 .addOnFailureListener(e -> Log.d(TAG, ERROR_ADDING_DOCUMENT));
     }
@@ -161,7 +162,7 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                     .update(jobExperience.toMap())
                     .addOnSuccessListener(aVoid -> {
                         Log.d(TAG, SUCCESSFULLY_UPDATED);
-                        goToIndex();
+                        finish();
                     })
 
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
@@ -178,20 +179,11 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                             .delete()
                             .addOnSuccessListener(aVoid -> {
                                 Log.d(TAG, SUCCESSFULLY_DELETED);
-                                goToIndex();})
+                                finish();})
                             .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_DELETED, e));
                 })
                 .setNegativeButton(R.string.no, null).show();
 
-    }
-
-    private void goToIndex() {
-        Intent i = new Intent(EditJobExperienceActivity.this, ExperienceIndexActivity.class);
-        i.putExtra(DOCUMENT_ID, userId);
-        i.putExtra(NEW_INFO, true);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
-        finish();
     }
 
     private boolean validateFields() {
@@ -238,41 +230,27 @@ public class EditJobExperienceActivity extends AppCompatActivity {
         new MonthYearPickerDialog(dateSetListener).show(getSupportFragmentManager(), "Month Year Picker");
     }
 
-    private void cancel(String documentId ,String startingDate, String endingDate, String companyName,
+    private void cancel(JobExperience jobExperience ,String startingDate, String endingDate, String companyName,
                         String role, String jobDescriptionString, String userId) {
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(JOB_EXPERIENCES)
-                .document(documentId)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
-                        final JobExperience jobExperience = Objects.requireNonNull(task.getResult()).toObject(JobExperience.class);
 
-                        assert jobExperience != null;
-                        if (!jobExperience.getCompany().trim().equals(companyName)
-                                || !jobExperience.getPosition().trim().equals(role)
-                                || !jobExperience.getStartingDate().trim().equals(startingDate)
-                                || !jobExperience.getEndingDate().trim().equals(endingDate)
-                                || !jobExperience.getJobDescription().trim().equals(jobDescriptionString)) {
+        if (!jobExperience.getCompany().trim().equals(companyName)
+                || !jobExperience.getPosition().trim().equals(role)
+                || !jobExperience.getStartingDate().trim().equals(startingDate)
+                || !jobExperience.getEndingDate().trim().equals(endingDate)
+                || !jobExperience.getJobDescription().trim().equals(jobDescriptionString)) {
 
-                            new AlertDialog.Builder(this)
-                                    .setTitle(R.string.discard_changes)
-                                    .setMessage(R.string.want_to_discard_changes)
-                                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> finish())
-                                    .setNegativeButton(android.R.string.no, null).show();
-                        }
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.discard_changes)
+                    .setMessage(R.string.want_to_discard_changes)
+                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> finish())
+                    .setNegativeButton(android.R.string.no, null).show();
+        }
 
-                        else {
-                            Log.d(TAG, "User id is: " + userId);
-                            finish();
-                        }
-                    }
+        else {
+            Log.d(TAG, "User id is: " + userId);
+            finish();
+        }
 
-                    else {
-                        Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
-                    }
-                });
     }
 
     private void cancelNewExperience(String startingDate, String endingDate, String companyName,
@@ -289,4 +267,20 @@ public class EditJobExperienceActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (newExperience) {
+            cancelNewExperience(startingDateView.getText().toString().trim(),
+                    endingDateView.getText().toString().trim(),
+                    companyView.getText().toString().trim(),
+                    roleView.getText().toString().trim(),
+                    jobDescriptionView.getText().toString().trim());
+        } else {
+            cancel(jobExperience, startingDateView.getText().toString().trim(),
+                    endingDateView.getText().toString().trim(),
+                    companyView.getText().toString().trim(),
+                    roleView.getText().toString().trim(),
+                    jobDescriptionView.getText().toString().trim(), userId);
+        }
+    }
 }

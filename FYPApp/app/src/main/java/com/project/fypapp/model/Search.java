@@ -9,62 +9,34 @@ import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
+
+import static com.project.fypapp.model.Retiree.INTERESTS;
+import static com.project.fypapp.model.Retiree.SKILLS;
 
 @Getter
+@Setter
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class Search {
-    public static final String SEARCH = "search";
     public static final String SEARCHES = "searches";
-    public static final String ROLES = "roles";
-    public static final String SECTORS = "sectors";
-    public static final String MIN_YEARS_OF_EXPERIENCE = "minYearsOfExperience";
+    public static final String SEARCH = "search";
     public static final String JOB_DESCRIPTION = "jobDescription";
 
-    private final List<String> roles;
-    private final List<String> sectors;
-    private final int minYearsOfExperience;
-    private final String jobDescription;
+    private String jobDescription;
+    private List<String> skills;
+    private List<String> interests;
 
     public Search() {
-        roles = new ArrayList<>();
-        sectors = new ArrayList<>();
-        minYearsOfExperience = 0;
         jobDescription = "";
-    }
-
-
-    public String getListOfRolesAsString() {
-        if (roles.isEmpty()) {
-            return "";
-        }
-
-        final StringBuilder sb = new StringBuilder();
-        for (String role : roles) {
-            sb.append(role).append(", ");
-        }
-        sb.setLength(sb.length() - 2);
-        return sb.toString();
-    }
-
-    public String getListOfSectorsAsString() {
-        if (sectors.isEmpty()) {
-            return "";
-        }
-
-        final StringBuilder sb = new StringBuilder();
-        for (String sector : sectors) {
-            sb.append(sector).append(", ");
-        }
-        sb.setLength(sb.length() - 2);
-        return sb.toString();
+        skills = new ArrayList<>();
+        interests = new ArrayList<>();
     }
 
     public Map<String, Object> toMap() {
         Map<String, Object> searchMap = new HashMap<>();
-        searchMap.put(ROLES, this.roles);
-        searchMap.put(SECTORS, this.sectors);
-        searchMap.put(MIN_YEARS_OF_EXPERIENCE, this.minYearsOfExperience);
         searchMap.put(JOB_DESCRIPTION, this.jobDescription);
+        searchMap.put(SKILLS, this.skills);
+        searchMap.put(INTERESTS, this.interests);
         return searchMap;
     }
 

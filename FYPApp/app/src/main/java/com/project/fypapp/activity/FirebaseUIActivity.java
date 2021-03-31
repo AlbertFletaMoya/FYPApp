@@ -24,6 +24,7 @@ import static com.project.fypapp.helper.FirestoreHelper.isFieldEmpty;
 import static com.project.fypapp.helper.FirestoreHelper.isQueryResultEmpty;
 import static com.project.fypapp.model.Entrepreneur.ENTREPRENEUR_USERS;
 import static com.project.fypapp.model.Retiree.RETIREE_USERS;
+import static com.project.fypapp.model.Search.JOB_DESCRIPTION;
 import static com.project.fypapp.model.Search.SEARCH;
 import static com.project.fypapp.model.Search.SEARCHES;
 import static com.project.fypapp.util.Constants.BACK_BUTTON_ERROR_MESSAGE;
@@ -145,8 +146,8 @@ public class FirebaseUIActivity extends AppCompatActivity {
                                                         .addOnCompleteListener(task3 -> {
                                                             if (task3.isSuccessful()) {
                                                                 Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
-                                                                if (!Objects.equals(Objects.requireNonNull(task3.getResult()).getString("job_description"), "")) {
-                                                                    goToSearchResults();
+                                                                if (!Objects.equals(Objects.requireNonNull(task3.getResult()).getString(JOB_DESCRIPTION), "")) {
+                                                                    goToSearchResults(task3.getResult().getId());
                                                                 } else {
                                                                     goToCreateSearch(Objects.requireNonNull(task2.getResult()).getDocuments().get(0).getId());
                                                                 }
@@ -190,8 +191,9 @@ public class FirebaseUIActivity extends AppCompatActivity {
         finish();
     }
 
-    private void goToSearchResults() {
+    private void goToSearchResults(String documentId) {
         final Intent intent = new Intent(FirebaseUIActivity.this, SearchResultsActivity.class);
+        intent.putExtra(DOCUMENT_ID, documentId);
         startActivity(intent);
         finish();
     }

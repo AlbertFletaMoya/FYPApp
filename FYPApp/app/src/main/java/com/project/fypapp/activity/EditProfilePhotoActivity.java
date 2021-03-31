@@ -57,6 +57,7 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
     private String profilePictureUri = "";
     Uri selectedImage = null;
     private ProgressBar progressBar;
+    private boolean isRegistration;
 
     private CircleImageView circleImageView;
     private Button noButton;
@@ -83,7 +84,7 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
 
         if (getIntent().getExtras() != null) {
-            boolean isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
+            isRegistration = getIntent().getBooleanExtra(IS_REGISTRATION, false);
             if (isRegistration) {
                 layout.setVisibility(View.GONE);
             }
@@ -229,7 +230,9 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
 
     @SneakyThrows
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-        noButton.setVisibility(View.VISIBLE);
+        if (isRegistration) {
+            noButton.setVisibility(View.VISIBLE);
+        }
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         switch(requestCode) {
             case TAKE_A_PHOTO_REQUEST_CODE:
@@ -269,5 +272,14 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
                     noButton.setVisibility(View.GONE);
                 })
                 .setNegativeButton(android.R.string.no, null).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isRegistration) {
+            super.onBackPressed();
+        } else {
+            cancel();
+        }
     }
 }

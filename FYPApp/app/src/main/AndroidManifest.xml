@@ -33,6 +33,8 @@
         <activity android:name=".activity.EditProfilePhotoActivity"/>
         <activity android:name=".activity.EditInterestsActivity"/>
         <activity android:name=".activity.EditSkillsActivity"/>
+        <activity android:name=".activity.EditSearchSkillsActivity"/>
+        <activity android:name=".activity.EditSearchInterestsActivity"/>
         <activity android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
             />

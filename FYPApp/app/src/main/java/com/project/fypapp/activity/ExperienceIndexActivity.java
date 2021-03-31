@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,13 +35,15 @@ import static com.project.fypapp.util.Constants.USER_ID;
 public class ExperienceIndexActivity extends AppCompatActivity {
     private static final String TAG = "ExperienceIndexActivity";
 
+    private String documentId;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experience_index);
 
         if (getIntent().getExtras() != null) {
-            final String documentId = getIntent().getStringExtra(DOCUMENT_ID);
+            documentId = getIntent().getStringExtra(DOCUMENT_ID);
 
             final boolean newInfo = getIntent().getBooleanExtra(NEW_INFO, false);
 
@@ -48,7 +51,7 @@ public class ExperienceIndexActivity extends AppCompatActivity {
             addExperienceView.setOnClickListener(view -> addExperience(documentId));
 
             final TextView cancelView = findViewById(R.id.cancel_view);
-            cancelView.setOnClickListener(view -> cancel(documentId));
+            cancelView.setOnClickListener(view -> finish());
 
             final ProgressBar progressBar = findViewById(R.id.progress_bar);
 
@@ -61,6 +64,25 @@ public class ExperienceIndexActivity extends AppCompatActivity {
             initRecyclerView(documentId);
         }
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        RecyclerView sv = findViewById(R.id.recycler_view);
+        sv.scrollTo(0, sv.getTop());
+        if (getIntent().getExtras() != null) {
+            initRecyclerView(documentId);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        RecyclerView sv = findViewById(R.id.recycler_view);
+        sv.scrollTo(0, sv.getTop());
+        initRecyclerView(documentId);
+    }
+
 
     private void initRecyclerView(String documentId) {
         final ProgressBar progressBar = findViewById(R.id.progress_bar);
@@ -102,9 +124,5 @@ public class ExperienceIndexActivity extends AppCompatActivity {
         i.putExtra(USER_ID, documentId);
         i.putExtra(NEW_EXPERIENCE, true);
         startActivity(i);
-    }
-
-    private void cancel(String documentId) {
-        finish();
     }
 }

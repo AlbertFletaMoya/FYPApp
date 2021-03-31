@@ -55,7 +55,7 @@
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             android:textColor="@color/opposite_main"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:paddingStart="20dp"
             android:paddingEnd="20dp" />
 
