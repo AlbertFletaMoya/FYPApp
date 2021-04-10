@@ -124,6 +124,10 @@ public class EditSearchActivity extends AppCompatActivity {
     }
 
     private void createSearch() {
+        if (!hasChanged()) {
+            goToSearchResults();
+        }
+
         final String jobDescriptionString = jobDescriptionEditText.getText().toString().trim();
         userSearch.setJobDescription(jobDescriptionString);
 
@@ -154,7 +158,7 @@ public class EditSearchActivity extends AppCompatActivity {
     private void cancel() {
         Log.d(TAG, "OBJECT VALUE: " + jobDescription);
         Log.d(TAG, "EditText VALUE: " + jobDescriptionEditText.getText().toString().trim());
-        if (!jobDescription.equals(jobDescriptionEditText.getText().toString().trim())) {
+        if (hasChanged()) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.discard_changes)
                     .setMessage(R.string.want_to_discard_changes)
@@ -163,6 +167,10 @@ public class EditSearchActivity extends AppCompatActivity {
         } else {
             finish();
         }
+    }
+
+    private boolean hasChanged() {
+        return (!jobDescription.equals(jobDescriptionEditText.getText().toString().trim()));
     }
 
     private boolean validateInputs() {

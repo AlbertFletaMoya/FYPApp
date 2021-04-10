@@ -1,10 +1,19 @@
 package com.project.fypapp.util;
 
+import android.content.Context;
+import android.widget.Toast;
+
+import com.project.fypapp.R;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Constants {
+    public static void successfullySaved(Context context) {
+        Toast.makeText(context, context.getString(R.string.successfully_saved), Toast.LENGTH_LONG).show();
+    }
+
     public static final String BACK_BUTTON_ERROR_MESSAGE = "Do not press the back button while you're being authenticated";
     public static final String UNKNOWN_ERROR_MESSAGE = "Please try again";
     public static final String NO_NETWORK_ERROR_MESSAGE = "You have no network connection";

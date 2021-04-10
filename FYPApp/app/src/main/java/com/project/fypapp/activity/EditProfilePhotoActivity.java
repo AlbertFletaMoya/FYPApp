@@ -49,6 +49,7 @@ import static com.project.fypapp.util.Constants.SUCCESSFULLY_UPDATED;
 import static com.project.fypapp.util.Constants.TAKE_A_PHOTO;
 import static com.project.fypapp.util.Constants.TAKE_A_PHOTO_REQUEST_CODE;
 import static com.project.fypapp.util.Constants.UNSUCCESSFULLY_UPDATED;
+import static com.project.fypapp.util.Constants.successfullySaved;
 
 public class EditProfilePhotoActivity extends AppCompatActivity {
     private static final String TAG = "EditProfilePhotoActivity";
@@ -153,7 +154,7 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
     }
 
     private void cancel() {
-        if (profilePictureUri.equals("")) {
+        if (!hasChanged()) {
             finish();
         }
 
@@ -166,7 +167,18 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
         }
     }
 
+    private boolean hasChanged() {
+        return (!profilePictureUri.equals(""));
+    }
+
     private void savePhoto(String documentId, Retiree retiree, boolean isRegistration) {
+        if (!hasChanged()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(DOCUMENT_ID, documentId);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+
         if (selectedImage == null) {
             goToNext(documentId);
         }
@@ -197,7 +209,11 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
                     if (isRegistration){
                         goToNext(documentId);
                     }
-                    finish();
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.putExtra(DOCUMENT_ID, documentId);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    successfullySaved(this);
                 })
                 .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
             } else {

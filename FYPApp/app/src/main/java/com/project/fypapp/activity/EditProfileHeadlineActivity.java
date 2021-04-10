@@ -28,6 +28,7 @@ import static com.project.fypapp.util.Constants.IS_REGISTRATION;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_UPDATED;
 import static com.project.fypapp.util.Constants.UNSUCCESSFULLY_UPDATED;
+import static com.project.fypapp.util.Constants.successfullySaved;
 
 public class EditProfileHeadlineActivity extends AppCompatActivity {
     private static final String TAG = "EditProfileHeadlineActivity";
@@ -96,7 +97,7 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
     }
 
     private void cancel() {
-        if (Objects.requireNonNull(headlineView.getText()).toString().trim().equals(originalHeadline)) {
+        if (!hasChanged()) {
             finish();
         }
 
@@ -109,7 +110,17 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
         }
     }
 
+    private boolean hasChanged() {
+        return(!Objects.requireNonNull(headlineView.getText()).toString().trim().equals(originalHeadline));
+    }
+
     private void saveHeadline(String documentId, Retiree retiree, boolean isRegistration) {
+        if (!hasChanged()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(DOCUMENT_ID, documentId);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             retiree.setHeadline(Objects.requireNonNull(headlineView.getText()).toString().trim());
             Map<String, Object> retireeMap = retiree.toMap();
@@ -121,7 +132,11 @@ public class EditProfileHeadlineActivity extends AppCompatActivity {
                         if (isRegistration) {
                             goToNext(documentId);
                         }
-                        finish();
+                        Intent intent = new Intent(this, MainActivity.class);
+                        intent.putExtra(DOCUMENT_ID, documentId);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        successfullySaved(this);
                     })
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
     }

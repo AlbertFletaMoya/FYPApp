@@ -118,4 +118,5 @@
     <string name="skills_you_are_looking_for">Skills you\'re looking for</string>
     <string name="search_and_select_skills_you_are_looking_for">Search and select skills you\'re looking for</string>
     <string name="search_and_select_interests_you_are_looking_for">Search and select interests you\'re looking for</string>
+    <string name="successfully_saved">Successfully saved!</string>
 </resources>

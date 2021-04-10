@@ -38,6 +38,7 @@ import static com.project.fypapp.util.Constants.SKILLS_AND_INTERESTS;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_UPDATED;
 import static com.project.fypapp.util.Constants.UNSUCCESSFULLY_UPDATED;
+import static com.project.fypapp.util.Constants.successfullySaved;
 
 public class EditSkillsActivity extends AppCompatActivity {
     private static final String TAG = "EditSkillsActivity";
@@ -176,6 +177,9 @@ public class EditSkillsActivity extends AppCompatActivity {
     }
 
     private void save(String documentId, boolean isRegistration, Retiree retiree) {
+        if (!hasChanged()) {
+            finish();
+        }
         final List<String> cleanList = Lists.newArrayList(Sets.newHashSet(retiree.getSkills()));
         retiree.setSkills(cleanList);
 
@@ -206,6 +210,7 @@ public class EditSkillsActivity extends AppCompatActivity {
                         goToNext(documentId);
                     }
                     finish();
+                    successfullySaved(this);
                 })
                 .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
     }
@@ -217,9 +222,13 @@ public class EditSkillsActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    private boolean hasChanged() {
+        return (!originalUserSkills.equals(Lists.newArrayList(Sets.newHashSet(retiree.getSkills()))));
+    }
+
     private void cancel() {
         originalUserSkills = Lists.newArrayList(Sets.newHashSet(originalUserSkills));
-        if (!originalUserSkills.equals(Lists.newArrayList(Sets.newHashSet(retiree.getSkills())))) {
+        if (hasChanged()) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.discard_changes)
                     .setMessage(R.string.want_to_discard_changes)

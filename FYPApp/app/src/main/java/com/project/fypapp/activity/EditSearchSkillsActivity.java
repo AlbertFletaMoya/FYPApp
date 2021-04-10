@@ -164,6 +164,9 @@ public class EditSearchSkillsActivity extends AppCompatActivity {
     }
 
     private void save(String documentId, Search search) {
+        if (!hasChanged()) {
+            finish();
+        }
         final List<String> cleanList = Lists.newArrayList(Sets.newHashSet(search.getSkills()));
         search.setSkills(cleanList);
 
@@ -195,9 +198,13 @@ public class EditSearchSkillsActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
     }
 
+    private boolean hasChanged() {
+        return (!originalUserSkills.equals(Lists.newArrayList(Sets.newHashSet(search.getSkills()))));
+    }
+
     private void cancel() {
         originalUserSkills = Lists.newArrayList(Sets.newHashSet(originalUserSkills));
-        if (!originalUserSkills.equals(Lists.newArrayList(Sets.newHashSet(search.getSkills())))) {
+        if (hasChanged()) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.discard_changes)
                     .setMessage(R.string.want_to_discard_changes)

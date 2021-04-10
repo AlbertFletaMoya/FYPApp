@@ -37,6 +37,7 @@ import static com.project.fypapp.util.Constants.SKILLS_AND_INTERESTS;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_UPDATED;
 import static com.project.fypapp.util.Constants.UNSUCCESSFULLY_UPDATED;
+import static com.project.fypapp.util.Constants.successfullySaved;
 
 public class EditInterestsActivity extends AppCompatActivity {
     private static final String TAG = "EditInterestsActivity";
@@ -169,6 +170,10 @@ public class EditInterestsActivity extends AppCompatActivity {
     }
 
     private void save(String documentId, boolean isRegistration, Retiree retiree) {
+        if (!hasChanged()) {
+            finish();
+        }
+
         final List<String> cleanList = Lists.newArrayList(Sets.newHashSet(retiree.getInterests()));
         retiree.setInterests(cleanList);
 
@@ -184,7 +189,6 @@ public class EditInterestsActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> map = new HashMap<>();
         map.put("list", interests);
-        // retiree.setInterests(checked);
 
         db.collection(RETIREE_USERS)
                 .document(documentId)
@@ -200,6 +204,7 @@ public class EditInterestsActivity extends AppCompatActivity {
                         goToNext(documentId);
                     }
                     finish();
+                    successfullySaved(this);
                 })
                 .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
     }
@@ -213,7 +218,7 @@ public class EditInterestsActivity extends AppCompatActivity {
 
     private void cancel() {
         originalUserInterests = Lists.newArrayList(Sets.newHashSet(originalUserInterests));
-        if (!originalUserInterests.equals(Lists.newArrayList(Sets.newHashSet(retiree.getInterests())))) {
+        if (hasChanged()) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.discard_changes)
                     .setMessage(R.string.want_to_discard_changes)
@@ -222,6 +227,10 @@ public class EditInterestsActivity extends AppCompatActivity {
         } else {
             finish();
         }
+    }
+
+    private boolean hasChanged() {
+        return !originalUserInterests.equals(Lists.newArrayList(Sets.newHashSet(retiree.getInterests())));
     }
 
     @Override

@@ -28,6 +28,7 @@ import static com.project.fypapp.util.Constants.IS_REGISTRATION;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_UPDATED;
 import static com.project.fypapp.util.Constants.UNSUCCESSFULLY_UPDATED;
+import static com.project.fypapp.util.Constants.successfullySaved;
 
 public class EditLocationActivity extends AppCompatActivity {
     private static final String TAG = "EditLocationActivity";
@@ -104,8 +105,7 @@ public class EditLocationActivity extends AppCompatActivity {
     }
 
     private void cancel() {
-        if (Objects.requireNonNull(cityView.getText()).toString().trim().equals(originalCity)
-                && Objects.requireNonNull(countryView.getText()).toString().trim().equals(originalCountry)) {
+        if (!hasChanged()) {
             finish();
         }
 
@@ -118,7 +118,18 @@ public class EditLocationActivity extends AppCompatActivity {
         }
     }
 
+    private boolean hasChanged() {
+        return (!Objects.requireNonNull(cityView.getText()).toString().trim().equals(originalCity)
+                || !Objects.requireNonNull(countryView.getText()).toString().trim().equals(originalCountry));
+    }
+
     private void saveLocation(String documentId, Retiree retiree) {
+        if (!hasChanged()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(DOCUMENT_ID, documentId);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             retiree.setCity(Objects.requireNonNull(cityView.getText()).toString().trim());
             retiree.setCountry(Objects.requireNonNull(countryView.getText()).toString().trim());
@@ -131,7 +142,11 @@ public class EditLocationActivity extends AppCompatActivity {
                         if (isRegistration) {
                             goToNext(documentId);
                         }
-                        finish();
+                        Intent intent = new Intent(this, MainActivity.class);
+                        intent.putExtra(DOCUMENT_ID, documentId);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        successfullySaved(this);
                     })
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
     }

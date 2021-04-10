@@ -161,6 +161,9 @@ public class EditSearchInterestsActivity extends AppCompatActivity {
     }
 
     private void save(String documentId, Search search) {
+        if (!hasChanged()) {
+            finish();
+        }
         final List<String> cleanList = Lists.newArrayList(Sets.newHashSet(search.getInterests()));
         search.setInterests(cleanList);
 
@@ -192,9 +195,13 @@ public class EditSearchInterestsActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
     }
 
+    private boolean hasChanged() {
+        return (!originalUserInterests.equals(Lists.newArrayList(Sets.newHashSet(search.getInterests()))));
+    }
+
     private void cancel() {
         originalUserInterests = Lists.newArrayList(Sets.newHashSet(originalUserInterests));
-        if (!originalUserInterests.equals(Lists.newArrayList(Sets.newHashSet(search.getInterests())))) {
+        if (hasChanged()) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.discard_changes)
                     .setMessage(R.string.want_to_discard_changes)

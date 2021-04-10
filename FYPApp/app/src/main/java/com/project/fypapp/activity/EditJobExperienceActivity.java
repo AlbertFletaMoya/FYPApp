@@ -34,6 +34,7 @@ import static com.project.fypapp.util.Constants.UNSUCCESSFULLY_DELETED;
 import static com.project.fypapp.util.Constants.UNSUCCESSFULLY_UPDATED;
 import static com.project.fypapp.util.Constants.USER_ID;
 import static com.project.fypapp.util.Constants.addedSuccessfully;
+import static com.project.fypapp.util.Constants.successfullySaved;
 
 public class EditJobExperienceActivity extends AppCompatActivity {
     private static final String TAG = "EditJobExperienceActivity";
@@ -130,7 +131,12 @@ public class EditJobExperienceActivity extends AppCompatActivity {
 
 
                 deleteButton.setOnClickListener(view -> deleteExperience(documentId));
-                saveButton.setOnClickListener(view -> updateExperience(documentId, userId));
+                saveButton.setOnClickListener(view -> updateExperience(documentId, userId, jobExperience,
+                        startingDateView.getText().toString().trim(),
+                        endingDateView.getText().toString().trim(),
+                        companyView.getText().toString().trim(),
+                        roleView.getText().toString().trim(),
+                        jobDescriptionView.getText().toString().trim()));
             }
         }
     }
@@ -146,23 +152,31 @@ public class EditJobExperienceActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentReference -> {
                     Log.d(TAG, addedSuccessfully(documentReference.getId()));
                     finish();
+                    successfullySaved(this);
                 })
                 .addOnFailureListener(e -> Log.d(TAG, ERROR_ADDING_DOCUMENT));
     }
 
-    private void updateExperience(String documentId, String userId) {
+    private void updateExperience(String documentId, String userId, JobExperience jobExperience,
+                                  String startingDate, String endingDate, String companyName,
+                                  String role, String jobDescriptionString) {
+        if (!hasChanged(jobExperience, startingDate, endingDate, companyName, role, jobDescriptionString)) {
+            finish();
+        }
+
         if (validateFields()) {
-            final JobExperience jobExperience = new JobExperience(companyView.getText().toString().trim(),
+            final JobExperience newJobExperience = new JobExperience(companyView.getText().toString().trim(),
                     roleView.getText().toString().trim(), startingDateView.getText().toString().trim(),
                     endingDateView.getText().toString().trim(), jobDescriptionView.getText().toString().trim(), userId);
 
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection(JOB_EXPERIENCES)
                     .document(documentId)
-                    .update(jobExperience.toMap())
+                    .update(newJobExperience.toMap())
                     .addOnSuccessListener(aVoid -> {
                         Log.d(TAG, SUCCESSFULLY_UPDATED);
                         finish();
+                        successfullySaved(this);
                     })
 
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
@@ -233,11 +247,7 @@ public class EditJobExperienceActivity extends AppCompatActivity {
     private void cancel(JobExperience jobExperience ,String startingDate, String endingDate, String companyName,
                         String role, String jobDescriptionString, String userId) {
 
-        if (!jobExperience.getCompany().trim().equals(companyName)
-                || !jobExperience.getPosition().trim().equals(role)
-                || !jobExperience.getStartingDate().trim().equals(startingDate)
-                || !jobExperience.getEndingDate().trim().equals(endingDate)
-                || !jobExperience.getJobDescription().trim().equals(jobDescriptionString)) {
+        if (hasChanged(jobExperience, startingDate, endingDate, companyName, role, jobDescriptionString)) {
 
             new AlertDialog.Builder(this)
                     .setTitle(R.string.discard_changes)
@@ -251,6 +261,15 @@ public class EditJobExperienceActivity extends AppCompatActivity {
             finish();
         }
 
+    }
+
+    private boolean hasChanged(JobExperience jobExperience ,String startingDate, String endingDate, String companyName,
+                               String role, String jobDescriptionString) {
+        return (!jobExperience.getCompany().trim().equals(companyName)
+                || !jobExperience.getPosition().trim().equals(role)
+                || !jobExperience.getStartingDate().trim().equals(startingDate)
+                || !jobExperience.getEndingDate().trim().equals(endingDate)
+                || !jobExperience.getJobDescription().trim().equals(jobDescriptionString));
     }
 
     private void cancelNewExperience(String startingDate, String endingDate, String companyName,

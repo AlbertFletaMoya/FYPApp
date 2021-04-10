@@ -29,6 +29,7 @@ import static com.project.fypapp.util.Constants.IS_REGISTRATION;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_UPDATED;
 import static com.project.fypapp.util.Constants.UNSUCCESSFULLY_UPDATED;
+import static com.project.fypapp.util.Constants.successfullySaved;
 
 public class EditNameActivity extends AppCompatActivity {
     private static final String TAG = "EditNameActivity";
@@ -101,8 +102,7 @@ public class EditNameActivity extends AppCompatActivity {
     }
 
     private void cancel() {
-        if (Objects.requireNonNull(firstNameView.getText()).toString().trim().equals(originalFirstName)
-        && Objects.requireNonNull(lastNameView.getText()).toString().trim().equals(originalLastName)) {
+        if (!hasChanged()) {
             finish();
         }
 
@@ -113,6 +113,11 @@ public class EditNameActivity extends AppCompatActivity {
                     .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> finish())
                     .setNegativeButton(android.R.string.no, null).show();
         }
+    }
+
+    private boolean hasChanged() {
+        return (!Objects.requireNonNull(firstNameView.getText()).toString().trim().equals(originalFirstName)
+                || !Objects.requireNonNull(lastNameView.getText()).toString().trim().equals(originalLastName));
     }
 
     private boolean validateFields() {
@@ -135,6 +140,12 @@ public class EditNameActivity extends AppCompatActivity {
     }
 
     private void saveName(String documentId, Retiree retiree, boolean isRegistration) {
+        if (!hasChanged()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(DOCUMENT_ID, documentId);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
         if (validateFields()) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             retiree.setFirstName(Objects.requireNonNull(firstNameView.getText()).toString().trim());
@@ -151,7 +162,11 @@ public class EditNameActivity extends AppCompatActivity {
                             i.putExtra(IS_REGISTRATION, true);
                             startActivity(i);
                         }
-                        finish();
+                        Intent intent = new Intent(this, MainActivity.class);
+                        intent.putExtra(DOCUMENT_ID, documentId);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        successfullySaved(this);
                     })
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
         }
