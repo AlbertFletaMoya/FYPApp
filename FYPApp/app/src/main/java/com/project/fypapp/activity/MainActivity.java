@@ -93,7 +93,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        if (getIntent().getExtras().getBoolean(PROFILE_BELONGS_TO_USER)) {
+            setContentView(R.layout.activity_main);
+        }
+        if (getIntent().getExtras().getBoolean(PROFILE_BELONGS_TO_USER)) {
+            setContentView(R.layout.activity_main_search);
+        }
 
         final View separatorView = findViewById(R.id.separator_view);
         separatorView.setVisibility(View.INVISIBLE);
@@ -159,6 +165,8 @@ public class MainActivity extends AppCompatActivity {
                 logoutButton.setVisibility(View.INVISIBLE);
                 editExperienceView.setVisibility(View.INVISIBLE);
                 editProfileView.setVisibility(View.INVISIBLE);
+                editSkillsView.setVisibility(View.INVISIBLE);
+                editInterestsView.setVisibility(View.INVISIBLE);
             } else {
                 circleImageView.setOnClickListener(view -> profilePictureDialogue());
                 cancelButton.setVisibility(View.INVISIBLE);
