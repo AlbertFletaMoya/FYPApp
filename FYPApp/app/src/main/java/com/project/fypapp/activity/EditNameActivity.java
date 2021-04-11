@@ -26,6 +26,7 @@ import static com.project.fypapp.model.Retiree.RETIREE_USERS;
 import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
 import static com.project.fypapp.util.Constants.DOCUMENT_ID;
 import static com.project.fypapp.util.Constants.IS_REGISTRATION;
+import static com.project.fypapp.util.Constants.PROFILE_BELONGS_TO_USER;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_UPDATED;
 import static com.project.fypapp.util.Constants.UNSUCCESSFULLY_UPDATED;
@@ -143,32 +144,35 @@ public class EditNameActivity extends AppCompatActivity {
         if (!hasChanged()) {
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra(DOCUMENT_ID, documentId);
+            intent.putExtra(PROFILE_BELONGS_TO_USER, true);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
-        }
-        if (validateFields()) {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            retiree.setFirstName(Objects.requireNonNull(firstNameView.getText()).toString().trim());
-            retiree.setLastName(Objects.requireNonNull(lastNameView.getText()).toString().trim());
-            Map<String, Object> retireeMap = retiree.toMap();
-            db.collection(RETIREE_USERS)
-                    .document(documentId)
-                    .update(retireeMap)
-                    .addOnSuccessListener(aVoid -> {
-                        Log.d(TAG, SUCCESSFULLY_UPDATED);
-                        if (isRegistration) {
-                            Intent i = new Intent(EditNameActivity.this, EditLocationActivity.class);
-                            i.putExtra(DOCUMENT_ID, documentId);
-                            i.putExtra(IS_REGISTRATION, true);
-                            startActivity(i);
-                        }
-                        Intent intent = new Intent(this, MainActivity.class);
-                        intent.putExtra(DOCUMENT_ID, documentId);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        successfullySaved(this);
-                    })
-                    .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
+        } else {
+            if (validateFields()) {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                retiree.setFirstName(Objects.requireNonNull(firstNameView.getText()).toString().trim());
+                retiree.setLastName(Objects.requireNonNull(lastNameView.getText()).toString().trim());
+                Map<String, Object> retireeMap = retiree.toMap();
+                db.collection(RETIREE_USERS)
+                        .document(documentId)
+                        .update(retireeMap)
+                        .addOnSuccessListener(aVoid -> {
+                            Log.d(TAG, SUCCESSFULLY_UPDATED);
+                            if (isRegistration) {
+                                Intent i = new Intent(EditNameActivity.this, EditLocationActivity.class);
+                                i.putExtra(DOCUMENT_ID, documentId);
+                                i.putExtra(PROFILE_BELONGS_TO_USER, true);
+                                i.putExtra(IS_REGISTRATION, true);
+                                startActivity(i);
+                            }
+                            Intent intent = new Intent(this, MainActivity.class);
+                            intent.putExtra(DOCUMENT_ID, documentId);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            successfullySaved(this);
+                        })
+                        .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
+            }
         }
     }
 

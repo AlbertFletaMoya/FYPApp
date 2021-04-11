@@ -175,51 +175,56 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
         if (!hasChanged()) {
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra(DOCUMENT_ID, documentId);
+            intent.putExtra(PROFILE_BELONGS_TO_USER, true);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
 
-        if (selectedImage == null) {
-            goToNext(documentId);
-        }
-        progressBar.setVisibility(View.VISIBLE);
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference profilePictureStorageRef = storage.getReference().child("profilePictures/" + documentId);
-        UploadTask uploadTask = profilePictureStorageRef.putFile(selectedImage);
-        uploadTask.continueWithTask(task -> {
-            if (!task.isSuccessful()) {
-                throw Objects.requireNonNull(task.getException());
-            }
+        else {
 
-            // Continue with the task to get the download URL
-            return profilePictureStorageRef.getDownloadUrl();
-        }).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Uri downloadUri = task.getResult();
-                Log.d(TAG, "Download URI is: " + downloadUri);
-                assert downloadUri != null;
-                retiree.setProfilePictureUri(downloadUri.toString());
-                Map<String, Object> retireeMap = retiree.toMap();
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection(RETIREE_USERS)
-                .document(documentId)
-                .update(retireeMap)
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, SUCCESSFULLY_UPDATED);
-                    if (isRegistration){
-                        goToNext(documentId);
-                    }
-                    Intent intent = new Intent(this, MainActivity.class);
-                    intent.putExtra(DOCUMENT_ID, documentId);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    successfullySaved(this);
-                })
-                .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
-            } else {
-                Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
+            if (selectedImage == null) {
+                goToNext(documentId);
             }
-        });
+            progressBar.setVisibility(View.VISIBLE);
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference profilePictureStorageRef = storage.getReference().child("profilePictures/" + documentId);
+            UploadTask uploadTask = profilePictureStorageRef.putFile(selectedImage);
+            uploadTask.continueWithTask(task -> {
+                if (!task.isSuccessful()) {
+                    throw Objects.requireNonNull(task.getException());
+                }
+
+                // Continue with the task to get the download URL
+                return profilePictureStorageRef.getDownloadUrl();
+            }).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    Log.d(TAG, "Download URI is: " + downloadUri);
+                    assert downloadUri != null;
+                    retiree.setProfilePictureUri(downloadUri.toString());
+                    Map<String, Object> retireeMap = retiree.toMap();
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection(RETIREE_USERS)
+                            .document(documentId)
+                            .update(retireeMap)
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d(TAG, SUCCESSFULLY_UPDATED);
+                                if (isRegistration) {
+                                    goToNext(documentId);
+                                }
+                                Intent intent = new Intent(this, MainActivity.class);
+                                intent.putExtra(DOCUMENT_ID, documentId);
+                                intent.putExtra(PROFILE_BELONGS_TO_USER, true);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                successfullySaved(this);
+                            })
+                            .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
+                } else {
+                    Log.d(TAG, COULD_NOT_RETRIEVE_DATA);
+                }
+            });
+        }
     }
 
     private void profilePictureDialogue() {

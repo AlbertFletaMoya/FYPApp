@@ -25,6 +25,7 @@ import static com.project.fypapp.model.Retiree.RETIREE_USERS;
 import static com.project.fypapp.util.Constants.COULD_NOT_RETRIEVE_DATA;
 import static com.project.fypapp.util.Constants.DOCUMENT_ID;
 import static com.project.fypapp.util.Constants.IS_REGISTRATION;
+import static com.project.fypapp.util.Constants.PROFILE_BELONGS_TO_USER;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_RETRIEVED_DATA;
 import static com.project.fypapp.util.Constants.SUCCESSFULLY_UPDATED;
 import static com.project.fypapp.util.Constants.UNSUCCESSFULLY_UPDATED;
@@ -127,9 +128,10 @@ public class EditLocationActivity extends AppCompatActivity {
         if (!hasChanged()) {
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra(DOCUMENT_ID, documentId);
+            intent.putExtra(PROFILE_BELONGS_TO_USER, true);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
-        }
+        } else {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             retiree.setCity(Objects.requireNonNull(cityView.getText()).toString().trim());
             retiree.setCountry(Objects.requireNonNull(countryView.getText()).toString().trim());
@@ -144,11 +146,13 @@ public class EditLocationActivity extends AppCompatActivity {
                         }
                         Intent intent = new Intent(this, MainActivity.class);
                         intent.putExtra(DOCUMENT_ID, documentId);
+                        intent.putExtra(PROFILE_BELONGS_TO_USER, true);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         successfullySaved(this);
                     })
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
+        }
     }
 
     private void goToNext(String documentId) {

@@ -25,8 +25,8 @@
             android:text="@string/cross"
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
-            android:textSize="24sp"
-            android:textColor="@color/grey"
+            android:textSize="30sp"
+            android:textColor="@color/custom_red"
             app:layout_constraintHorizontal_chainStyle="spread_inside"/>
 
         <TextView
@@ -36,11 +36,11 @@
             app:layout_constraintLeft_toRightOf="@id/cancel_view"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@string/select_interests"
+            android:text="@string/select_skills"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             android:textColor="@color/opposite_main"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="25sp"
             android:paddingStart="20dp"
             android:paddingEnd="20dp" />
 
@@ -51,12 +51,12 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="@string/save"
-            android:textSize="20sp"
+            android:textSize="25sp"
             android:textColor="@color/turquoise_light"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintRight_toRightOf="parent"
             android:paddingVertical="10dp"
-            android:paddingHorizontal="20dp"/>
+            android:paddingHorizontal="20dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -78,7 +78,7 @@
             android:id="@+id/search_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="25sp"
             android:hint="@string/search_and_select_interests"
             android:paddingHorizontal="20dp"/>
     </com.google.android.material.textfield.TextInputLayout>
