@@ -161,15 +161,17 @@ public class EditNameActivity extends AppCompatActivity {
                             if (isRegistration) {
                                 Intent i = new Intent(EditNameActivity.this, EditLocationActivity.class);
                                 i.putExtra(DOCUMENT_ID, documentId);
-                                i.putExtra(PROFILE_BELONGS_TO_USER, true);
                                 i.putExtra(IS_REGISTRATION, true);
                                 startActivity(i);
+                                finish();
+                            } else {
+                                Intent intent = new Intent(this, MainActivity.class);
+                                intent.putExtra(DOCUMENT_ID, documentId);
+                                intent.putExtra(PROFILE_BELONGS_TO_USER, true);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                successfullySaved(this);
                             }
-                            Intent intent = new Intent(this, MainActivity.class);
-                            intent.putExtra(DOCUMENT_ID, documentId);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            successfullySaved(this);
                         })
                         .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
             }

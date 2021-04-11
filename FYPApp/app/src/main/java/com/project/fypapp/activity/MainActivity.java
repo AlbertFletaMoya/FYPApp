@@ -9,7 +9,6 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -97,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         if (getIntent().getExtras().getBoolean(PROFILE_BELONGS_TO_USER)) {
             setContentView(R.layout.activity_main);
         }
-        if (getIntent().getExtras().getBoolean(PROFILE_BELONGS_TO_USER)) {
+        else {
             setContentView(R.layout.activity_main_search);
         }
 

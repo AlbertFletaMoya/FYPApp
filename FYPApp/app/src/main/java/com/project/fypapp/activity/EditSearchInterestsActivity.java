@@ -49,7 +49,7 @@ public class EditSearchInterestsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_skills_and_interests);
+        setContentView(R.layout.activity_search_skills_and_interests);
 
         final TextView title = findViewById(R.id.page_title_view);
         title.setText(R.string.select_interests);
@@ -145,7 +145,7 @@ public class EditSearchInterestsActivity extends AppCompatActivity {
                                 currentSearchInterests.removeIf(n -> n.equals(customInterests.get(position)));
                                 search.setInterests(currentSearchInterests);
                             }
-                        }, this);
+                        }, false, this);
         recyclerView.setAdapter(skillsAndInterestsRecyclerAdapter);
 
         for (int i = 0; i < customInterests.size(); i++) {
@@ -161,42 +161,44 @@ public class EditSearchInterestsActivity extends AppCompatActivity {
     }
 
     private void save(String documentId, Search search) {
+        originalUserInterests = Lists.newArrayList(Sets.newHashSet(originalUserInterests));
         if (!hasChanged()) {
             finish();
-        }
-        final List<String> cleanList = Lists.newArrayList(Sets.newHashSet(search.getInterests()));
-        search.setInterests(cleanList);
+        } else {
+            final List<String> cleanList = Lists.newArrayList(Sets.newHashSet(search.getInterests()));
+            search.setInterests(cleanList);
 
-        // TODO Store any new interests, for security measures we could limit the amount of new words
-        // That a user can store, and validate with a dictionary that the user gave valid words and
-        // Not just bogus strings to try and fill the storage up
-        for (String checkedElement : cleanList) {
-            if (!interests.contains(checkedElement)) {
-                interests.add(checkedElement);
+            // TODO Store any new interests, for security measures we could limit the amount of new words
+            // That a user can store, and validate with a dictionary that the user gave valid words and
+            // Not just bogus strings to try and fill the storage up
+            for (String checkedElement : cleanList) {
+                if (!interests.contains(checkedElement)) {
+                    interests.add(checkedElement);
+                }
             }
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            Map<String, Object> map = new HashMap<>();
+            map.put("list", interests);
+
+            db.collection(SEARCHES)
+                    .document(documentId)
+                    .update(search.toMap())
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, SUCCESSFULLY_UPDATED);
+                        db.collection(SKILLS_AND_INTERESTS)
+                                .document(SKILLS_AND_INTERESTS)
+                                .update(map)
+                                .addOnSuccessListener(aVoid1 -> Log.d(TAG, SUCCESSFULLY_UPDATED))
+                                .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
+                        finish();
+                    })
+                    .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
         }
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> map = new HashMap<>();
-        map.put("list", interests);
-
-        db.collection(SEARCHES)
-                .document(documentId)
-                .update(search.toMap())
-                .addOnSuccessListener(aVoid -> {
-                   Log.d(TAG, SUCCESSFULLY_UPDATED);
-                   db.collection(SKILLS_AND_INTERESTS)
-                           .document(SKILLS_AND_INTERESTS)
-                           .update(map)
-                           .addOnSuccessListener(aVoid1 -> Log.d(TAG, SUCCESSFULLY_UPDATED))
-                           .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
-                   finish();
-                })
-                .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
     }
 
     private boolean hasChanged() {
-        return (!originalUserInterests.equals(Lists.newArrayList(Sets.newHashSet(search.getInterests()))));
+        return (!Sets.newHashSet(originalUserInterests).equals(Sets.newHashSet(search.getInterests())));
     }
 
     private void cancel() {

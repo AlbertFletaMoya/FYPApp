@@ -211,13 +211,14 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
                                 Log.d(TAG, SUCCESSFULLY_UPDATED);
                                 if (isRegistration) {
                                     goToNext(documentId);
+                                } else {
+                                    Intent intent = new Intent(this, MainActivity.class);
+                                    intent.putExtra(DOCUMENT_ID, documentId);
+                                    intent.putExtra(PROFILE_BELONGS_TO_USER, true);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                    successfullySaved(this);
                                 }
-                                Intent intent = new Intent(this, MainActivity.class);
-                                intent.putExtra(DOCUMENT_ID, documentId);
-                                intent.putExtra(PROFILE_BELONGS_TO_USER, true);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                                successfullySaved(this);
                             })
                             .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
                 } else {
@@ -281,6 +282,7 @@ public class EditProfilePhotoActivity extends AppCompatActivity {
         i.putExtra(PROFILE_BELONGS_TO_USER, true);
         i.putExtra(DOCUMENT_ID, documentId);
         startActivity(i);
+        finish();
     }
 
     private void repeatPhoto() {

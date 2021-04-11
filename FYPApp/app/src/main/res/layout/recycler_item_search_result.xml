@@ -59,6 +59,7 @@
             android:gravity="start"
             android:textSize="16sp"
             android:text="@string/bio_text"
+            android:textAlignment="center"
             app:layout_constraintVertical_chainStyle="packed"
             android:paddingHorizontal="20dp"
             app:layout_constraintHorizontal_chainStyle="packed"

@@ -154,7 +154,7 @@ public class EditInterestsActivity extends AppCompatActivity {
                         currentUserInterests.removeIf(n -> n.equals(customInterests.get(position)));
                         retiree.setInterests(currentUserInterests);
                     }
-                }, this);
+                }, true, this);
         recyclerView.setAdapter(skillsAndInterestsRecyclerAdapter);
 
         for (int i = 0; i < customInterests.size(); i++) {
@@ -170,43 +170,46 @@ public class EditInterestsActivity extends AppCompatActivity {
     }
 
     private void save(String documentId, boolean isRegistration, Retiree retiree) {
+        originalUserInterests = Lists.newArrayList(Sets.newHashSet(originalUserInterests));
         if (!hasChanged()) {
             finish();
-        }
+        } else {
 
-        final List<String> cleanList = Lists.newArrayList(Sets.newHashSet(retiree.getInterests()));
-        retiree.setInterests(cleanList);
+            final List<String> cleanList = Lists.newArrayList(Sets.newHashSet(retiree.getInterests()));
+            retiree.setInterests(cleanList);
 
-        // TODO Store any new interests, for security measures we could limit the amount of new words
-        // That a user can store, and validate with a dictionary that the user gave valid words and
-        // Not just bogus strings to try and fill the storage up
-        for (String checkedElement : cleanList) {
-            if (!interests.contains(checkedElement)) {
-                interests.add(checkedElement);
+            // TODO Store any new interests, for security measures we could limit the amount of new words
+            // That a user can store, and validate with a dictionary that the user gave valid words and
+            // Not just bogus strings to try and fill the storage up
+            for (String checkedElement : cleanList) {
+                if (!interests.contains(checkedElement)) {
+                    interests.add(checkedElement);
+                }
             }
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            Map<String, Object> map = new HashMap<>();
+            map.put("list", interests);
+
+            db.collection(RETIREE_USERS)
+                    .document(documentId)
+                    .update(retiree.toMap())
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, SUCCESSFULLY_UPDATED);
+                        db.collection(SKILLS_AND_INTERESTS)
+                                .document(SKILLS_AND_INTERESTS)
+                                .update(map)
+                                .addOnSuccessListener(aVoid1 -> Log.d(TAG, SUCCESSFULLY_UPDATED))
+                                .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
+                        if (isRegistration) {
+                            goToNext(documentId);
+                        } else {
+                            finish();
+                            successfullySaved(this);
+                        }
+                    })
+                    .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
         }
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> map = new HashMap<>();
-        map.put("list", interests);
-
-        db.collection(RETIREE_USERS)
-                .document(documentId)
-                .update(retiree.toMap())
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, SUCCESSFULLY_UPDATED);
-                    db.collection(SKILLS_AND_INTERESTS)
-                            .document(SKILLS_AND_INTERESTS)
-                            .update(map)
-                            .addOnSuccessListener(aVoid1 -> Log.d(TAG, SUCCESSFULLY_UPDATED))
-                            .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
-                    if (isRegistration) {
-                        goToNext(documentId);
-                    }
-                    finish();
-                    successfullySaved(this);
-                })
-                .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
     }
 
     private void goToNext(String documentId) {
@@ -214,6 +217,7 @@ public class EditInterestsActivity extends AppCompatActivity {
         i.putExtra(DOCUMENT_ID, documentId);
         i.putExtra(IS_REGISTRATION, true);
         startActivity(i);
+        finish();
     }
 
     private void cancel() {
@@ -230,7 +234,7 @@ public class EditInterestsActivity extends AppCompatActivity {
     }
 
     private boolean hasChanged() {
-        return !originalUserInterests.equals(Lists.newArrayList(Sets.newHashSet(retiree.getInterests())));
+        return !Sets.newHashSet(originalUserInterests).equals(Sets.newHashSet(retiree.getInterests()));
     }
 
     @Override

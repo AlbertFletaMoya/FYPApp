@@ -22,10 +22,12 @@ import com.project.fypapp.adapter.SkillsAndInterestsRecyclerAdapter;
 import com.project.fypapp.model.Search;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.project.fypapp.model.Search.SEARCHES;
@@ -50,7 +52,7 @@ public class EditSearchSkillsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_skills_and_interests);
+        setContentView(R.layout.activity_search_skills_and_interests);
 
         final TextView title = findViewById(R.id.page_title_view);
         title.setText(R.string.select_skills);
@@ -148,7 +150,7 @@ public class EditSearchSkillsActivity extends AppCompatActivity {
                         currentSearchSkills.removeIf(n -> n.equals(customSkills.get(position)));
                         search.setSkills(currentSearchSkills);
                     }
-                        }, this);
+                        }, false,this);
         recyclerView.setAdapter(skillsAndInterestsRecyclerAdapter);
 
         for (int i = 0; i < customSkills.size(); i++) {
@@ -164,42 +166,46 @@ public class EditSearchSkillsActivity extends AppCompatActivity {
     }
 
     private void save(String documentId, Search search) {
+        originalUserSkills = Lists.newArrayList(Sets.newHashSet(originalUserSkills));
         if (!hasChanged()) {
             finish();
         }
-        final List<String> cleanList = Lists.newArrayList(Sets.newHashSet(search.getSkills()));
-        search.setSkills(cleanList);
 
-        // TODO Store any new skills, for security measures we could limit the amount of new words
-        // That a user can store, and validate with a dictionary that the user gave valid words and
-        // Not just bogus strings to try and fill the storage up
-        for (String checkedElement : cleanList) {
-            if (!skills.contains(checkedElement)) {
-                skills.add(checkedElement);
+        else {
+            final List<String> cleanList = Lists.newArrayList(Sets.newHashSet(search.getSkills()));
+            search.setSkills(cleanList);
+
+            // TODO Store any new skills, for security measures we could limit the amount of new words
+            // That a user can store, and validate with a dictionary that the user gave valid words and
+            // Not just bogus strings to try and fill the storage up
+            for (String checkedElement : cleanList) {
+                if (!skills.contains(checkedElement)) {
+                    skills.add(checkedElement);
+                }
             }
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            Map<String, Object> map = new HashMap<>();
+            map.put("list", skills);
+
+            db.collection(SEARCHES)
+                    .document(documentId)
+                    .update(search.toMap())
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, SUCCESSFULLY_UPDATED);
+                        db.collection(SKILLS_AND_INTERESTS)
+                                .document(SKILLS_AND_INTERESTS)
+                                .update(map)
+                                .addOnSuccessListener(aVoid1 -> Log.d(TAG, SUCCESSFULLY_UPDATED))
+                                .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
+                        finish();
+                    })
+                    .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
         }
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> map = new HashMap<>();
-        map.put("list", skills);
-
-        db.collection(SEARCHES)
-                .document(documentId)
-                .update(search.toMap())
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, SUCCESSFULLY_UPDATED);
-                    db.collection(SKILLS_AND_INTERESTS)
-                            .document(SKILLS_AND_INTERESTS)
-                            .update(map)
-                            .addOnSuccessListener(aVoid1 -> Log.d(TAG, SUCCESSFULLY_UPDATED))
-                            .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
-                    finish();
-                })
-                .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
     }
 
     private boolean hasChanged() {
-        return (!originalUserSkills.equals(Lists.newArrayList(Sets.newHashSet(search.getSkills()))));
+        return (!Sets.newHashSet(originalUserSkills).equals(Sets.newHashSet(search.getSkills())));
     }
 
     private void cancel() {

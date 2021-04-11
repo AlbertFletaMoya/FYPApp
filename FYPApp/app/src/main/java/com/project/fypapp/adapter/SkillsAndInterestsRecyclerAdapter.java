@@ -22,6 +22,7 @@ public class SkillsAndInterestsRecyclerAdapter extends RecyclerView.Adapter<Recy
     private final List<String> list;
     private final List<String> userList;
     private final SkillsAndInterestsOnClickListener onClickListener;
+    private final boolean isRetiree;
     Context context;
 
     public class SkillsAndInterestsViewHolder extends RecyclerView.ViewHolder {
@@ -54,7 +55,12 @@ public class SkillsAndInterestsRecyclerAdapter extends RecyclerView.Adapter<Recy
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_skill_and_interest, parent, false);
+        View view;
+        if (isRetiree) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_skill_and_interest, parent, false);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_skill_and_interest, parent, false);
+        }
         return new SkillsAndInterestsViewHolder(view);
     }
 

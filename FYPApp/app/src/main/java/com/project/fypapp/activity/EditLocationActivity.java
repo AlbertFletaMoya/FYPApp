@@ -143,13 +143,14 @@ public class EditLocationActivity extends AppCompatActivity {
                         Log.d(TAG, SUCCESSFULLY_UPDATED);
                         if (isRegistration) {
                             goToNext(documentId);
+                        } else {
+                            Intent intent = new Intent(this, MainActivity.class);
+                            intent.putExtra(DOCUMENT_ID, documentId);
+                            intent.putExtra(PROFILE_BELONGS_TO_USER, true);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            successfullySaved(this);
                         }
-                        Intent intent = new Intent(this, MainActivity.class);
-                        intent.putExtra(DOCUMENT_ID, documentId);
-                        intent.putExtra(PROFILE_BELONGS_TO_USER, true);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        successfullySaved(this);
                     })
                     .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
         }
@@ -160,6 +161,7 @@ public class EditLocationActivity extends AppCompatActivity {
         i.putExtra(IS_REGISTRATION, true);
         i.putExtra(DOCUMENT_ID, documentId);
         startActivity(i);
+        finish();
     }
 
     private void skipToNext(String documentId) {

@@ -161,7 +161,7 @@ public class EditSkillsActivity extends AppCompatActivity {
                         currentUserSkills.removeIf(n -> n.equals(customSkills.get(position)));
                         retiree.setSkills(currentUserSkills);
                     }
-                        }, this);
+                        }, true, this);
         recyclerView.setAdapter(skillsAndInterestsRecyclerAdapter);
 
         for (int i = 0; i < customSkills.size(); i++) {
@@ -177,42 +177,45 @@ public class EditSkillsActivity extends AppCompatActivity {
     }
 
     private void save(String documentId, boolean isRegistration, Retiree retiree) {
+        originalUserSkills = Lists.newArrayList(Sets.newHashSet(originalUserSkills));
         if (!hasChanged()) {
             finish();
-        }
-        final List<String> cleanList = Lists.newArrayList(Sets.newHashSet(retiree.getSkills()));
-        retiree.setSkills(cleanList);
+        } else {
+            final List<String> cleanList = Lists.newArrayList(Sets.newHashSet(retiree.getSkills()));
+            retiree.setSkills(cleanList);
 
-        // TODO Store any new skills, for security measures we could limit the amount of new words
-        // That a user can store, and validate with a dictionary that the user gave valid words and
-        // Not just bogus strings to try and fill the storage up
-        for (String checkedElement : cleanList) {
-            if (!skills.contains(checkedElement)) {
-                skills.add(checkedElement);
+            // TODO Store any new skills, for security measures we could limit the amount of new words
+            // That a user can store, and validate with a dictionary that the user gave valid words and
+            // Not just bogus strings to try and fill the storage up
+            for (String checkedElement : cleanList) {
+                if (!skills.contains(checkedElement)) {
+                    skills.add(checkedElement);
+                }
             }
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            Map<String, Object> map = new HashMap<>();
+            map.put("list", skills);
+
+            db.collection(RETIREE_USERS)
+                    .document(documentId)
+                    .update(retiree.toMap())
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, SUCCESSFULLY_UPDATED);
+                        db.collection(SKILLS_AND_INTERESTS)
+                                .document(SKILLS_AND_INTERESTS)
+                                .update(map)
+                                .addOnSuccessListener(aVoid1 -> Log.d(TAG, SUCCESSFULLY_UPDATED))
+                                .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
+                        if (isRegistration) {
+                            goToNext(documentId);
+                        } else {
+                            finish();
+                            successfullySaved(this);
+                        }
+                    })
+                    .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
         }
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> map = new HashMap<>();
-        map.put("list", skills);
-
-        db.collection(RETIREE_USERS)
-                .document(documentId)
-                .update(retiree.toMap())
-                .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, SUCCESSFULLY_UPDATED);
-                    db.collection(SKILLS_AND_INTERESTS)
-                            .document(SKILLS_AND_INTERESTS)
-                            .update(map)
-                            .addOnSuccessListener(aVoid1 -> Log.d(TAG, SUCCESSFULLY_UPDATED))
-                            .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
-                    if (isRegistration) {
-                        goToNext(documentId);
-                    }
-                    finish();
-                    successfullySaved(this);
-                })
-                .addOnFailureListener(e -> Log.d(TAG, UNSUCCESSFULLY_UPDATED));
     }
 
     private void goToNext(String documentId) {
@@ -220,10 +223,11 @@ public class EditSkillsActivity extends AppCompatActivity {
         i.putExtra(DOCUMENT_ID, documentId);
         i.putExtra(IS_REGISTRATION, true);
         startActivity(i);
+        finish();
     }
 
     private boolean hasChanged() {
-        return (!originalUserSkills.equals(Lists.newArrayList(Sets.newHashSet(retiree.getSkills()))));
+        return (!Sets.newHashSet(originalUserSkills).equals(Sets.newHashSet(retiree.getSkills())));
     }
 
     private void cancel() {
