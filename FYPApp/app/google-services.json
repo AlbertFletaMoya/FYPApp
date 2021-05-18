@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "673707792256-7ii4dci1dtn0iceqoh5dj2708eohnlt2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.project.fypapp",
+            "certificate_hash": "f5e213ecc3e6812e660c0257a8dc06333f007cb6"
+          }
+        },
+        {
           "client_id": "673707792256-s0emmbgvcem9aggsnb2upr3tstsf10sp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
