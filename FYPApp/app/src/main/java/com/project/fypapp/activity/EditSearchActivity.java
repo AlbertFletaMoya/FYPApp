@@ -124,7 +124,7 @@ public class EditSearchActivity extends AppCompatActivity {
     }
 
     private void createSearch() {
-        if (!hasChanged()) {
+        if (!hasChanged() && !newSearch) {
             goToSearchResults();
         }
 
@@ -192,7 +192,8 @@ public class EditSearchActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                    if (task.isSuccessful()) {
                        Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
-                       userSearch = task.getResult().toObject(Search.class);
+                       userSearch = Objects.requireNonNull(task.getResult()).toObject(Search.class);
+                       assert userSearch != null;
                        userSearch.setJobDescription(jobDescription);
                        skillsView.setText(Retiree.customSetToString(userSearch.getSkills()));
                        interestsView.setText(Retiree.customSetToString(userSearch.getInterests()));

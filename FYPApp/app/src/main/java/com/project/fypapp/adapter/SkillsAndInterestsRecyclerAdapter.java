@@ -43,13 +43,6 @@ public class SkillsAndInterestsRecyclerAdapter extends RecyclerView.Adapter<Recy
             this.checkboxView.setChecked(true);
         }
 
-        public boolean isCheckboxChecked() {
-            return this.checkboxView.isChecked();
-        }
-
-        public String getLabelText() {
-            return this.labelView.getText().toString().trim();
-        }
     }
 
     @NonNull
@@ -59,7 +52,7 @@ public class SkillsAndInterestsRecyclerAdapter extends RecyclerView.Adapter<Recy
         if (isRetiree) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_skill_and_interest, parent, false);
         } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_skill_and_interest, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_search_skill_and_interest, parent, false);
         }
         return new SkillsAndInterestsViewHolder(view);
     }
