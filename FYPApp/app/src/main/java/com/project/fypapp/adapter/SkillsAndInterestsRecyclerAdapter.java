@@ -1,6 +1,7 @@
 package com.project.fypapp.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,10 @@ public class SkillsAndInterestsRecyclerAdapter extends RecyclerView.Adapter<Recy
             this.checkboxView.setChecked(true);
         }
 
+        public void unsetCheckboxView() {
+            this.checkboxView.setChecked(false);
+        }
+
     }
 
     @NonNull
@@ -61,9 +66,7 @@ public class SkillsAndInterestsRecyclerAdapter extends RecyclerView.Adapter<Recy
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         SkillsAndInterestsViewHolder viewHolder = (SkillsAndInterestsViewHolder) holder;
         viewHolder.labelView.setText(list.get(position));
-        if (userList.contains(list.get(position))) {
-            viewHolder.checkboxView.setChecked(!viewHolder.checkboxView.isChecked());
-        }
+        viewHolder.checkboxView.setChecked(userList.contains(list.get(position)));
     }
 
     @Override

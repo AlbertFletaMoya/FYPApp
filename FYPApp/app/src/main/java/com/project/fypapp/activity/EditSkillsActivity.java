@@ -84,8 +84,8 @@ public class EditSkillsActivity extends AppCompatActivity {
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, SUCCESSFULLY_RETRIEVED_DATA);
                             skills = (List<String>) task.getResult().get("list");
+                            assert skills != null;
                             assert documentId != null;
                             db.collection(RETIREE_USERS)
                                     .document(documentId)
@@ -165,12 +165,16 @@ public class EditSkillsActivity extends AppCompatActivity {
         recyclerView.setAdapter(skillsAndInterestsRecyclerAdapter);
 
         for (int i = 0; i < customSkills.size(); i++) {
+            SkillsAndInterestsRecyclerAdapter.SkillsAndInterestsViewHolder viewHolder =
+                    (SkillsAndInterestsRecyclerAdapter.SkillsAndInterestsViewHolder)
+                            recyclerView.findViewHolderForAdapterPosition(i);
             if (retiree.getSkills().contains(customSkills.get(i))) {
-                SkillsAndInterestsRecyclerAdapter.SkillsAndInterestsViewHolder viewHolder =
-                        (SkillsAndInterestsRecyclerAdapter.SkillsAndInterestsViewHolder)
-                                recyclerView.findViewHolderForAdapterPosition(i);
                 if (null != viewHolder) {
                     viewHolder.setCheckboxView();
+                }
+            } else {
+                if (null != viewHolder) {
+                    viewHolder.unsetCheckboxView();
                 }
             }
         }
